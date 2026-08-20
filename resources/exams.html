@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Past Exams</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+        .card li { margin: 0.3rem 0; line-height: 1.6; }
+        .highlight-box { background: #eef4fa; padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #1f6e8c; margin: 1rem 0; }
+        .formula-box { background: #e7edf6; padding: 0.8rem 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 500; color: #003153; display: inline-block; margin: 0.4rem 0; border: 1px solid #bfd3e6; }
+        .exam-trap { background: #fef6ee; border-left: 4px solid #c77d4a; padding: 0.8rem 1.5rem; border-radius: 10px; margin: 0.6rem 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .graph-container { width: 100%; max-width: 850px; margin: 1.5rem auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 0.5rem; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .graph-container svg { width: 100%; height: auto; display: block; }
+        .graph-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; text-align: center; padding: 0.8rem 0 0.3rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .graph-subtitle { font-size: 0.85rem; color: #64748b; text-align: center; padding-bottom: 0.5rem; }
+        .graph-insight { padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 6px; margin-top: 0.5rem; }
+        .graph-insight p { font-size: 0.85rem; color: #1e293b; margin: 0; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .graph-container { margin: 0.5rem 0; } .graph-container svg text { font-size: 10px !important; } .graph-title { font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Past Exams</div>
+
+    <div class="page-header">
+        <h2>📝 Past Exams</h2>
+        <div class="subtitle">Practice with real exam questions</div>
+    </div>
+
+    <!-- EXAM 1 -->
+    <div class="card">
+        <h3>📄 Exam 1: Methodology & The Market</h3>
+        <p><strong>Time:</strong> 60 minutes | <strong>Total Points:</strong> 100</p>
+        <p><em>Covering chapters 1-2: Methodology and Supply & Demand</em></p>
+
+        <div class="question-block" id="e1">
+            <div class="q-text">1. Define economics and explain the difference between microeconomics and macroeconomics. (10 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e1')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Sample Answer:</strong><br><br>
+                <strong>Economics</strong> is the study of how individuals, firms, and societies make choices when faced with scarcity. It examines how people allocate limited resources to satisfy unlimited wants.<br><br>
+                <strong>Microeconomics</strong> studies individual agents (consumers, firms) and specific markets. It focuses on decisions at the individual level.<br>
+                Example: How does a firm decide how many workers to hire?<br><br>
+                <strong>Macroeconomics</strong> looks at the economy as a whole using aggregate measures like GDP, inflation, and unemployment.<br>
+                Example: Why is inflation rising?<br><br>
+                <strong>Key distinction:</strong> Micro = individual trees; Macro = whole forest.
+            </div>
+        </div>
+
+        <div class="question-block" id="e2">
+            <div class="q-text">2. Explain the difference between positive and normative analysis, and provide an example of each. (10 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e2')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Sample Answer:</strong><br><br>
+                <strong>Positive Analysis</strong> is about "what IS" — it describes how the world works and makes testable claims. It is objective and based on facts.<br>
+                Example: "A 10% increase in the minimum wage would reduce employment by 2% among low-skilled workers."<br><br>
+                <strong>Normative Analysis</strong> is about "what SHOULD BE" — it makes value judgments and recommendations based on opinions and beliefs. It is subjective.<br>
+                Example: "We should not raise the minimum wage because it hurts workers."<br><br>
+                <strong>Key distinction:</strong> Positive = factual and testable; Normative = value-based and opinionated.
+            </div>
+        </div>
+
+        <div class="question-block" id="e3">
+            <div class="q-text">3. Given Q<sub>D</sub> = 150 − 6P and Q<sub>S</sub> = 30 + 4P, find the equilibrium price and quantity. (15 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e3')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Solution:</strong><br><br>
+                Set Q<sub>D</sub> = Q<sub>S</sub>:<br>
+                150 − 6P = 30 + 4P<br>
+                150 − 30 = 4P + 6P<br>
+                120 = 10P<br>
+                <strong>P* = 12</strong><br><br>
+                Q* = 150 − 6(12) = 150 − 72 = <strong>78</strong><br><br>
+                <strong>Answer:</strong> Equilibrium price is $12, equilibrium quantity is 78 units.
+            </div>
+        </div>
+
+        <div class="question-block" id="e4">
+            <div class="q-text">4. Explain the concept of opportunity cost and provide a real-world example. (10 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e4')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Sample Answer:</strong><br><br>
+                <strong>Opportunity Cost</strong> is the value of the best alternative that you give up when you make a choice. It's the true cost of any decision—not just the money you spend, but everything you sacrifice.<br><br>
+                <strong>Example:</strong> Maria gives up a $50,000/year job to start a business. Her accounting costs are $80,000/year and revenue is $120,000/year.<br>
+                Accounting profit = $120,000 − $80,000 = $40,000<br>
+                Opportunity cost = $50,000 (forgone salary)<br>
+                Economic profit = $40,000 − $50,000 = <strong>−$10,000</strong><br><br>
+                <strong>Conclusion:</strong> The business LOOKS profitable ($40,000 accounting profit) but is actually a bad decision (−$10,000 economic loss). The true cost includes the forgone salary.
+            </div>
+        </div>
+
+        <div class="question-block" id="e5">
+            <div class="q-text">5. Coffee and tea are substitutes. If the price of coffee increases, what happens to the demand for tea? Explain. (10 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e5')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Sample Answer:</strong><br><br>
+                When the price of a substitute (coffee) increases, consumers switch to the alternative (tea), causing <strong>demand for tea to increase</strong>.<br><br>
+                <strong>Effect:</strong> The entire demand curve for tea shifts to the RIGHT.<br><br>
+                <strong>Result:</strong> Higher equilibrium price and higher equilibrium quantity for tea.<br><br>
+                <strong>Reason:</strong> This is a shift of the demand curve, NOT a movement along it, because the change is due to the price of a related good (coffee), not the price of tea itself.
+            </div>
+        </div>
+
+        <div class="question-block" id="e6">
+            <div class="q-text">6. A technological breakthrough reduces production costs for smartphones. Analyze the effect on equilibrium price and quantity. (10 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e6')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Sample Answer:</strong><br><br>
+                A technological breakthrough <strong>shifts the supply curve to the RIGHT</strong> (increase in supply).<br><br>
+                <strong>Effect on equilibrium:</strong><br>
+                • Price: <strong>DECREASES</strong><br>
+                • Quantity: <strong>INCREASES</strong><br><br>
+                <strong>Reason:</strong> At any given price, firms can now produce more smartphones. This puts downward pressure on price and increases the quantity traded.
+            </div>
+        </div>
+    </div>
+
+    <!-- EXAM 2 -->
+    <div class="card">
+        <h3>📄 Exam 2: Elasticity & Welfare</h3>
+        <p><strong>Time:</strong> 60 minutes | <strong>Total Points:</strong> 100</p>
+        <p><em>Covering chapters 3-4: Elasticity, Consumer Surplus, and Producer Surplus</em></p>
+
+        <div class="question-block" id="e7">
+            <div class="q-text">1. The price of a good increases from $10 to $12, and quantity demanded falls from 100 to 80. Calculate the own-price elasticity of demand. (10 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e7')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Solution:</strong><br><br>
+                %ΔQ = (80 − 100) / 100 = −20%<br>
+                %ΔP = (12 − 10) / 10 = 20%<br>
+                ε = %ΔQ / %ΔP = −20% / 20% = <strong>−1.0</strong><br><br>
+                <strong>|ε| = 1</strong> → Demand is <strong>unit-elastic</strong>.<br><br>
+                <strong>Interpretation:</strong> A 1% increase in price leads to exactly a 1% decrease in quantity demanded.
+            </div>
+        </div>
+
+        <div class="question-block" id="e8">
+            <div class="q-text">2. If demand is elastic (|ε| > 1), what happens to total revenue when price increases? Explain. (10 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e8')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Sample Answer:</strong><br><br>
+                When demand is elastic (|ε| > 1), the <strong>quantity effect</strong> dominates the <strong>price effect</strong>.<br><br>
+                • Price effect: Higher price increases revenue on each unit sold (pushes TR up)<br>
+                • Quantity effect: Fewer units are sold (pushes TR down)<br><br>
+                Since demand is elastic, the percentage decrease in quantity is <strong>larger</strong> than the percentage increase in price.<br><br>
+                <strong>Conclusion:</strong> Total revenue <strong>DECREASES</strong> when price increases.
+            </div>
+        </div>
+
+        <div class="question-block" id="e9">
+            <div class="q-text">3. The price of Coke increases by 10%, and demand for Pepsi increases by 15%. Calculate the cross-price elasticity. Are they substitutes or complements? (10 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e9')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Solution:</strong><br><br>
+                ε = %ΔQ<sub>Pepsi</sub> / %ΔP<sub>Coke</sub> = 15% / 10% = <strong>1.5</strong><br><br>
+                <strong>Interpretation:</strong><br>
+                • Positive elasticity → <strong>Substitutes</strong><br>
+                • A 1% increase in Coke price leads to a 1.5% increase in Pepsi demand<br><br>
+                <strong>Answer:</strong> Coke and Pepsi are <strong>substitutes</strong> with cross-price elasticity of <strong>1.5</strong>.
+            </div>
+        </div>
+
+        <div class="question-block" id="e10">
+            <div class="q-text">4. Given Q<sub>D</sub> = 100 − 2P and Q<sub>S</sub> = 20 + 2P, find equilibrium price, quantity, consumer surplus, and producer surplus. (20 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e10')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Solution:</strong><br><br>
+                <strong>Step 1: Find equilibrium</strong><br>
+                100 − 2P = 20 + 2P → 80 = 4P → <strong>P* = 20</strong><br>
+                Q* = 100 − 2(20) = <strong>60</strong><br><br>
+                <strong>Step 2: Find intercepts</strong><br>
+                Demand intercept: Q=0 → P = 50<br>
+                Supply intercept: Q=0 → P = −10 (but the minimum price is where Q=0, so P_min = -10, though for surplus we use the intercept where supply meets price axis, which is -10)<br><br>
+                <strong>Step 3: Calculate CS</strong><br>
+                CS = ½ × Q* × (P<sub>max</sub> − P*) = ½ × 60 × (50 − 20) = ½ × 60 × 30 = <strong>900</strong><br><br>
+                <strong>Step 4: Calculate PS</strong><br>
+                PS = ½ × Q* × (P* − P<sub>min</sub>) = ½ × 60 × (20 − (−10)) = ½ × 60 × 30 = <strong>900</strong><br><br>
+                <strong>Answer:</strong> P* = 20, Q* = 60, CS = 900, PS = 900
+            </div>
+        </div>
+    </div>
+
+    <!-- EXAM 3 -->
+    <div class="card">
+        <h3>📄 Exam 3: Government Interventions & Monopoly</h3>
+        <p><strong>Time:</strong> 60 minutes | <strong>Total Points:</strong> 100</p>
+        <p><em>Covering chapters 5, 7, and 8: Government Interventions, Perfect Competition, and Monopoly</em></p>
+
+        <div class="question-block" id="e11">
+            <div class="q-text">1. A tax is imposed on a good. Buyers pay $12 and sellers receive $8. What is the tax per unit? (5 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e11')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Solution:</strong><br><br>
+                Tax = P<sub>D</sub> − P<sub>S</sub> = $12 − $8 = <strong>$4</strong>
+            </div>
+        </div>
+
+        <div class="question-block" id="e12">
+            <div class="q-text">2. A monopolist has TC = 16 + Q² and faces demand Q = 24 − P. Find the monopoly equilibrium price, quantity, profit, and deadweight loss. (25 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e12')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Solution:</strong><br><br>
+                <strong>Step 1: Find MR</strong><br>
+                P = 24 − Q<br>
+                TR = P × Q = 24Q − Q²<br>
+                MR = 24 − 2Q<br><br>
+                <strong>Step 2: Find MC</strong><br>
+                MC = dTC/dQ = 2Q<br><br>
+                <strong>Step 3: Set MR = MC</strong><br>
+                24 − 2Q = 2Q → 4Q = 24 → <strong>Q<sub>M</sub> = 6</strong><br>
+                P<sub>M</sub> = 24 − 6 = <strong>18</strong><br><br>
+                <strong>Step 4: Calculate Profit</strong><br>
+                TR = 18 × 6 = 108<br>
+                TC = 16 + 36 = 52<br>
+                π = 108 − 52 = <strong>56</strong><br><br>
+                <strong>Step 5: Calculate DWL</strong><br>
+                Competitive Q: Set P = MC → 24 − Q = 2Q → Q<sub>PC</sub> = 8<br>
+                DWL = ½ × (P<sub>M</sub> − P<sub>PC</sub>) × (Q<sub>PC</sub> − Q<sub>M</sub>)<br>
+                P<sub>PC</sub> = 2(8) = 16<br>
+                DWL = ½ × (18 − 16) × (8 − 6) = ½ × 2 × 2 = <strong>2</strong><br><br>
+                <strong>Answer:</strong> Q<sub>M</sub> = 6, P<sub>M</sub> = 18, π = 56, DWL = 2
+            </div>
+        </div>
+
+        <div class="question-block" id="e13">
+            <div class="q-text">3. A firm has TC = 500 + 0.25Q² and faces P = 50 in a perfectly competitive market. Find the profit-maximizing quantity and profit. (15 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e13')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Solution:</strong><br><br>
+                <strong>Step 1: Find MC</strong><br>
+                MC = dTC/dQ = 0.5Q<br><br>
+                <strong>Step 2: Set P = MC</strong><br>
+                50 = 0.5Q → <strong>Q = 100</strong><br><br>
+                <strong>Step 3: Calculate Profit</strong><br>
+                TR = 50 × 100 = 5000<br>
+                TC = 500 + 0.25(10000) = 500 + 2500 = 3000<br>
+                π = 5000 − 3000 = <strong>2000</strong><br><br>
+                <strong>Answer:</strong> Q = 100, π = 2000
+            </div>
+        </div>
+
+        <div class="question-block" id="e14">
+            <div class="q-text">4. A price ceiling is set below equilibrium. What happens to quantity traded? Which quantity determines the trade? (10 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e14')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Sample Answer:</strong><br><br>
+                When a price ceiling is set below equilibrium:<br><br>
+                • Quantity demanded <strong>increases</strong> (more people want the good at the lower price)<br>
+                • Quantity supplied <strong>decreases</strong> (fewer sellers willing to supply at the lower price)<br>
+                • Result: A <strong>shortage</strong> (excess demand)<br><br>
+                <strong>Quantity traded = Q<sub>S</sub></strong> (the quantity supplied)<br><br>
+                <strong>Why?</strong> The short side of the market prevails. You can't force sellers to supply more than they're willing to at the controlled price.
+            </div>
+        </div>
+    </div>
+
+    <!-- EXAM 4 -->
+    <div class="card">
+        <h3>📄 Exam 4: Oligopoly & Game Theory</h3>
+        <p><strong>Time:</strong> 60 minutes | <strong>Total Points:</strong> 100</p>
+        <p><em>Covering chapter 9: Oligopoly, Game Theory & Externalities</em></p>
+
+        <div class="question-block" id="e15">
+            <div class="q-text">1. Two firms in a duopoly have P = 13 − (Q₁ + Q₂) and MC = 1. Find the non-cooperative (Cournot-Nash) equilibrium quantity for each firm. (15 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e15')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Solution:</strong><br><br>
+                <strong>Step 1: Set up profit functions</strong><br>
+                π₁ = (13 − Q₁ − Q₂ − 1) × Q₁ = (12 − Q₁ − Q₂) × Q₁<br>
+                π₂ = (13 − Q₂ − Q₁ − 1) × Q₂ = (12 − Q₂ − Q₁) × Q₂<br><br>
+                <strong>Step 2: Find best response functions</strong><br>
+                FOC for Firm 1: 12 − 2Q₁ − Q₂ = 0 → Q₁ = (12 − Q₂)/2<br>
+                FOC for Firm 2: 12 − 2Q₂ − Q₁ = 0 → Q₂ = (12 − Q₁)/2<br><br>
+                <strong>Step 3: Solve simultaneously</strong><br>
+                Q₁ = (12 − (12 − Q₁)/2)/2 → Q₁ = 4, Q₂ = 4<br><br>
+                <strong>Answer:</strong> Q₁ = 4, Q₂ = 4
+            </div>
+        </div>
+
+        <div class="question-block" id="e16">
+            <div class="q-text">2. In the Prisoner's Dilemma, what is the Nash equilibrium and why is it not Pareto optimal? (10 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e16')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Sample Answer:</strong><br><br>
+                In the Prisoner's Dilemma:<br><br>
+                <strong>Nash Equilibrium:</strong> (Confess, Confess)<br><br>
+                <strong>Why it's NOT Pareto optimal:</strong><br>
+                • Both prisoners would be better off with (Not Confess, Not Confess) → 1 year each<br>
+                • But (Not Confess, Not Confess) is NOT a Nash equilibrium<br>
+                • Each prisoner has an incentive to cheat (confess) to get 0 years<br>
+                • The Nash equilibrium (Confess, Confess) gives 8 years each<br><br>
+                <strong>Key insight:</strong> Pareto optimal means no one can be made better off without making someone worse off. (Not Confess, Not Confess) is Pareto superior to (Confess, Confess), but it's not stable.
+            </div>
+        </div>
+
+        <div class="question-block" id="e17">
+            <div class="q-text">3. Define externalities and explain why they represent a market failure. Provide one example of a negative externality and one example of a positive externality. (15 points)</div>
+            <button class="btn-show-answer" onclick="toggleAnswer('e17')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Sample Answer:</strong><br><br>
+                <strong>Externality:</strong> An uncompensated impact of one person's actions on another person's well-being.<br><br>
+                <strong>Why externalities are market failures:</strong><br>
+                • The market price does not reflect the full social cost or benefit<br>
+                • Negative externality → overproduction (too much of the good)<br>
+                • Positive externality → underproduction (too little of the good)<br><br>
+                <strong>Example of Negative Externality:</strong><br>
+                Factory pollution. The factory produces goods but doesn't pay for the health and environmental costs imposed on the community.<br><br>
+                <strong>Example of Positive Externality:</strong><br>
+                Education. When you get an education, you benefit from higher earnings (private benefit), but society also benefits from a more productive workforce and higher tax revenues (social benefit).
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleAnswer(questionId) {
+            const questionBlock = document.getElementById(questionId);
+            if (!questionBlock) return;
+
+            const answerArea = questionBlock.querySelector('.answer-area');
+            const btn = questionBlock.querySelector('.btn-show-answer');
+
+            if (answerArea.classList.contains('show')) {
+                answerArea.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+            } else {
+                answerArea.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

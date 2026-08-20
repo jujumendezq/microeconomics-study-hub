@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizzes</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+        .card li { margin: 0.3rem 0; line-height: 1.6; }
+        .highlight-box { background: #eef4fa; padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #1f6e8c; margin: 1rem 0; }
+        .formula-box { background: #e7edf6; padding: 0.8rem 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 500; color: #003153; display: inline-block; margin: 0.4rem 0; border: 1px solid #bfd3e6; }
+        .exam-trap { background: #fef6ee; border-left: 4px solid #c77d4a; padding: 0.8rem 1.5rem; border-radius: 10px; margin: 0.6rem 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .glossary-term { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #e8edf3; }
+        .glossary-term dt { font-weight: 600; color: #0b2b4a; min-width: 160px; }
+        .glossary-term dd { color: #334155; }
+        .graph-container { width: 100%; max-width: 850px; margin: 1.5rem auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 0.5rem; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .graph-container svg { width: 100%; height: auto; display: block; }
+        .graph-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; text-align: center; padding: 0.8rem 0 0.3rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .graph-subtitle { font-size: 0.85rem; color: #64748b; text-align: center; padding-bottom: 0.5rem; }
+        .graph-insight { padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 6px; margin-top: 0.5rem; }
+        .graph-insight p { font-size: 0.85rem; color: #1e293b; margin: 0; }
+        .score-display { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; padding: 0.5rem 1rem; background: #eef4fa; border-radius: 8px; text-align: center; margin: 1rem 0; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .glossary-term { flex-direction: column; gap: 0.2rem; } .glossary-term dt { min-width: unset; } .graph-container { margin: 0.5rem 0; } .graph-container svg text { font-size: 10px !important; } .graph-title { font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Quizzes</div>
+
+    <div class="page-header">
+        <h2>🧪 Quizzes</h2>
+        <div class="subtitle">Self-assessment for each chapter</div>
+    </div>
+
+    <div class="card">
+        <div class="score-display" id="scoreDisplay">📊 Score: 0 / 0 (0%)</div>
+        <button class="btn-show-answer" onclick="checkAllAnswers()" style="margin-top: 0.5rem;">📊 Check All Answers</button>
+        <button class="btn-show-answer" onclick="resetAllAnswers()" style="margin-top: 0.5rem; background: #64748b;">🔄 Reset All</button>
+    </div>
+
+    <!-- QUIZ 1: METHODOLOGY -->
+    <div class="card">
+        <h3>Quiz 1: Methodology</h3>
+        <p><em>Test your understanding of economic methodology, opportunity cost, and correlation vs. causation</em></p>
+
+        <div class="question-block" id="qz1">
+            <div class="q-text">1. Which of the following is a positive statement?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz1" value="A"><span>A) The government should increase spending on education.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz1" value="B"><span>B) Higher taxes reduce consumer spending.</span></label>
+                <label class="option-label"><input type="radio" name="qz1" value="C"><span>C) We need to reduce income inequality.</span></label>
+                <label class="option-label"><input type="radio" name="qz1" value="D"><span>D) The unemployment rate is too high.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz1', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                "Higher taxes reduce consumer spending" is a <strong>positive</strong> statement because it can be tested with data. Statements A, C, and D contain value judgments (normative statements).<br><br>
+                <strong>Key distinction:</strong> Positive = testable and factual; Normative = value-based and opinionated.
+            </div>
+        </div>
+
+        <div class="question-block" id="qz2">
+            <div class="q-text">2. What is the opportunity cost of attending university?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz2" value="A"><span>A) Tuition and fees</span></label>
+                <label class="option-label"><input type="radio" name="qz2" value="B"><span>B) Books and supplies</span></label>
+                <label class="option-label"><input type="radio" name="qz2" value="C"><span>C) The salary you could have earned instead</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz2" value="D"><span>D) Both A and B, plus C</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz2', 'D')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                Opportunity cost includes <strong>BOTH</strong> explicit costs (tuition, books) AND implicit costs (the forgone salary you could have earned). The true cost includes everything you give up.<br><br>
+                <strong>Formula:</strong> Economic Cost = Explicit Costs + Implicit Costs
+            </div>
+        </div>
+
+        <div class="question-block" id="qz3">
+            <div class="q-text">3. A study finds a correlation between ice cream sales and drowning deaths. What is the most likely explanation?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz3" value="A"><span>A) Ice cream causes drowning</span></label>
+                <label class="option-label"><input type="radio" name="qz3" value="B"><span>B) Drowning causes people to buy more ice cream</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz3" value="C"><span>C) Hot weather causes both</span></label>
+                <label class="option-label"><input type="radio" name="qz3" value="D"><span>D) The study is flawed</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz3', 'C')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                This is the classic example of a <strong>spurious correlation</strong>. Hot weather causes both ice cream sales and drowning deaths to increase. Correlation does NOT imply causation!<br><br>
+                <strong>Lesson:</strong> Always look for third variables that might explain the relationship.
+            </div>
+        </div>
+
+        <div class="question-block" id="qz4">
+            <div class="q-text">4. Which of the following is a microeconomics question?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="qz4" value="A"><span>A) Why does the price of avocados rise in winter?</span></label>
+                <label class="option-label"><input type="radio" name="qz4" value="B"><span>B) Why is inflation rising?</span></label>
+                <label class="option-label"><input type="radio" name="qz4" value="C"><span>C) What is the national unemployment rate?</span></label>
+                <label class="option-label"><input type="radio" name="qz4" value="D"><span>D) How fast is the economy growing?</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz4', 'A')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                Microeconomics focuses on <strong>individual agents</strong> and <strong>specific markets</strong>. Avocado prices are a specific market question. B, C, and D are macroeconomics questions about the whole economy.<br><br>
+                <strong>Memory trick:</strong> Micro = individual trees; Macro = whole forest.
+            </div>
+        </div>
+
+        <div class="question-block" id="qz5">
+            <div class="q-text">5. What is the opportunity cost of attending a concert if the ticket costs $50 and you could have worked 4 hours at $15/hour during that time?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz5" value="A"><span>A) $50</span></label>
+                <label class="option-label"><input type="radio" name="qz5" value="B"><span>B) $60</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz5" value="C"><span>C) $110</span></label>
+                <label class="option-label"><input type="radio" name="qz5" value="D"><span>D) $15</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz5', 'C')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                Opportunity cost = Explicit cost ($50 ticket) + Implicit cost (4 hours × $15/hour = $60) = <strong>$110</strong><br><br>
+                <strong>Formula:</strong> Economic Cost = Explicit Costs + Implicit Costs
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ 2: THE MARKET -->
+    <div class="card">
+        <h3>Quiz 2: The Market</h3>
+        <p><em>Test your understanding of supply, demand, and market equilibrium</em></p>
+
+        <div class="question-block" id="qz6">
+            <div class="q-text">6. If the price of a complement increases, what happens to demand for the original good?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz6" value="A"><span>A) Demand increases (shifts RIGHT)</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz6" value="B"><span>B) Demand decreases (shifts LEFT)</span></label>
+                <label class="option-label"><input type="radio" name="qz6" value="C"><span>C) Quantity demanded increases</span></label>
+                <label class="option-label"><input type="radio" name="qz6" value="D"><span>D) Quantity demanded decreases</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz6', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                Complements are goods used together (coffee & sugar, cars & gasoline). When the price of a complement increases, demand for the other good <strong>decreases</strong> (shifts LEFT).<br><br>
+                <strong>Example:</strong> If the price of printers increases, demand for ink cartridges decreases.
+            </div>
+        </div>
+
+        <div class="question-block" id="qz7">
+            <div class="q-text">7. A decrease in the price of a good causes:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz7" value="A"><span>A) A shift of the demand curve to the RIGHT</span></label>
+                <label class="option-label"><input type="radio" name="qz7" value="B"><span>B) A shift of the demand curve to the LEFT</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz7" value="C"><span>C) A movement along the demand curve</span></label>
+                <label class="option-label"><input type="radio" name="qz7" value="D"><span>D) No change in the demand curve</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz7', 'C')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                A change in the good's <strong>own price</strong> causes a <strong>movement</strong> along the demand curve (change in quantity demanded), NOT a shift of the curve.<br><br>
+                <strong>Rule:</strong> Price changes cause movements; other factors cause shifts.
+            </div>
+        </div>
+
+        <div class="question-block" id="qz8">
+            <div class="q-text">8. Given Q<sub>D</sub> = 200 − 8P and Q<sub>S</sub> = 40 + 2P, find the equilibrium price.</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz8" value="A"><span>A) P = 12</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz8" value="B"><span>B) P = 16</span></label>
+                <label class="option-label"><input type="radio" name="qz8" value="C"><span>C) P = 20</span></label>
+                <label class="option-label"><input type="radio" name="qz8" value="D"><span>D) P = 24</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz8', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                Set Q<sub>D</sub> = Q<sub>S</sub>:<br>
+                200 − 8P = 40 + 2P<br>
+                200 − 40 = 2P + 8P<br>
+                160 = 10P<br>
+                <strong>P* = 16</strong>
+            </div>
+        </div>
+
+        <div class="question-block" id="qz9">
+            <div class="q-text">9. If income increases and a good is normal, what happens to demand?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="qz9" value="A"><span>A) Demand increases (shifts RIGHT)</span></label>
+                <label class="option-label"><input type="radio" name="qz9" value="B"><span>B) Demand decreases (shifts LEFT)</span></label>
+                <label class="option-label"><input type="radio" name="qz9" value="C"><span>C) Quantity demanded increases</span></label>
+                <label class="option-label"><input type="radio" name="qz9" value="D"><span>D) No change</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz9', 'A')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                For a <strong>normal good</strong>, an increase in income leads to an <strong>increase in demand</strong> (shift RIGHT).<br><br>
+                <strong>Examples of normal goods:</strong> Restaurant meals, vacations, new cars.<br>
+                <strong>Examples of inferior goods:</strong> Public transit, instant noodles, second-hand goods.
+            </div>
+        </div>
+
+        <div class="question-block" id="qz10">
+            <div class="q-text">10. What is the "short side of the market" rule?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz10" value="A"><span>A) The quantity traded is the average of Q<sub>D</sub> and Q<sub>S</sub></span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz10" value="B"><span>B) The quantity traded is the smaller of Q<sub>D</sub> and Q<sub>S</sub></span></label>
+                <label class="option-label"><input type="radio" name="qz10" value="C"><span>C) The quantity traded is the larger of Q<sub>D</sub> and Q<sub>S</sub></span></label>
+                <label class="option-label"><input type="radio" name="qz10" value="D"><span>D) The quantity traded is determined by the government</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz10', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                The <strong>short side of the market</strong> rule states that in disequilibrium, the actual quantity exchanged is the <strong>smaller</strong> of quantity demanded and quantity supplied.<br><br>
+                <strong>Example:</strong> In a shortage (Q<sub>D</sub> > Q<sub>S</sub>), the quantity traded is Q<sub>S</sub> because sellers control how much they supply.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ 3: ELASTICITY -->
+    <div class="card">
+        <h3>Quiz 3: Elasticity</h3>
+        <p><em>Test your understanding of elasticity and surplus</em></p>
+
+        <div class="question-block" id="qz11">
+            <div class="q-text">11. The price of a good increases from $10 to $12, and quantity demanded falls from 100 to 80. What is the own-price elasticity of demand?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz11" value="A"><span>A) -0.5</span></label>
+                <label class="option-label"><input type="radio" name="qz11" value="B"><span>B) -0.8</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz11" value="C"><span>C) -1.0</span></label>
+                <label class="option-label"><input type="radio" name="qz11" value="D"><span>D) -1.2</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz11', 'C')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                %ΔQ = (80-100)/100 = -20%<br>
+                %ΔP = (12-10)/10 = 20%<br>
+                ε = -20%/20% = <strong>-1.0</strong><br><br>
+                <strong>Interpretation:</strong> Demand is unit-elastic. A 1% increase in price leads to exactly a 1% decrease in quantity demanded.
+            </div>
+        </div>
+
+        <div class="question-block" id="qz12">
+            <div class="q-text">12. If demand is elastic (|ε| > 1), what happens to total revenue when price increases?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz12" value="A"><span>A) Total revenue increases</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz12" value="B"><span>B) Total revenue decreases</span></label>
+                <label class="option-label"><input type="radio" name="qz12" value="C"><span>C) Total revenue stays the same</span></label>
+                <label class="option-label"><input type="radio" name="qz12" value="D"><span>D) It depends on the size of the price increase</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz12', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                When demand is elastic, the <strong>quantity effect</strong> dominates the <strong>price effect</strong>. The percentage decrease in quantity is larger than the percentage increase in price, so <strong>total revenue decreases</strong>.<br><br>
+                <strong>Rule:</strong> Elastic demand → Price ↑ → Revenue ↓
+            </div>
+        </div>
+
+        <div class="question-block" id="qz13">
+            <div class="q-text">13. The price of Coke increases by 10%, and demand for Pepsi increases by 15%. What is the cross-price elasticity?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz13" value="A"><span>A) 0.67, Substitutes</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz13" value="B"><span>B) 1.5, Substitutes</span></label>
+                <label class="option-label"><input type="radio" name="qz13" value="C"><span>C) 0.67, Complements</span></label>
+                <label class="option-label"><input type="radio" name="qz13" value="D"><span>D) 1.5, Complements</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz13', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                ε = %ΔQ<sub>Pepsi</sub> / %ΔP<sub>Coke</sub> = 15%/10% = <strong>1.5</strong><br>
+                Positive elasticity → <strong>Substitutes</strong><br><br>
+                <strong>Rule:</strong> Positive = Substitutes; Negative = Complements
+            </div>
+        </div>
+
+        <div class="question-block" id="qz14">
+            <div class="q-text">14. Income increases by 5%, and demand for restaurant meals increases by 15%. What is the income elasticity?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz14" value="A"><span>A) 3.0, Normal Necessity</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz14" value="B"><span>B) 3.0, Luxury</span></label>
+                <label class="option-label"><input type="radio" name="qz14" value="C"><span>C) 0.33, Normal Necessity</span></label>
+                <label class="option-label"><input type="radio" name="qz14" value="D"><span>D) 0.33, Luxury</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz14', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                ε<sub>R</sub> = %ΔQ / %ΔR = 15%/5% = <strong>3.0</strong><br>
+                Since ε > 1, restaurant meals are a <strong>luxury normal good</strong>.<br><br>
+                <strong>Rule:</strong> ε > 1 = Luxury; 0 < ε < 1 = Necessity; ε < 0 = Inferior
+            </div>
+        </div>
+
+        <div class="question-block" id="qz15">
+            <div class="q-text">15. Given Q<sub>D</sub> = 100 − 2P and Q<sub>S</sub> = 20 + 2P, find consumer surplus.</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="qz15" value="A"><span>A) 400</span></label>
+                <label class="option-label"><input type="radio" name="qz15" value="B"><span>B) 600</span></label>
+                <label class="option-label"><input type="radio" name="qz15" value="C"><span>C) 200</span></label>
+                <label class="option-label"><input type="radio" name="qz15" value="D"><span>D) 300</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz15', 'A')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                <strong>Step 1:</strong> Find equilibrium: 100 − 2P = 20 + 2P → 80 = 4P → P* = 20, Q* = 60<br>
+                <strong>Step 2:</strong> Find demand intercept: Q=0 → P = 50<br>
+                <strong>Step 3:</strong> CS = ½ × Q* × (P<sub>max</sub> − P*) = ½ × 60 × (50 − 20) = <strong>400</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ 4: GOVERNMENT INTERVENTIONS -->
+    <div class="card">
+        <h3>Quiz 4: Government Interventions</h3>
+        <p><em>Test your understanding of taxes, subsidies, and price controls</em></p>
+
+        <div class="question-block" id="qz16">
+            <div class="q-text">16. A price ceiling set below equilibrium creates:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz16" value="A"><span>A) A surplus</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz16" value="B"><span>B) A shortage</span></label>
+                <label class="option-label"><input type="radio" name="qz16" value="C"><span>C) No effect</span></label>
+                <label class="option-label"><input type="radio" name="qz16" value="D"><span>D) An increase in supply</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz16', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                A price ceiling set below equilibrium creates a <strong>shortage</strong> (excess demand) because quantity demanded exceeds quantity supplied.<br><br>
+                <strong>Memory trick:</strong> Ceiling below = Shortage (think: low ceiling means less room to breathe!)
+            </div>
+        </div>
+
+        <div class="question-block" id="qz17">
+            <div class="q-text">17. A price floor set above equilibrium creates:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz17" value="A"><span>A) A shortage</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz17" value="B"><span>B) A surplus</span></label>
+                <label class="option-label"><input type="radio" name="qz17" value="C"><span>C) No effect</span></label>
+                <label class="option-label"><input type="radio" name="qz17" value="D"><span>D) A decrease in demand</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz17', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                A price floor set above equilibrium creates a <strong>surplus</strong> (excess supply) because quantity supplied exceeds quantity demanded.<br><br>
+                <strong>Example:</strong> Minimum wage → surplus of labor (unemployment).
+            </div>
+        </div>
+
+        <div class="question-block" id="qz18">
+            <div class="q-text">18. The more inelastic side of the market bears:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz18" value="A"><span>A) Less of the tax burden</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz18" value="B"><span>B) More of the tax burden</span></label>
+                <label class="option-label"><input type="radio" name="qz18" value="C"><span>C) None of the tax burden</span></label>
+                <label class="option-label"><input type="radio" name="qz18" value="D"><span>D) All of the tax burden</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz18', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                The <strong>more inelastic</strong> side bears <strong>more</strong> of the tax burden because they can't easily adjust their behavior.<br><br>
+                <strong>Rule:</strong> The inelastic side gets "crushed" by the tax burden.
+            </div>
+        </div>
+
+        <div class="question-block" id="qz19">
+            <div class="q-text">19. A subsidy is a:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz19" value="A"><span>A) Positive tax</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz19" value="B"><span>B) Negative tax</span></label>
+                <label class="option-label"><input type="radio" name="qz19" value="C"><span>C) Price ceiling</span></label>
+                <label class="option-label"><input type="radio" name="qz19" value="D"><span>D) Price floor</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz19', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                A subsidy is a <strong>negative tax</strong>. It creates a wedge where sellers receive more than buyers pay (P<sub>S</sub> > P<sub>B</sub>), encouraging more production and consumption.<br><br>
+                <strong>Effect:</strong> Quantity increases, government pays.
+            </div>
+        </div>
+
+        <div class="question-block" id="qz20">
+            <div class="q-text">20. Deadweight loss from a tax is:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz20" value="A"><span>A) The tax revenue collected</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz20" value="B"><span>B) The lost surplus from foregone trades</span></label>
+                <label class="option-label"><input type="radio" name="qz20" value="C"><span>C) The price increase paid by consumers</span></label>
+                <label class="option-label"><input type="radio" name="qz20" value="D"><span>D) The price decrease received by producers</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz20', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                Deadweight loss is the <strong>lost surplus from foregone trades</strong> that do not occur because of the tax. It represents the net loss in total surplus.<br><br>
+                <strong>Key distinction:</strong> Tax revenue is a transfer; DWL is the true loss to society.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ 5: MONOPOLY & GAME THEORY -->
+    <div class="card">
+        <h3>Quiz 5: Monopoly & Game Theory</h3>
+        <p><em>Test your understanding of market power and strategic interaction</em></p>
+
+        <div class="question-block" id="qz21">
+            <div class="q-text">21. A monopolist maximizes profit where:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz21" value="A"><span>A) P = MC</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz21" value="B"><span>B) MR = MC</span></label>
+                <label class="option-label"><input type="radio" name="qz21" value="C"><span>C) P = AC</span></label>
+                <label class="option-label"><input type="radio" name="qz21" value="D"><span>D) MR = P</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz21', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                All firms maximize profit where <strong>MR = MC</strong>. In monopoly, since MR < P, this means <strong>P > MC</strong>.<br><br>
+                <strong>Key distinction:</strong> Perfect competition: P = MC; Monopoly: MR = MC, then find P from demand.
+            </div>
+        </div>
+
+        <div class="question-block" id="qz22">
+            <div class="q-text">22. For a monopolist, MR is less than P because:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz22" value="A"><span>A) Demand is perfectly elastic</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz22" value="B"><span>B) To sell more, the firm must lower the price on all units</span></label>
+                <label class="option-label"><input type="radio" name="qz22" value="C"><span>C) Marginal cost is increasing</span></label>
+                <label class="option-label"><input type="radio" name="qz22" value="D"><span>D) Average cost is decreasing</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz22', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                To sell more output, a monopolist must <strong>lower the price on ALL units sold</strong>, not just the additional unit. This is why MR < P.<br><br>
+                <strong>Example:</strong> If a monopolist sells 4 units at $8 each, MR of the 5th unit is only $3 (not $7) because the price on the first 4 units must be lowered to $7.
+            </div>
+        </div>
+
+        <div class="question-block" id="qz23">
+            <div class="q-text">23. The Lerner Index measures:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz23" value="A"><span>A) Total profit</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz23" value="B"><span>B) Market power as (P − MC)/P</span></label>
+                <label class="option-label"><input type="radio" name="qz23" value="C"><span>C) Deadweight loss</span></label>
+                <label class="option-label"><input type="radio" name="qz23" value="D"><span>D) Consumer surplus</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz23', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                The Lerner Index = (P − MC)/P = 1/|ε|. It measures the markup over marginal cost as a percentage of price.<br><br>
+                <strong>Rule:</strong> Higher Lerner Index = More market power.
+            </div>
+        </div>
+
+        <div class="question-block" id="qz24">
+            <div class="q-text">24. Student discounts are an example of:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz24" value="A"><span>A) First-degree price discrimination</span></label>
+                <label class="option-label"><input type="radio" name="qz24" value="B"><span>B) Second-degree price discrimination</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz24" value="C"><span>C) Third-degree price discrimination</span></label>
+                <label class="option-label"><input type="radio" name="qz24" value="D"><span>D) No price discrimination</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz24', 'C')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                Student discounts are <strong>third-degree price discrimination</strong> because they're based on observable group characteristics (student status).<br><br>
+                <strong>Degrees:</strong> 1st = each customer; 2nd = quantity/version; 3rd = group characteristics.
+            </div>
+        </div>
+
+        <div class="question-block" id="qz25">
+            <div class="q-text">25. Cartels are unstable because:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="qz25" value="A"><span>A) They are illegal</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="qz25" value="B"><span>B) Each firm has an incentive to cheat</span></label>
+                <label class="option-label"><input type="radio" name="qz25" value="C"><span>C) They produce too much output</span></label>
+                <label class="option-label"><input type="radio" name="qz25" value="D"><span>D) They charge too low a price</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('qz25', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                Cartels are <strong>unstable</strong> because each individual firm has an <strong>incentive to cheat</strong> by producing more than its agreed quantity, capturing a larger market share and higher profit.<br><br>
+                <strong>Key insight:</strong> Cartels are profitable but unstable → they often collapse.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+
+        function toggleAnswer(qId, correct) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+                updateScore();
+            }
+        }
+
+        function updateScore() {
+            const total = document.querySelectorAll('.question-block').length;
+            let correct = 0;
+            document.querySelectorAll('.question-block').forEach(block => {
+                const selected = block.querySelector('input[type="radio"]:checked');
+                if (selected) {
+                    const label = selected.closest('.option-label');
+                    if (label.dataset.correct === 'true') correct++;
+                }
+            });
+            const pct = Math.round((correct / total) * 100);
+            document.getElementById('scoreDisplay').textContent = `📊 Score: ${correct} / ${total} (${pct}%)`;
+        }
+
+        function checkAllAnswers() {
+            document.querySelectorAll('.question-block').forEach(block => {
+                const area = block.querySelector('.answer-area');
+                const btn = block.querySelector('.btn-show-answer');
+                const labels = block.querySelectorAll('.option-label');
+                const radios = block.querySelectorAll('input[type="radio"]');
+
+                if (!area.classList.contains('show')) {
+                    area.classList.add('show');
+                    btn.textContent = 'Hide Answer';
+                    btn.classList.add('active');
+                    radios.forEach(r => r.disabled = true);
+                    labels.forEach(l => {
+                        const isCorrect = l.dataset.correct === 'true';
+                        if (isCorrect) l.classList.add('correct-answer');
+                        const radio = l.querySelector('input[type="radio"]');
+                        if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                        l.classList.add('disabled');
+                    });
+                }
+            });
+            updateScore();
+        }
+
+        function resetAllAnswers() {
+            document.querySelectorAll('.question-block').forEach(block => {
+                const area = block.querySelector('.answer-area');
+                const btn = block.querySelector('.btn-show-answer');
+                const labels = block.querySelectorAll('.option-label');
+                const radios = block.querySelectorAll('input[type="radio"]');
+
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled', 'selected'));
+                radios.forEach(r => { r.checked = false; r.disabled = false; });
+            });
+            document.getElementById('scoreDisplay').textContent = '📊 Score: 0 / 0 (0%)';
+        }
+    </script>
+</body>
+</html>

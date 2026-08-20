@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glossary</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .glossary-term { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #e8edf3; }
+        .glossary-term dt { font-weight: 600; color: #0b2b4a; min-width: 180px; }
+        .glossary-term dd { color: #334155; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .search-box { width: 100%; padding: 0.8rem 1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; margin-bottom: 1.5rem; transition: border-color 0.2s; }
+        .search-box:focus { outline: none; border-color: #0b2b4a; }
+        .letter-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: center; }
+        .letter-nav a { padding: 0.4rem 0.8rem; background: #eef4fa; border-radius: 6px; text-decoration: none; color: #0b2b4a; font-weight: 600; font-size: 0.9rem; transition: background 0.2s; }
+        .letter-nav a:hover { background: #0b2b4a; color: white; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .glossary-term { flex-direction: column; gap: 0.2rem; } .glossary-term dt { min-width: unset; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Glossary</div>
+
+    <div class="page-header">
+        <h2>📖 Glossary of Key Terms</h2>
+        <div class="subtitle">All important microeconomics terminology in one place</div>
+    </div>
+
+    <div class="card">
+        <h3>🔍 Search Glossary</h3>
+        <input type="text" class="search-box" id="glossarySearch" placeholder="Search for a term..." onkeyup="filterGlossary()">
+    </div>
+
+    <div class="card">
+        <div class="letter-nav">
+            <a href="#section-A">A</a>
+            <a href="#section-B">B</a>
+            <a href="#section-C">C</a>
+            <a href="#section-D">D</a>
+            <a href="#section-E">E</a>
+            <a href="#section-F">F</a>
+            <a href="#section-G">G</a>
+            <a href="#section-I">I</a>
+            <a href="#section-L">L</a>
+            <a href="#section-M">M</a>
+            <a href="#section-N">N</a>
+            <a href="#section-O">O</a>
+            <a href="#section-P">P</a>
+            <a href="#section-R">R</a>
+            <a href="#section-S">S</a>
+            <a href="#section-T">T</a>
+            <a href="#section-U">U</a>
+            <a href="#section-V">V</a>
+            <a href="#section-W">W</a>
+            <a href="#section-Z">Z</a>
+        </div>
+    </div>
+
+    <!-- SECTION A -->
+    <div class="card" id="section-A">
+        <h3>A</h3>
+        <div class="glossary-term"><dt>Accounting Cost</dt><dd>Explicit, direct monetary costs (rent, materials, wages).</dd></div>
+        <div class="glossary-term"><dt>Accounting Profit</dt><dd>Total revenue minus explicit costs only.</dd></div>
+        <div class="glossary-term"><dt>Actuarial (Fair) Insurance</dt><dd>Insurance with premium exactly equal to the expected loss.</dd></div>
+        <div class="glossary-term"><dt>Antitrust Legislation</dt><dd>Laws that prohibit collusion and other anti-competitive practices.</dd></div>
+        <div class="glossary-term"><dt>Arc Elasticity</dt><dd>Another name for the midpoint method; elasticity calculated over an arc of the demand curve.</dd></div>
+        <div class="glossary-term"><dt>Atomicity</dt><dd>The assumption of many small firms, none with market power.</dd></div>
+        <div class="glossary-term"><dt>Average Cost (AC)</dt><dd>Total cost divided by quantity produced; cost per unit.</dd></div>
+        <div class="glossary-term"><dt>Average Fixed Cost (AFC)</dt><dd>Fixed cost divided by quantity; always declines as q increases.</dd></div>
+        <div class="glossary-term"><dt>Average Product (AP)</dt><dd>Total output divided by total labor; output per worker on average.</dd></div>
+        <div class="glossary-term"><dt>Average Variable Cost (AVC)</dt><dd>Variable cost divided by quantity.</dd></div>
+    </div>
+
+    <!-- SECTION B -->
+    <div class="card" id="section-B">
+        <h3>B</h3>
+        <div class="glossary-term"><dt>Barriers to Entry</dt><dd>Factors that prevent new firms from entering a market.</dd></div>
+        <div class="glossary-term"><dt>Best Response</dt><dd>The strategy that maximizes a player's payoff given what others are doing.</dd></div>
+        <div class="glossary-term"><dt>Binding</dt><dd>When a price control actually affects the market (ceiling below equilibrium; floor above equilibrium).</dd></div>
+        <div class="glossary-term"><dt>Break-Even Price</dt><dd>The minimum price needed to cover all costs in the long run; equals minimum AC.</dd></div>
+    </div>
+
+    <!-- SECTION C -->
+    <div class="card" id="section-C">
+        <h3>C</h3>
+        <div class="glossary-term"><dt>Cartel</dt><dd>A formal agreement between firms to cooperate on prices or output.</dd></div>
+        <div class="glossary-term"><dt>Causality</dt><dd>One variable directly causing a change in another.</dd></div>
+        <div class="glossary-term"><dt>Certainty Equivalent</dt><dd>The amount of money with certainty that gives the same utility as a gamble.</dd></div>
+        <div class="glossary-term"><dt>Ceteris Paribus</dt><dd>"All else equal" — assumption that other variables are held constant.</dd></div>
+        <div class="glossary-term"><dt>Club Good</dt><dd>Excludable and non‑rivalrous (cable TV, toll roads).</dd></div>
+        <div class="glossary-term"><dt>Coase Theorem</dt><dd>Private bargaining leads to efficient outcome if property rights clear and transaction costs low.</dd></div>
+        <div class="glossary-term"><dt>Cobb-Douglas</dt><dd>A specific production function: q = A × K<sup>α</sup> × L<sup>β</sup>.</dd></div>
+        <div class="glossary-term"><dt>Collusion</dt><dd>When firms secretly cooperate to maximize joint profits.</dd></div>
+        <div class="glossary-term"><dt>Common Resource</dt><dd>Non‑excludable and rivalrous (fisheries, forests, water).</dd></div>
+        <div class="glossary-term"><dt>Complements</dt><dd>Goods used together (coffee & sugar, cars & gasoline).</dd></div>
+        <div class="glossary-term"><dt>Concave Function</dt><dd>A function that curves downward (flattens out), like the production function with diminishing returns.</dd></div>
+        <div class="glossary-term"><dt>Confounding Variable</dt><dd>A third variable that explains the relationship between two others.</dd></div>
+        <div class="glossary-term"><dt>Constant Returns to Scale (CRS)</dt><dd>Output doubles when inputs double.</dd></div>
+        <div class="glossary-term"><dt>Consumer Surplus (CS)</dt><dd>The difference between what buyers are willing to pay and the actual market price.</dd></div>
+        <div class="glossary-term"><dt>Control Group</dt><dd>The group that doesn't receive the treatment in an experiment.</dd></div>
+        <div class="glossary-term"><dt>Copyright</dt><dd>Government-granted rights to the creator of literary or artistic work.</dd></div>
+        <div class="glossary-term"><dt>Correlation</dt><dd>Two variables moving together.</dd></div>
+        <div class="glossary-term"><dt>Cost of Production</dt><dd>The total cost incurred by a producer to produce a good; represented by the area under the supply curve.</dd></div>
+        <div class="glossary-term"><dt>Counterfactual</dt><dd>What would have happened in the absence of an event.</dd></div>
+        <div class="glossary-term"><dt>Cournot-Nash Equilibrium</dt><dd>The Nash equilibrium in a quantity-setting duopoly.</dd></div>
+        <div class="glossary-term"><dt>Cross-Price Elasticity of Demand</dt><dd>The percentage change in quantity demanded of one good resulting from a 1% increase in the price of another good.</dd></div>
+    </div>
+
+    <!-- SECTION D -->
+    <div class="card" id="section-D">
+        <h3>D</h3>
+        <div class="glossary-term"><dt>Deadweight Loss (DWL)</dt><dd>The net loss in total surplus from a market intervention.</dd></div>
+        <div class="glossary-term"><dt>Decreasing Returns to Scale (DRS)</dt><dd>Output less than doubles when inputs double.</dd></div>
+        <div class="glossary-term"><dt>Deflation</dt><dd>A general decrease in the level of prices.</dd></div>
+        <div class="glossary-term"><dt>Demand</dt><dd>Quantity buyers are willing and able to purchase at various prices.</dd></div>
+        <div class="glossary-term"><dt>Deviation / Cheating</dt><dd>When a firm breaks a collusive agreement to increase its own profit.</dd></div>
+        <div class="glossary-term"><dt>Difference-in-Differences</dt><dd>Comparing changes over time between treatment and control groups.</dd></div>
+        <div class="glossary-term"><dt>Diminishing Marginal Product</dt><dd>The tendency for the additional output from each extra unit of input to eventually decrease.</dd></div>
+        <div class="glossary-term"><dt>Direct Tax</dt><dd>Tax levied on individual income/wealth (depends on financial situation).</dd></div>
+        <div class="glossary-term"><dt>Diversification</dt><dd>A strategy to reduce risk by combining investments or activities that are not perfectly correlated.</dd></div>
+        <div class="glossary-term"><dt>Dominant Strategy</dt><dd>A strategy that gives the highest payoff regardless of what others do.</dd></div>
+        <div class="glossary-term"><dt>Duopoly</dt><dd>An oligopoly with exactly two firms.</dd></div>
+    </div>
+
+    <!-- SECTION E -->
+    <div class="card" id="section-E">
+        <h3>E</h3>
+        <div class="glossary-term"><dt>Economic Cost</dt><dd>The sum of explicit and implicit costs.</dd></div>
+        <div class="glossary-term"><dt>Economic Incidence</dt><dd>Who actually bears the burden of the tax (depends on elasticities).</dd></div>
+        <div class="glossary-term"><dt>Economic Model</dt><dd>Simplified representation of reality used to understand relationships.</dd></div>
+        <div class="glossary-term"><dt>Economic Profit</dt><dd>Revenue minus economic costs (accounting + opportunity costs).</dd></div>
+        <div class="glossary-term"><dt>Economic Rent</dt><dd>The difference between benefit and economic cost.</dd></div>
+        <div class="glossary-term"><dt>Economics</dt><dd>Study of how people make choices under conditions of scarcity.</dd></div>
+        <div class="glossary-term"><dt>Economies of Scale</dt><dd>When the average cost of production decreases as output increases.</dd></div>
+        <div class="glossary-term"><dt>Efficiency</dt><dd>Maximizing total surplus; making the pie as big as possible.</dd></div>
+        <div class="glossary-term"><dt>Elastic Demand</dt><dd>|ε| > 1: Quantity changes more than proportionally to price.</dd></div>
+        <div class="glossary-term"><dt>Elasticity</dt><dd>Measure of responsiveness of one variable to changes in another; the percentage change in one variable resulting from a 1% increase in another.</dd></div>
+        <div class="glossary-term"><dt>Elasticity Rule</dt><dd>The more inelastic side bears more burden (taxes) or captures more benefit (subsidies).</dd></div>
+        <div class="glossary-term"><dt>Engel's Laws</dt><dd>Three observations about how spending patterns change with income: food share falls, housing/clothing share is constant, education/health/leisure share rises.</dd></div>
+        <div class="glossary-term"><dt>Equilibrium</dt><dd>A situation where no one can improve by changing behavior unilaterally.</dd></div>
+        <div class="glossary-term"><dt>Equity</dt><dd>Fairness in the distribution of resources; how the pie is divided.</dd></div>
+        <div class="glossary-term"><dt>Excess Demand (Shortage)</dt><dd>Q<sub>D</sub> > Q<sub>S</sub> at a given price.</dd></div>
+        <div class="glossary-term"><dt>Excess Supply (Surplus)</dt><dd>Q<sub>S</sub> > Q<sub>D</sub> at a given price.</dd></div>
+        <div class="glossary-term"><dt>Excludable</dt><dd>You can prevent people from using the good.</dd></div>
+        <div class="glossary-term"><dt>Explicit Costs</dt><dd>Monetary outflows (wages, rent, materials).</dd></div>
+        <div class="glossary-term"><dt>Extensive Margin</dt><dd>Adjustment in the number of firms (entry/exit).</dd></div>
+        <div class="glossary-term"><dt>Externalities</dt><dd>Costs or benefits affecting people not directly involved in a transaction.</dd></div>
+    </div>
+
+    <!-- SECTION F -->
+    <div class="card" id="section-F">
+        <h3>F</h3>
+        <div class="glossary-term"><dt>Fair Lottery</dt><dd>A gamble with an expected value of zero.</dd></div>
+        <div class="glossary-term"><dt>Firm</dt><dd>An agent that produces goods/services; transforms inputs into outputs.</dd></div>
+        <div class="glossary-term"><dt>First-Degree Price Discrimination</dt><dd>Charging each customer their maximum willingness to pay.</dd></div>
+        <div class="glossary-term"><dt>Fixed Cost (FC)</dt><dd>Costs that don't vary with output.</dd></div>
+        <div class="glossary-term"><dt>Free Entry</dt><dd>No barriers preventing new firms from entering the market.</dd></div>
+        <div class="glossary-term"><dt>Free-Rider Problem</dt><dd>People enjoy benefits without paying → underprovision.</dd></div>
+    </div>
+
+    <!-- SECTION G -->
+    <div class="card" id="section-G">
+        <h3>G</h3>
+        <div class="glossary-term"><dt>Game Theory</dt><dd>The study of strategic decision-making.</dd></div>
+        <div class="glossary-term"><dt>Gini Coefficient</dt><dd>Statistical measure of income inequality (0 = perfect equality, 1 = perfect inequality).</dd></div>
+        <div class="glossary-term"><dt>Government Revenue</dt><dd>The tax money collected by the government.</dd></div>
+    </div>
+
+    <!-- SECTION I -->
+    <div class="card" id="section-I">
+        <h3>I</h3>
+        <div class="glossary-term"><dt>Implicit Costs</dt><dd>Opportunity costs (foregone income, foregone interest).</dd></div>
+        <div class="glossary-term"><dt>Incentive</dt><dd>Something that motivates a particular action or behavior.</dd></div>
+        <div class="glossary-term"><dt>Income Elasticity of Demand</dt><dd>The percentage change in quantity demanded resulting from a 1% increase in income.</dd></div>
+        <div class="glossary-term"><dt>Increasing Returns to Scale (IRS)</dt><dd>Output more than doubles when inputs double.</dd></div>
+        <div class="glossary-term"><dt>Indirect Tax</dt><dd>A tax on units of goods or services, not dependent on income.</dd></div>
+        <div class="glossary-term"><dt>Individual Transferable Quotas (ITQs)</dt><dd>Allocating fishing rights to individuals.</dd></div>
+        <div class="glossary-term"><dt>Inelastic Demand</dt><dd>|ε| < 1: Quantity changes less than proportionally to price.</dd></div>
+        <div class="glossary-term"><dt>Inferior Good</dt><dd>Income ↑ → Demand ↓ (e.g., public transit, junk food).</dd></div>
+        <div class="glossary-term"><dt>Inflation</dt><dd>A general increase in the level of prices.</dd></div>
+        <div class="glossary-term"><dt>Innovation</dt><dd>An improvement that allows more output from the same inputs or the same output from fewer inputs.</dd></div>
+        <div class="glossary-term"><dt>Intensive Margin</dt><dd>Adjustment in quantity by existing firms.</dd></div>
+    </div>
+
+    <!-- SECTION L -->
+    <div class="card" id="section-L">
+        <h3>L</h3>
+        <div class="glossary-term"><dt>Law of Demand</dt><dd>Inverse relationship between price and quantity demanded.</dd></div>
+        <div class="glossary-term"><dt>Law of Supply</dt><dd>Direct relationship between price and quantity supplied.</dd></div>
+        <div class="glossary-term"><dt>Lerner Index</dt><dd>Measure of market power: (P − MC)/P = 1/|ε|.</dd></div>
+        <div class="glossary-term"><dt>Long Run</dt><dd>A period in which all inputs can be varied.</dd></div>
+        <div class="glossary-term"><dt>Luxury Good</dt><dd>A normal good where demand increases more than proportionally to income (ε<sub>R</sub><sup>D</sup> > 1).</dd></div>
+    </div>
+
+    <!-- SECTION M -->
+    <div class="card" id="section-M">
+        <h3>M</h3>
+        <div class="glossary-term"><dt>Macroeconomics</dt><dd>Study of the economy as a whole, using aggregate measures.</dd></div>
+        <div class="glossary-term"><dt>Marginal Benefit</dt><dd>Additional benefit from consuming/producing one more unit.</dd></div>
+        <div class="glossary-term"><dt>Marginal Cost (MC)</dt><dd>Additional cost from consuming/producing one more unit.</dd></div>
+        <div class="glossary-term"><dt>Marginal Product (MP)</dt><dd>The additional output produced when one more unit of labor is employed.</dd></div>
+        <div class="glossary-term"><dt>Marginal Revenue (MR)</dt><dd>Additional revenue from selling one more unit.</dd></div>
+        <div class="glossary-term"><dt>Market</dt><dd>Group of buyers and sellers of a good or service.</dd></div>
+        <div class="glossary-term"><dt>Market Failure</dt><dd>When markets don't achieve optimal outcomes on their own.</dd></div>
+        <div class="glossary-term"><dt>Market Power</dt><dd>The ability of a firm to influence the market price.</dd></div>
+        <div class="glossary-term"><dt>Markup</dt><dd>The difference between price and marginal cost (P − MC).</dd></div>
+        <div class="glossary-term"><dt>Microeconomics</dt><dd>Study of individual economic agents and their interactions.</dd></div>
+        <div class="glossary-term"><dt>Midpoint Method</dt><dd>A method for calculating elasticity between two points that gives the same result regardless of direction.</dd></div>
+        <div class="glossary-term"><dt>Minimum Wage</dt><dd>A price floor on labor (wages).</dd></div>
+        <div class="glossary-term"><dt>Monopoly</dt><dd>A single seller in a market.</dd></div>
+        <div class="glossary-term"><dt>Monopsony</dt><dd>A market with only one buyer (market power on the demand side).</dd></div>
+        <div class="glossary-term"><dt>Movement Along the Curve</dt><dd>Change in quantity due to price change.</dd></div>
+    </div>
+
+    <!-- SECTION N -->
+    <div class="card" id="section-N">
+        <h3>N</h3>
+        <div class="glossary-term"><dt>Nash Equilibrium</dt><dd>A situation where no player can improve by unilaterally changing strategy.</dd></div>
+        <div class="glossary-term"><dt>Natural Experiment</dt><dd>Real-world event that mimics a controlled experiment.</dd></div>
+        <div class="glossary-term"><dt>Natural Monopoly</dt><dd>Market where one firm can produce at lower cost than multiple firms.</dd></div>
+        <div class="glossary-term"><dt>Necessity Good</dt><dd>A normal good where demand increases less than proportionally to income (0 < ε<sub>R</sub><sup>D</sup> < 1).</dd></div>
+        <div class="glossary-term"><dt>Negative Externality</dt><dd>An externality that imposes a cost on others.</dd></div>
+        <div class="glossary-term"><dt>Network Effects</dt><dd>When the value of a product increases as more people use it.</dd></div>
+        <div class="glossary-term"><dt>Non-Binding</dt><dd>When a price control has no effect (ceiling above equilibrium; floor below equilibrium).</dd></div>
+        <div class="glossary-term"><dt>Non‑excludable</dt><dd>You cannot prevent people from using the good.</dd></div>
+        <div class="glossary-term"><dt>Non‑rivalrous</dt><dd>One person's use does not reduce availability for others.</dd></div>
+        <div class="glossary-term"><dt>Normal Good</dt><dd>Income ↑ → Demand ↑ (e.g., restaurant meals, vacations).</dd></div>
+        <div class="glossary-term"><dt>Normal Profit</dt><dd>Zero economic profit—just covers opportunity costs.</dd></div>
+        <div class="glossary-term"><dt>Normative Analysis</dt><dd>Subjective, value-based analysis of "what should be."</dd></div>
+    </div>
+
+    <!-- SECTION O -->
+    <div class="card" id="section-O">
+        <h3>O</h3>
+        <div class="glossary-term"><dt>Oligopoly</dt><dd>Market with a few large firms that are interdependent.</dd></div>
+        <div class="glossary-term"><dt>Omitted Variable Bias</dt><dd>When an unobserved variable affects both X and Y, creating a spurious correlation.</dd></div>
+        <div class="glossary-term"><dt>Opportunity Cost</dt><dd>Value of the best alternative forgone when making a choice.</dd></div>
+        <div class="glossary-term"><dt>Ostrom</dt><dd>Nobel laureate; showed community management of common resources can work.</dd></div>
+        <div class="glossary-term"><dt>Overproduction</dt><dd>Producing more than the socially optimal quantity.</dd></div>
+        <div class="glossary-term"><dt>Own-Price Elasticity of Demand</dt><dd>The percentage change in quantity demanded resulting from a 1% increase in the good's own price.</dd></div>
+    </div>
+
+    <!-- SECTION P -->
+    <div class="card" id="section-P">
+        <h3>P</h3>
+        <div class="glossary-term"><dt>Pareto Optimal</dt><dd>A situation where no one can be made better off without making someone else worse off.</dd></div>
+        <div class="glossary-term"><dt>Pareto Superior</dt><dd>One situation is Pareto superior if it makes at least one person better off without making anyone worse off.</dd></div>
+        <div class="glossary-term"><dt>Patent</dt><dd>Government-granted permission to be the sole producer of an invention.</dd></div>
+        <div class="glossary-term"><dt>Payoff Matrix</dt><dd>A table showing payoffs for all strategy combinations.</dd></div>
+        <div class="glossary-term"><dt>Payoffs</dt><dd>The outcomes for each combination of strategies.</dd></div>
+        <div class="glossary-term"><dt>Perfect Competition</dt><dd>Market structure with price takers, homogeneous goods, perfect info, free entry.</dd></div>
+        <div class="glossary-term"><dt>Perfectly Elastic Demand</dt><dd>|ε| = ∞: Any price change causes quantity to drop to zero (horizontal demand curve).</dd></div>
+        <div class="glossary-term"><dt>Perfectly Inelastic Demand</dt><dd>|ε| = 0: Quantity doesn't change with price (vertical demand curve).</dd></div>
+        <div class="glossary-term"><dt>Pigouvian Tax</dt><dd>Tax to correct negative externalities.</dd></div>
+        <div class="glossary-term"><dt>Players</dt><dd>The decision-makers in a game.</dd></div>
+        <div class="glossary-term"><dt>Pooling</dt><dd>A form of diversification where many independent risks are combined; used by insurance companies.</dd></div>
+        <div class="glossary-term"><dt>Positive Analysis</dt><dd>Objective, testable analysis of "what is."</dd></div>
+        <div class="glossary-term"><dt>Positive Externality</dt><dd>An externality that provides a benefit to others.</dd></div>
+        <div class="glossary-term"><dt>Price Ceiling</dt><dd>A legal maximum price that can be charged. Binding if set below equilibrium.</dd></div>
+        <div class="glossary-term"><dt>Price Discrimination</dt><dd>Selling the same good at different prices to different customers.</dd></div>
+        <div class="glossary-term"><dt>Price Elasticity of Supply</dt><dd>The percentage change in quantity supplied resulting from a 1% increase in price.</dd></div>
+        <div class="glossary-term"><dt>Price Floor</dt><dd>A legal minimum price that can be charged. Binding if set above equilibrium.</dd></div>
+        <div class="glossary-term"><dt>Price Maker</dt><dd>A firm that can influence the market price.</dd></div>
+        <div class="glossary-term"><dt>Price Taker</dt><dd>A firm that cannot influence the market price; must accept it.</dd></div>
+        <div class="glossary-term"><dt>Prisoner's Dilemma</dt><dd>A game showing why rational individuals might fail to cooperate even when cooperation makes everyone better off.</dd></div>
+        <div class="glossary-term"><dt>Private Good</dt><dd>Excludable and rivalrous (food, clothing, cars).</dd></div>
+        <div class="glossary-term"><dt>Producer Surplus (PS)</dt><dd>The difference between the market price and the seller's willingness to sell (cost of production).</dd></div>
+        <div class="glossary-term"><dt>Production Function</dt><dd>The relationship between inputs and the maximum output that can be produced given current technology.</dd></div>
+        <div class="glossary-term"><dt>Production Frontier</dt><dd>The boundary between possible and impossible production; points on the frontier are efficient.</dd></div>
+        <div class="glossary-term"><dt>Profit Maximization</dt><dd>The firm's goal: choose q to maximize π = TR − TC.</dd></div>
+        <div class="glossary-term"><dt>Protectionism</dt><dd>Government actions that restrict international trade.</dd></div>
+        <div class="glossary-term"><dt>Public Good</dt><dd>Non‑excludable and non‑rivalrous (national defense, streetlights).</dd></div>
+    </div>
+
+    <!-- SECTION R -->
+    <div class="card" id="section-R">
+        <h3>R</h3>
+        <div class="glossary-term"><dt>Random Variable</dt><dd>A variable whose future value is uncertain.</dd></div>
+        <div class="glossary-term"><dt>Rationality</dt><dd>The assumption that people make choices to maximize their well-being.</dd></div>
+        <div class="glossary-term"><dt>Regulation</dt><dd>Government intervention to correct market failures.</dd></div>
+        <div class="glossary-term"><dt>Rent Control</dt><dd>A price ceiling on rental housing.</dd></div>
+        <div class="glossary-term"><dt>Representative Firm</dt><dd>A "typical" firm used to analyze the behavior of all firms.</dd></div>
+        <div class="glossary-term"><dt>Residual Demand</dt><dd>The demand a firm faces after competitors have supplied their output.</dd></div>
+        <div class="glossary-term"><dt>Returns to Scale</dt><dd>How output changes when ALL inputs are increased proportionally.</dd></div>
+        <div class="glossary-term"><dt>Reverse Causality</dt><dd>When Y causes X, rather than X causing Y.</dd></div>
+        <div class="glossary-term"><dt>Risk Premium</dt><dd>The maximum amount a risk-averse person will pay to eliminate risk.</dd></div>
+        <div class="glossary-term"><dt>Risk-Averse</dt><dd>Prefers certainty over a gamble with the same EV; concave utility function.</dd></div>
+        <div class="glossary-term"><dt>Risk-Loving</dt><dd>Prefers a gamble over certainty with the same EV; convex utility function.</dd></div>
+        <div class="glossary-term"><dt>Risk-Neutral</dt><dd>Indifferent between certainty and a gamble with the same EV; linear utility.</dd></div>
+        <div class="glossary-term"><dt>Rivalrous</dt><dd>One person's use reduces availability for others.</dd></div>
+    </div>
+
+    <!-- SECTION S -->
+    <div class="card" id="section-S">
+        <h3>S</h3>
+        <div class="glossary-term"><dt>Scarcity</dt><dd>The fundamental economic problem: limited resources, unlimited wants.</dd></div>
+        <div class="glossary-term"><dt>Second-Degree Price Discrimination</dt><dd>Price varies by quantity or version (bulk discounts, economy vs. first class).</dd></div>
+        <div class="glossary-term"><dt>Short Run</dt><dd>A period in which at least one input is fixed.</dd></div>
+        <div class="glossary-term"><dt>Short Side of the Market</dt><dd>In disequilibrium, the smaller of Q<sub>D</sub> and Q<sub>S</sub> determines trade.</dd></div>
+        <div class="glossary-term"><dt>Shortage (Excess Demand)</dt><dd>Occurs when quantity demanded exceeds quantity supplied.</dd></div>
+        <div class="glossary-term"><dt>Shutdown Price</dt><dd>The minimum price needed to cover variable costs; equals minimum AVC.</dd></div>
+        <div class="glossary-term"><dt>Shift of the Curve</dt><dd>Change in demand/supply due to other factors.</dd></div>
+        <div class="glossary-term"><dt>Social Optimum</dt><dd>The quantity where MSB = MSC.</dd></div>
+        <div class="glossary-term"><dt>Spurious Correlation</dt><dd>A correlation that doesn't reflect a causal relationship.</dd></div>
+        <div class="glossary-term"><dt>Statutory Incidence</dt><dd>Who is legally required to pay the tax to the government.</dd></div>
+        <div class="glossary-term"><dt>Strategies</dt><dd>The possible actions available to each player.</dd></div>
+        <div class="glossary-term"><dt>Subsidy</dt><dd>Government payment to encourage production or consumption; a negative tax.</dd></div>
+        <div class="glossary-term"><dt>Substitutes</dt><dd>Goods used in place of each other (coffee & tea).</dd></div>
+        <div class="glossary-term"><dt>Sunk Cost</dt><dd>Costs already incurred that can't be recovered.</dd></div>
+        <div class="glossary-term"><dt>Supply</dt><dd>Quantity sellers are willing and able to sell at various prices.</dd></div>
+        <div class="glossary-term"><dt>Supply Curve</dt><dd>Relationship between price and quantity supplied; MC above minimum AVC.</dd></div>
+        <div class="glossary-term"><dt>Surplus (Excess Supply)</dt><dd>Occurs when quantity supplied exceeds quantity demanded.</dd></div>
+        <div class="glossary-term"><dt>Systematic Risk</dt><dd>Risk that cannot be diversified away (affects all investments).</dd></div>
+    </div>
+
+    <!-- SECTION T -->
+    <div class="card" id="section-T">
+        <h3>T</h3>
+        <div class="glossary-term"><dt>Tariff</dt><dd>A tax on imported goods.</dd></div>
+        <div class="glossary-term"><dt>Tax Incidence</dt><dd>How the burden of a tax is shared between buyers and sellers.</dd></div>
+        <div class="glossary-term"><dt>Tax Wedge</dt><dd>The gap between what buyers pay and what sellers receive (P<sub>B</sub> − P<sub>S</sub>).</dd></div>
+        <div class="glossary-term"><dt>Third-Degree Price Discrimination</dt><dd>Charging different prices to identifiable groups.</dd></div>
+        <div class="glossary-term"><dt>Total Cost (TC)</dt><dd>Sum of fixed and variable costs (FC + VC).</dd></div>
+        <div class="glossary-term"><dt>Total Revenue (TR)</dt><dd>Price × Quantity; the total amount received from selling a good.</dd></div>
+        <div class="glossary-term"><dt>Total Surplus (TS)</dt><dd>The sum of consumer surplus and producer surplus; CS + PS.</dd></div>
+        <div class="glossary-term"><dt>Trade-off</dt><dd>Giving up one thing to get another.</dd></div>
+        <div class="glossary-term"><dt>Tragedy of the Commons</dt><dd>Overuse of common resources (overfishing, groundwater depletion).</dd></div>
+        <div class="glossary-term"><dt>Transaction Costs</dt><dd>The costs of making an economic exchange.</dd></div>
+        <div class="glossary-term"><dt>Transfer</dt><dd>A payment from one group to another with no net loss to society.</dd></div>
+        <div class="glossary-term"><dt>Treatment Group</dt><dd>The group that receives the experimental treatment.</dd></div>
+    </div>
+
+    <!-- SECTION U -->
+    <div class="card" id="section-U">
+        <h3>U</h3>
+        <div class="glossary-term"><dt>Underproduction</dt><dd>Producing less than the socially optimal quantity.</dd></div>
+        <div class="glossary-term"><dt>Unit-Elastic Demand</dt><dd>|ε| = 1: Quantity changes proportionally to price.</dd></div>
+        <div class="glossary-term"><dt>Utility Function of Wealth</dt><dd>A mathematical relationship that maps wealth levels to satisfaction levels.</dd></div>
+    </div>
+
+    <!-- SECTION V -->
+    <div class="card" id="section-V">
+        <h3>V</h3>
+        <div class="glossary-term"><dt>Variable Cost (VC)</dt><dd>Costs that change with output level.</dd></div>
+        <div class="glossary-term"><dt>Vertical Summation</dt><dd>Adding willingness to pay across individuals for public goods.</dd></div>
+    </div>
+
+    <!-- SECTION W -->
+    <div class="card" id="section-W">
+        <h3>W</h3>
+        <div class="glossary-term"><dt>Welfare</dt><dd>The well-being of society (consumer + producer surplus).</dd></div>
+        <div class="glossary-term"><dt>Welfare Analysis</dt><dd>Using CS and PS to measure the winners and losers from a policy.</dd></div>
+        <div class="glossary-term"><dt>Willingness to Pay (WTP)</dt><dd>The maximum amount a buyer is willing to pay for a good.</dd></div>
+        <div class="glossary-term"><dt>Willingness to Sell (WTS)</dt><dd>The minimum amount a seller is willing to accept for a good.</dd></div>
+    </div>
+
+    <!-- SECTION Z -->
+    <div class="card" id="section-Z">
+        <h3>Z</h3>
+        <div class="glossary-term"><dt>Zero-Profit Condition</dt><dd>Long-run equilibrium where P = AC and economic profit = 0.</dd></div>
+    </div>
+
+    <!-- QUICK REFERENCE -->
+    <div class="card">
+        <h3>📊 Quick Reference: Type of Good</h3>
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then it's...</th></tr>
+                <tr><td>Income ↑ → Demand ↑</td><td>Normal Good</td></tr>
+                <tr><td>Income ↑ → Demand ↓</td><td>Inferior Good</td></tr>
+                <tr><td>Price of A ↑ → Demand for B ↑</td><td>B is a Substitute</td></tr>
+                <tr><td>Price of A ↑ → Demand for B ↓</td><td>B is a Complement</td></tr>
+                <tr><td>ε<sub>R</sub><sup>D</sup> > 1</td><td>Luxury Good</td></tr>
+                <tr><td>0 < ε<sub>R</sub><sup>D</sup> < 1</td><td>Necessity Good</td></tr>
+                <tr><td>ε<sub>R</sub><sup>D</sup> < 0</td><td>Inferior Good</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- ABBREVIATIONS -->
+    <div class="card">
+        <h3>📝 Abbreviations</h3>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Abbreviation</th><th>Full Term</th><th>Definition</th></tr>
+                <tr><td>AC</td><td>Average Cost</td><td>TC/q, the cost per unit of output</td></tr>
+                <tr><td>AFC</td><td>Average Fixed Cost</td><td>FC/q, fixed cost per unit</td></tr>
+                <tr><td>AP</td><td>Average Product</td><td>q/L, output per worker</td></tr>
+                <tr><td>AVC</td><td>Average Variable Cost</td><td>VC/q, variable cost per unit</td></tr>
+                <tr><td>CRS</td><td>Constant Returns to Scale</td><td>Output doubles when inputs double</td></tr>
+                <tr><td>CS</td><td>Consumer Surplus</td><td>Benefit consumers receive from market participation</td></tr>
+                <tr><td>DRS</td><td>Decreasing Returns to Scale</td><td>Output less than doubles when inputs double</td></tr>
+                <tr><td>DWL</td><td>Deadweight Loss</td><td>Net loss in total surplus from a policy</td></tr>
+                <tr><td>FC</td><td>Fixed Cost</td><td>Costs that don't vary with output</td></tr>
+                <tr><td>GDP</td><td>Gross Domestic Product</td><td>Total value of everything produced in a country</td></tr>
+                <tr><td>IRS</td><td>Increasing Returns to Scale</td><td>Output more than doubles when inputs double</td></tr>
+                <tr><td>MC</td><td>Marginal Cost</td><td>ΔTC/Δq, cost of producing one more unit</td></tr>
+                <tr><td>MP</td><td>Marginal Product</td><td>Δq/ΔL, output from one more worker</td></tr>
+                <tr><td>MR</td><td>Marginal Revenue</td><td>ΔTR/Δq, revenue from one more unit</td></tr>
+                <tr><td>PS</td><td>Producer Surplus</td><td>Benefit producers receive from market participation</td></tr>
+                <tr><td>TC</td><td>Total Cost</td><td>Total cost of production (FC + VC)</td></tr>
+                <tr><td>TR</td><td>Total Revenue</td><td>P × q, total money from sales</td></tr>
+                <tr><td>VC</td><td>Variable Cost</td><td>Costs that vary with output</td></tr>
+                <tr><td>WTO</td><td>World Trade Organization</td><td>International body regulating trade</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function filterGlossary() {
+            const input = document.getElementById('glossarySearch');
+            const filter = input.value.toLowerCase();
+            const terms = document.querySelectorAll('.glossary-term');
+
+            terms.forEach(term => {
+                const dt = term.querySelector('dt');
+                const dd = term.querySelector('dd');
+                const text = (dt ? dt.textContent : '') + ' ' + (dd ? dd.textContent : '');
+                if (text.toLowerCase().includes(filter)) {
+                    term.style.display = 'flex';
+                } else {
+                    term.style.display = 'none';
+                }
+            });
+
+            // Show/hide sections based on visible terms
+            const sections = document.querySelectorAll('.card[id^="section-"]');
+            sections.forEach(section => {
+                const terms = section.querySelectorAll('.glossary-term');
+                let hasVisible = false;
+                terms.forEach(term => {
+                    if (term.style.display !== 'none') hasVisible = true;
+                });
+                section.style.display = hasVisible ? 'block' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>
