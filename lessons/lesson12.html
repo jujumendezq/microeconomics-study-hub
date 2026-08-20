@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 12: Uncertainty</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+        .card li { margin: 0.3rem 0; line-height: 1.6; }
+        .highlight-box { background: #eef4fa; padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #1f6e8c; margin: 1rem 0; }
+        .formula-box { background: #e7edf6; padding: 0.8rem 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 500; color: #003153; display: inline-block; margin: 0.4rem 0; border: 1px solid #bfd3e6; }
+        .exam-trap { background: #fef6ee; border-left: 4px solid #c77d4a; padding: 0.8rem 1.5rem; border-radius: 10px; margin: 0.6rem 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .glossary-term { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #e8edf3; }
+        .glossary-term dt { font-weight: 600; color: #0b2b4a; min-width: 160px; }
+        .glossary-term dd { color: #334155; }
+        .graph-container { width: 100%; max-width: 850px; margin: 1.5rem auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 0.5rem; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .graph-container svg { width: 100%; height: auto; display: block; }
+        .graph-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; text-align: center; padding: 0.8rem 0 0.3rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .graph-subtitle { font-size: 0.85rem; color: #64748b; text-align: center; padding-bottom: 0.5rem; }
+        .graph-insight { padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 6px; margin-top: 0.5rem; }
+        .graph-insight p { font-size: 0.85rem; color: #1e293b; margin: 0; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .glossary-term { flex-direction: column; gap: 0.2rem; } .glossary-term dt { min-width: unset; } .graph-container { margin: 0.5rem 0; } .graph-container svg text { font-size: 10px !important; } .graph-title { font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Lesson 12: Uncertainty</div>
+
+    <div class="page-header">
+        <h2>🎯 12. Uncertainty</h2>
+        <div class="subtitle">Risk, expected utility, insurance, and diversification</div>
+    </div>
+
+    <!-- LEARNING OBJECTIVES -->
+    <div class="card">
+        <h3>📌 Learning Objectives</h3>
+        <ul>
+            <li>Explain what a random variable is and calculate its expected value</li>
+            <li>Characterize different attitudes towards risk (risk-averse, risk-neutral, risk-loving)</li>
+            <li>Identify how the shape of a utility function reveals risk preferences</li>
+            <li>Explain why risk-averse people are willing to pay a risk premium</li>
+            <li>Understand how insurance and diversification can reduce risk</li>
+        </ul>
+    </div>
+
+    <!-- TOPIC INTRODUCTION -->
+    <div class="card">
+        <h3>🔹 Topic Introduction</h3>
+        <p>Life is full of uncertainty. Every day, we make decisions without knowing exactly what will happen tomorrow. Should you buy that house? Will it increase or decrease in value? Should you invest in stocks or keep your money in a savings account? Will it rain on the day of your outdoor concert? This chapter introduces you to how economists think about decision-making under uncertainty.</p>
+
+        <div class="highlight-box">
+            <strong>Why should you care?</strong> Understanding this material is crucial because it forms the foundation for finance courses you'll take next semester, and it explains why most people buy insurance, why diversification is important in investing, and why people often make seemingly irrational decisions (like buying lottery tickets despite terrible odds).
+        </div>
+    </div>
+
+    <!-- CONCEPT 1: RANDOM VARIABLES -->
+    <div class="card">
+        <h3>🔹 Random Variables</h3>
+        <p><strong>Definition:</strong> A random variable is simply something whose future value we don't know for certain. It could be the outcome of a coin toss (heads or tails), the value of your house next year, or the profit from a concert that depends on the weather.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> When you buy a house today, you don't know what it will be worth in 5 years. Will the neighborhood improve? Will a new highway be built nearby? Will there be a fire? The future value of your house is a <strong>random variable</strong>.
+        </div>
+
+        <p><strong>Why do we need to understand random variables?</strong> Many economic decisions involve uncertain outcomes. If we knew the future with certainty, decision-making would be simple—we'd just choose the best option. But because we don't know the future, we need tools to help us make better decisions despite uncertainty.</p>
+
+        <h4>Key Elements</h4>
+        <ul>
+            <li><strong>Discrete random variables:</strong> Take on specific, countable values (like heads or tails)</li>
+            <li><strong>Continuous random variables:</strong> Can take on any value within a range (like the exact temperature tomorrow)</li>
+            <li>Each possible outcome has a probability associated with it</li>
+        </ul>
+    </div>
+
+    <!-- CONCEPT 2: PROBABILITY -->
+    <div class="card">
+        <h3>🔹 Probability</h3>
+        <p><strong>Definition:</strong> Probability is the frequency with which something occurs. It's a number between 0 and 1 that tells us how likely an event is to happen.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong>
+            <ul>
+                <li>If you flip a fair coin, the probability of getting heads is <strong>0.5</strong> (or 1/2).</li>
+                <li>If you roll a fair six-sided die, the probability of rolling a 4 is <strong>1/6</strong>.</li>
+            </ul>
+        </div>
+
+        <p><strong>Why do probabilities matter?</strong> Probabilities quantify uncertainty. Without probabilities, we'd have no way to compare different uncertain outcomes. Probabilities allow us to calculate expected values and make rational decisions.</p>
+
+        <h4>Key Elements</h4>
+        <ul>
+            <li>Probabilities must sum to 1 for all possible outcomes</li>
+            <li>P(heads) = 0.5 and P(tails) = 0.5 → 0.5 + 0.5 = 1</li>
+            <li>For a house: P(fire) = 0.01, P(no fire) = 0.99 → 0.01 + 0.99 = 1</li>
+            <li>A "fair" coin means heads and tails are equally likely (both 0.5)</li>
+        </ul>
+    </div>
+
+    <!-- CONCEPT 3: EXPECTED VALUE -->
+    <div class="card">
+        <h3>🔹 Expected Value (EV)</h3>
+        <p><strong>Definition:</strong> The expected value is a <strong>weighted average</strong> of all possible outcomes, where the weights are the probabilities of each outcome occurring. It's what you would get "on average" if the situation were repeated many, many times.</p>
+
+        <div class="formula-box">EV = Σ P<sub>i</sub> × X<sub>i</sub></div>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> In the concert example, the expected profit is (0.5 × 15,000) + (0.5 × -5,000) = <strong>5,000 CHF</strong>. If you organized this concert every night for 1,000 nights, you'd expect to make about 5,000 CHF per night on average.
+        </div>
+
+        <p><strong>Why is expected value important?</strong> Expected value gives us a single number that summarizes all possible outcomes. It's a benchmark for decision-making. However, it's important to understand that the expected value is rarely what actually happens—the house worth 79,600 CHF on average will actually be worth either 80,000 CHF or 40,000 CHF.</p>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> EV is a theoretical benchmark, not an actual outcome. EV is what you'd observe on average after infinite repetitions. EV doesn't capture risk—two gambles can have the same EV but very different risk profiles.</div>
+    </div>
+
+    <!-- CONCEPT 4: FAIR LOTTERY -->
+    <div class="card">
+        <h3>🔹 Fair Lottery</h3>
+        <p><strong>Definition:</strong> A fair lottery is a gamble where the <strong>expected value is zero</strong>. You have an equal chance of winning and losing the same amount.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> I flip a coin. If it's heads, you pay me 10 CHF. If it's tails, I pay you 10 CHF. EV = (0.5 × 10) + (0.5 × -10) = <strong>0</strong>.
+        </div>
+
+        <p><strong>Why are fair lotteries useful?</strong> Fair lotteries are useful for identifying risk preferences:</p>
+        <ul>
+            <li><strong>Risk-averse:</strong> Rejects a fair lottery → prefers certainty</li>
+            <li><strong>Risk-loving:</strong> Accepts a fair lottery → enjoys the gamble</li>
+            <li><strong>Risk-neutral:</strong> Indifferent → only cares about expected value</li>
+        </ul>
+    </div>
+
+    <!-- CONCEPT 5: ATTITUDES TOWARDS RISK -->
+    <div class="card">
+        <h3>🔹 Attitudes Towards Risk</h3>
+        <p>People have different attitudes towards risk. These attitudes determine whether they'll accept a gamble or prefer a certain outcome.</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Risk Attitude</th><th>Behavior</th><th>Utility Function Shape</th></tr>
+                <tr><td><strong>Risk-Averse</strong></td><td>Always rejects fair lotteries</td><td>Concave</td></tr>
+                <tr><td><strong>Risk-Loving</strong></td><td>Always accepts fair lotteries</td><td>Convex</td></tr>
+                <tr><td><strong>Risk-Neutral</strong></td><td>Indifferent to fair lotteries</td><td>Linear</td></tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong>
+            <ul>
+                <li><strong>Risk-Averse:</strong> Won't gamble on a 50/50 chance to win or lose 10 CHF. Prefers to keep the 10 CHF for sure.</li>
+                <li><strong>Risk-Loving:</strong> Will gamble on a 50/50 chance to win or lose 10 CHF. Finds the excitement worth the risk.</li>
+                <li><strong>Risk-Neutral:</strong> Doesn't care either way. Only cares about expected value.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- GRAPH: UTILITY FUNCTION -->
+    <div class="card">
+        <h3>📈 Graph: Utility Function of Wealth</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 1: Utility Functions and Risk Attitudes</div>
+            <div class="graph-subtitle">The shape reveals attitudes towards risk</div>
+            <svg viewBox="0 0 750 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="750" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="700" y2="400"/>
+                    <line x1="80" y1="100" x2="700" y2="100"/>
+                    <line x1="80" y1="150" x2="700" y2="150"/>
+                    <line x1="80" y1="200" x2="700" y2="200"/>
+                    <line x1="80" y1="250" x2="700" y2="250"/>
+                    <line x1="80" y1="300" x2="700" y2="300"/>
+                    <line x1="80" y1="350" x2="700" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="390" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Wealth (ω)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Utility (U)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="700,400 685,390 685,410" fill="#0b2b4a"/>
+                <path d="M 80,380 Q 200,300 360,220 Q 500,180 640,160" stroke="#2563eb" stroke-width="3" fill="none"/>
+                <text x="620" y="165" font-size="14" font-weight="700" fill="#2563eb">Risk-Averse</text>
+                <text x="620" y="180" font-size="11" fill="#2563eb">(Concave)</text>
+                <line x1="80" y1="380" x2="640" y2="160" stroke="#16a34a" stroke-width="3" stroke-dasharray="8,4"/>
+                <text x="620" y="150" font-size="14" font-weight="700" fill="#16a34a">Risk-Neutral</text>
+                <text x="620" y="135" font-size="11" fill="#16a34a">(Linear)</text>
+                <path d="M 80,380 Q 200,380 360,300 Q 500,250 640,250" stroke="#dc2626" stroke-width="3" fill="none"/>
+                <text x="620" y="255" font-size="14" font-weight="700" fill="#dc2626">Risk-Loving</text>
+                <text x="620" y="270" font-size="11" fill="#dc2626">(Convex)</text>
+                <rect x="470" y="60" width="200" height="100" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="80" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="95" x2="495" y2="95" stroke="#2563eb" stroke-width="2"/>
+                <text x="505" y="99" font-size="11" fill="#1e293b">Risk-Averse</text>
+                <line x1="480" y1="110" x2="495" y2="110" stroke="#16a34a" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="505" y="114" font-size="11" fill="#1e293b">Risk-Neutral</text>
+                <line x1="480" y1="125" x2="495" y2="125" stroke="#dc2626" stroke-width="2"/>
+                <text x="505" y="129" font-size="11" fill="#1e293b">Risk-Loving</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> The shape of the utility function reveals risk preferences. Concave = risk-averse, convex = risk-loving, linear = risk-neutral.</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 6: EXPECTED UTILITY -->
+    <div class="card">
+        <h3>🔹 Expected Utility (EU)</h3>
+        <p><strong>Definition:</strong> Expected utility is the <strong>weighted average</strong> of the utilities from each possible outcome, where the weights are the probabilities of each outcome occurring.</p>
+
+        <div class="formula-box">EU = Σ P<sub>i</sub> × U(X<sub>i</sub>)</div>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> In the concert example, if U(ω) = √ω:
+            <ul>
+                <li>Utility with rain (25,000 CHF) = √25,000 ≈ 158</li>
+                <li>Utility with sun (45,000 CHF) = √45,000 ≈ 212</li>
+                <li>Expected Utility = 0.5 × 158 + 0.5 × 212 = <strong>185</strong></li>
+            </ul>
+        </div>
+
+        <p><strong>Why is expected utility important?</strong> Expected utility is what matters for decision-making under uncertainty. People don't maximize expected wealth—they maximize <strong>expected utility</strong>. This explains why risk-averse people reject fair lotteries even when the expected value is zero.</p>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> For risk-averse people: EU < U(EV). For risk-loving people: EU > U(EV). For risk-neutral people: EU = U(EV).</div>
+    </div>
+
+    <!-- GRAPH: RISK AVERSION -->
+    <div class="card">
+        <h3>📈 Graph: Risk Aversion and Expected Utility</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 2: Risk Aversion and Expected Utility</div>
+            <div class="graph-subtitle">Why risk-averse people reject fair lotteries</div>
+            <svg viewBox="0 0 750 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="750" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="700" y2="400"/>
+                    <line x1="80" y1="100" x2="700" y2="100"/>
+                    <line x1="80" y1="150" x2="700" y2="150"/>
+                    <line x1="80" y1="200" x2="700" y2="200"/>
+                    <line x1="80" y1="250" x2="700" y2="250"/>
+                    <line x1="80" y1="300" x2="700" y2="300"/>
+                    <line x1="80" y1="350" x2="700" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="390" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Wealth (ω)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Utility (U)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="700,400 685,390 685,410" fill="#0b2b4a"/>
+                <path d="M 80,380 Q 200,300 360,250 Q 500,220 640,200" stroke="#2563eb" stroke-width="3" fill="none"/>
+                <text x="620" y="205" font-size="14" font-weight="700" fill="#2563eb">U(ω)</text>
+                <line x1="80" y1="200" x2="220" y2="200" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="60" y="205" font-size="11" fill="#dc2626">U(25k)</text>
+                <line x1="80" y1="100" x2="500" y2="100" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="60" y="105" font-size="11" fill="#dc2626">U(45k)</text>
+                <circle cx="220" cy="200" r="6" fill="#dc2626"/>
+                <text x="230" y="195" font-size="10" fill="#dc2626">A</text>
+                <circle cx="500" cy="100" r="6" fill="#dc2626"/>
+                <text x="510" y="95" font-size="10" fill="#dc2626">B</text>
+                <line x1="220" y1="200" x2="500" y2="100" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="330" y="160" font-size="12" fill="#f59e0b">EU</text>
+                <text x="330" y="175" font-size="10" fill="#f59e0b">(Average)</text>
+                <circle cx="360" cy="250" r="6" fill="#16a34a"/>
+                <text x="370" y="245" font-size="10" fill="#16a34a">U(EV)</text>
+                <line x1="80" y1="150" x2="360" y2="150" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="60" y="155" font-size="11" fill="#16a34a">U(35k)</text>
+                <text x="340" y="140" font-size="11" fill="#16a34a">↑</text>
+                <text x="345" y="125" font-size="11" fill="#dc2626">Risk Premium</text>
+                <text x="380" y="380" font-size="11" fill="#0b2b4a">25k</text>
+                <text x="500" y="380" font-size="11" fill="#0b2b4a">45k</text>
+                <text x="480" y="380" font-size="11" fill="#0b2b4a">35k</text>
+                <rect x="470" y="280" width="200" height="85" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="300" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="315" x2="495" y2="315" stroke="#2563eb" stroke-width="2"/>
+                <text x="505" y="319" font-size="11" fill="#1e293b">U(ω)</text>
+                <circle cx="487" cy="332" r="4" fill="#dc2626"/>
+                <text x="505" y="336" font-size="11" fill="#1e293b">Gamble Outcomes</text>
+                <circle cx="487" cy="348" r="4" fill="#16a34a"/>
+                <text x="505" y="352" font-size="11" fill="#1e293b">U(EV)</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> For a risk-averse person, U(EV) > EU. The difference between EV and the certainty equivalent is the <strong>risk premium</strong> – the maximum amount they'd pay to avoid risk.</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 7: RISK PREMIUM -->
+    <div class="card">
+        <h3>🔹 Risk Premium</h3>
+        <p><strong>Definition:</strong> The risk premium is the <strong>maximum amount</strong> a risk-averse person is willing to pay to avoid risk. It's the difference between the expected value of a gamble and the <strong>certainty equivalent</strong> (the amount that gives the same utility as the gamble).</p>
+
+        <div class="formula-box">Risk Premium = EV − Certainty Equivalent</div>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> In the concert example, you might be willing to pay 10 CHF for insurance that guarantees you'll have 35,000 CHF regardless of the weather. Even if the insurance company charged you 11 CHF (an extra 1 CHF), you might still buy it because you value certainty. The risk premium is the extra amount you're willing to pay above the fair insurance premium.
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> The more concave the utility function (the more diminishing marginal utility), the <strong>larger</strong> the risk premium. Risk-averse people pay to eliminate uncertainty.</div>
+    </div>
+
+    <!-- CONCEPT 8: INSURANCE -->
+    <div class="card">
+        <h3>🔹 Insurance</h3>
+        <p><strong>Definition:</strong> Insurance is a contract where you pay a <strong>premium</strong> in exchange for protection against a specific risk. If the bad event happens, the insurance company pays you a benefit.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> You pay 500 CHF per year for car insurance. If you get into an accident, the insurance company pays for repairs. You're transferring the risk from yourself to the insurance company.
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Type</th><th>Definition</th><th>Example</th></tr>
+                <tr><td><strong>Actuarial (Fair) Insurance</strong></td><td>Premium = expected loss</td><td>If chance of accident = 5% and damage = 10,000 CHF → fair premium = 500 CHF</td></tr>
+                <tr><td><strong>Risk Premium</strong></td><td>Additional amount above fair premium</td><td>Risk-averse person pays 550 CHF even though fair premium is 500 CHF</td></tr>
+                <tr><td><strong>Real Insurance</strong></td><td>Companies charge more than fair premium to cover costs and make profit</td><td>Insurance premium = 600 CHF (includes administration costs)</td></tr>
+            </table>
+        </div>
+
+        <div class="formula-box">Actuarial (Fair) Premium = P(bad event) × Loss amount</div>
+
+        <div class="highlight-box">
+            <strong>Example: Health Insurance</strong>
+            <ul>
+                <li>A household has 30,000 CHF income</li>
+                <li>There's a 0.5 probability someone gets sick and incurs 10,000 CHF in medical expenses</li>
+                <li>Fair premium = 0.5 × 10,000 = <strong>5,000 CHF</strong></li>
+                <li>Without insurance: EU = 0.5 × U(30,000) + 0.5 × U(20,000) = 1,000</li>
+                <li>With fair insurance: Income = 25,000 CHF (regardless of illness) → Utility = 1,025</li>
+                <li>Since 1,025 > 1,000, the household is better off with insurance</li>
+            </ul>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> Risk-averse people will buy insurance even if it's "unfair" (premium > expected loss) because they value the elimination of risk.</div>
+    </div>
+
+    <!-- CONCEPT 9: DIVERSIFICATION -->
+    <div class="card">
+        <h3>🔹 Diversification</h3>
+        <p><strong>Definition:</strong> Diversification is a strategy to reduce risk by <strong>spreading investments</strong> across multiple assets or activities that are not perfectly correlated with each other.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> Don't put all your eggs in one basket. Instead of investing all your money in one company's stock, invest in stocks from different industries. If one industry declines, others may do well.
+        </div>
+
+        <div class="highlight-box">
+            <strong>Example: Sunglasses & Umbrellas</strong>
+            <ul>
+                <li>Sunglasses revenue: Sunny = 30,000 CHF, Rainy = 12,000 CHF</li>
+                <li>Umbrellas revenue: Sunny = 12,000 CHF, Rainy = 30,000 CHF</li>
+                <li>Each weather has 0.5 probability</li>
+                <li><strong>Only sunglasses:</strong> EV = 0.5 × 30,000 + 0.5 × 12,000 = 21,000 CHF (risky)</li>
+                <li><strong>Only umbrellas:</strong> EV = 0.5 × 12,000 + 0.5 × 30,000 = 21,000 CHF (risky)</li>
+                <li><strong>Both (diversified):</strong> EV = 21,000 CHF regardless of weather! <strong>Risk eliminated</strong></li>
+            </ul>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> Diversification works because different risks are often <strong>not perfectly correlated</strong>. When one investment performs poorly, another might perform well, smoothing out your overall returns. However, <strong>systematic risk</strong> (like a global recession) can't be diversified away.</div>
+    </div>
+
+    <!-- FORMULAS -->
+    <div class="card">
+        <h3>🧮 Key Formulas</h3>
+
+        <div class="formula-box">EV = Σ P<sub>i</sub> × X<sub>i</sub> (Expected Value)</div>
+        <div class="formula-box">EU = Σ P<sub>i</sub> × U(X<sub>i</sub>) (Expected Utility)</div>
+        <div class="formula-box">Actuarial (Fair) Premium = P(bad event) × Loss amount</div>
+        <div class="formula-box">Risk Premium = EV − Certainty Equivalent</div>
+        <div class="formula-box">Diversification: Combine uncorrelated risky assets to reduce risk</div>
+    </div>
+
+    <!-- EXAM SCENARIOS -->
+    <div class="card">
+        <h3>📝 Exam Scenarios & Problem-Solving</h3>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 1: Expected Value Calculation</h4>
+            <p><strong>Scenario:</strong> A gamble offers a 0.3 probability of winning 100 CHF and a 0.7 probability of winning 20 CHF. What is the expected value?</p>
+            <p><strong>Solution:</strong> EV = 0.3 × 100 + 0.7 × 20 = 30 + 14 = <strong>44 CHF</strong></p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 2: Expected Utility and Risk Aversion</h4>
+            <p><strong>Scenario:</strong> U(ω) = √ω. Wealth = 100 CHF. Offered gamble: 0.5 chance to win 21 CHF (wealth = 121), 0.5 chance to lose 19 CHF (wealth = 81). Calculate EU and U(EV). Is this person risk-averse?</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>EV = 0.5 × 121 + 0.5 × 81 = 101</li>
+                <li>U(121) = √121 = 11, U(81) = √81 = 9</li>
+                <li>EU = 0.5 × 11 + 0.5 × 9 = <strong>10</strong></li>
+                <li>U(EV) = U(101) = √101 ≈ <strong>10.05</strong></li>
+                <li>Since 10 < 10.05, EU < U(EV) → <strong>Risk-averse</strong></li>
+            </ul>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 3: Fair Insurance Premium</h4>
+            <p><strong>Scenario:</strong> What is the fair premium for insurance against a 20,000 CHF loss that occurs with 0.1 probability?</p>
+            <p><strong>Solution:</strong> Fair Premium = 0.1 × 20,000 = <strong>2,000 CHF</strong></p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 4: Diversification</h4>
+            <p><strong>Scenario:</strong> You can invest all your money in an asset that returns 10% or 0% with equal probability, or you can split your investment between two unrelated assets with the same returns. Which option reduces risk?</p>
+            <p><strong>Solution:</strong> Splitting between two unrelated assets <strong>reduces risk</strong> because when one performs poorly, the other might perform well. This is diversification.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0;">
+            <h4>Scenario 5: Open-Air Concert</h4>
+            <p><strong>Scenario:</strong> You organize open-air concerts. You can hire a local band or a world-famous band. Both have EV = 5,000 CHF. Local band: Rain → -5,000 CHF, Sun → 15,000 CHF. Famous band: Rain → -150,000 CHF, Sun → 160,000 CHF. Which do you choose?</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li><strong>Risk-averse:</strong> Choose Local Band (avoid large loss)</li>
+                <li><strong>Risk-loving:</strong> Choose Famous Band (chance of huge profit)</li>
+                <li><strong>Risk-neutral:</strong> Indifferent (same EV)</li>
+            </ul>
+            <div class="highlight-box"><strong>Answer:</strong> Most people choose the local band because they're risk-averse. The expected values are the same, but the local band has much lower downside risk.</div>
+        </div>
+    </div>
+
+    <!-- HIGH-YIELD EXAM FOCUS -->
+    <div class="card">
+        <h3>⚡ High-Yield Exam Focus</h3>
+
+        <h4>Memorization Checklist</h4>
+        <div class="grid-2">
+            <ul>
+                <li>□ Random Variable</li>
+                <li>□ Probability</li>
+                <li>□ Expected Value (EV)</li>
+                <li>□ Fair Lottery</li>
+                <li>□ Risk-Averse</li>
+                <li>□ Risk-Loving</li>
+                <li>□ Risk-Neutral</li>
+                <li>□ Utility Function of Wealth</li>
+            </ul>
+            <ul>
+                <li>□ Expected Utility (EU)</li>
+                <li>□ Risk Premium</li>
+                <li>□ Actuarial (Fair) Insurance</li>
+                <li>□ Diversification</li>
+                <li>□ Concave Utility Function</li>
+                <li>□ Convex Utility Function</li>
+                <li>□ Linear Utility Function</li>
+                <li>□ Certainty Equivalent</li>
+            </ul>
+        </div>
+
+        <h4>Common Exam Traps</h4>
+        <ul>
+            <li><strong>Confusing Expected Value with Expected Utility:</strong> EV is weighted average of monetary outcomes; EU is weighted average of utilities. Risk-averse people maximize EU, not EV.</li>
+            <li><strong>Confusing Risk-Aversion with Risk-Loving:</strong> Risk-Averse → Concave → EU < U(EV). Risk-Loving → Convex → EU > U(EV).</li>
+            <li><strong>Thinking Insurance Premiums Are Always Fair:</strong> Fair premium = expected loss. Real insurance premiums include a risk premium (profit, administrative costs).</li>
+            <li><strong>Forgetting Diversification Requires Uncorrelated Events:</strong> Diversification reduces risk when risks are not perfectly correlated.</li>
+            <li><strong>Believing Expected Value Happens in Reality:</strong> EV is a theoretical average, not what actually happens.</li>
+        </ul>
+
+        <h4>The "If This, Then That" Logic</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then...</th></tr>
+                <tr><td>Utility function is concave</td><td>Person is RISK-AVERSE</td></tr>
+                <tr><td>Utility function is convex</td><td>Person is RISK-LOVING</td></tr>
+                <tr><td>Utility function is linear</td><td>Person is RISK-NEUTRAL</td></tr>
+                <tr><td>EU < U(EV)</td><td>Risk-averse</td></tr>
+                <tr><td>EU > U(EV)</td><td>Risk-loving</td></tr>
+                <tr><td>EU = U(EV)</td><td>Risk-neutral</td></tr>
+                <tr><td>Offered a fair lottery</td><td>Risk-averse → Refuse; Risk-loving → Accept; Risk-neutral → Indifferent</td></tr>
+                <tr><td>Considering insurance</td><td>Risk-averse → Buy; Risk-loving → Probably don't; Risk-neutral → Buy only if premium ≤ fair</td></tr>
+                <tr><td>Opportunity to diversify</td><td>Risk-averse → Diversify; Risk-loving → May not; Risk-neutral → Indifferent</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- PRACTICE QUESTIONS -->
+    <div class="card">
+        <h3>📝 Practice Questions</h3>
+
+        <div class="question-block" id="q1">
+            <div class="q-text">Q1: A gamble offers a 0.3 probability of winning 100 CHF and a 0.7 probability of winning 20 CHF. What is the expected value?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) 30 CHF</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="B"><span>B) 44 CHF</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="C"><span>C) 44 CHF</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) 20 CHF</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1', 'C')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: C</strong><br>EV = 0.3 × 100 + 0.7 × 20 = 30 + 14 = <strong>44 CHF</strong></div>
+        </div>
+
+        <div class="question-block" id="q2">
+            <div class="q-text">Q2: A risk-averse person has a utility function that is:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q2" value="A"><span>A) Convex</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="B"><span>B) Concave</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) Linear</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="D"><span>D) Exponential</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>A risk-averse person has a concave utility function (diminishing marginal utility). This means they value each additional unit of wealth less than the previous one.</div>
+        </div>
+
+        <div class="question-block" id="q3">
+            <div class="q-text">Q3: The fair premium for insurance is equal to:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A"><span>A) The risk premium</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="B"><span>B) The expected loss</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="C"><span>C) The administrative cost</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="D"><span>D) The insurance company's profit</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>The fair (actuarial) premium is equal to the expected loss: P(bad event) × Loss amount.</div>
+        </div>
+
+        <div class="question-block" id="q4">
+            <div class="q-text">Q4: Which of the following is NOT a condition for price discrimination?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q4" value="A"><span>A) Market power</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="B"><span>B) Different consumer groups with different WTP</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="C"><span>C) No arbitrage between groups</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="D"><span>D) Perfect competition</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4', 'D')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: D</strong><br>Perfect competition is NOT a condition for price discrimination. In fact, firms need market power (the opposite of perfect competition) to price discriminate.</div>
+        </div>
+
+        <div class="question-block" id="q5">
+            <div class="q-text">Q5: Diversification reduces risk by:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A"><span>A) Increasing expected value</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="B"><span>B) Combining uncorrelated risky assets</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="C"><span>C) Eliminating all risk</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="D"><span>D) Reducing expected value</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>Diversification reduces risk by combining assets that are not perfectly correlated. When one asset performs poorly, another may perform well, smoothing overall returns.</div>
+        </div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="card">
+        <h3>📖 Glossary</h3>
+        <div class="glossary-term"><dt>Random Variable</dt><dd>A variable whose future value is uncertain.</dd></div>
+        <div class="glossary-term"><dt>Probability</dt><dd>The frequency with which something occurs; a number between 0 and 1.</dd></div>
+        <div class="glossary-term"><dt>Expected Value (EV)</dt><dd>The weighted average of all possible outcomes.</dd></div>
+        <div class="glossary-term"><dt>Fair Lottery</dt><dd>A gamble with an expected value of zero.</dd></div>
+        <div class="glossary-term"><dt>Risk-Averse</dt><dd>Prefers certainty over a gamble with the same EV; concave utility function.</dd></div>
+        <div class="glossary-term"><dt>Risk-Loving</dt><dd>Prefers a gamble over certainty with the same EV; convex utility function.</dd></div>
+        <div class="glossary-term"><dt>Risk-Neutral</dt><dd>Indifferent between certainty and a gamble with the same EV; linear utility.</dd></div>
+        <div class="glossary-term"><dt>Utility Function of Wealth</dt><dd>A mathematical relationship mapping wealth to satisfaction.</dd></div>
+        <div class="glossary-term"><dt>Expected Utility (EU)</dt><dd>The weighted average of utilities from all possible outcomes.</dd></div>
+        <div class="glossary-term"><dt>Risk Premium</dt><dd>The maximum amount a risk-averse person will pay to eliminate risk.</dd></div>
+        <div class="glossary-term"><dt>Actuarial (Fair) Insurance</dt><dd>Insurance with premium exactly equal to the expected loss.</dd></div>
+        <div class="glossary-term"><dt>Certainty Equivalent</dt><dd>The amount of money with certainty that gives the same utility as a gamble.</dd></div>
+        <div class="glossary-term"><dt>Diversification</dt><dd>A strategy to reduce risk by combining uncorrelated assets.</dd></div>
+        <div class="glossary-term"><dt>Systematic Risk</dt><dd>Risk that cannot be diversified away (affects all investments).</dd></div>
+        <div class="glossary-term"><dt>Idiosyncratic Risk</dt><dd>Risk specific to an individual investment that can be diversified away.</dd></div>
+        <div class="glossary-term"><dt>Diminishing Marginal Utility</dt><dd>The decrease in additional satisfaction from each additional unit of wealth.</dd></div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+        function toggleAnswer(qId, correct) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

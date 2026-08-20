@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 7: Supply in Competitive Markets</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+        .card li { margin: 0.3rem 0; line-height: 1.6; }
+        .highlight-box { background: #eef4fa; padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #1f6e8c; margin: 1rem 0; }
+        .formula-box { background: #e7edf6; padding: 0.8rem 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 500; color: #003153; display: inline-block; margin: 0.4rem 0; border: 1px solid #bfd3e6; }
+        .exam-trap { background: #fef6ee; border-left: 4px solid #c77d4a; padding: 0.8rem 1.5rem; border-radius: 10px; margin: 0.6rem 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .glossary-term { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #e8edf3; }
+        .glossary-term dt { font-weight: 600; color: #0b2b4a; min-width: 160px; }
+        .glossary-term dd { color: #334155; }
+        .graph-container { width: 100%; max-width: 850px; margin: 1.5rem auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 0.5rem; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .graph-container svg { width: 100%; height: auto; display: block; }
+        .graph-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; text-align: center; padding: 0.8rem 0 0.3rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .graph-subtitle { font-size: 0.85rem; color: #64748b; text-align: center; padding-bottom: 0.5rem; }
+        .graph-insight { padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 6px; margin-top: 0.5rem; }
+        .graph-insight p { font-size: 0.85rem; color: #1e293b; margin: 0; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .glossary-term { flex-direction: column; gap: 0.2rem; } .glossary-term dt { min-width: unset; } .graph-container { margin: 0.5rem 0; } .graph-container svg text { font-size: 10px !important; } .graph-title { font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Lesson 7: Supply in Competitive Markets</div>
+
+    <div class="page-header">
+        <h2>🏪 7. Supply in Competitive Markets</h2>
+        <div class="subtitle">Firm behavior, profit maximization, and supply curves</div>
+    </div>
+
+    <!-- LEARNING OBJECTIVES -->
+    <div class="card">
+        <h3>📌 Learning Objectives</h3>
+        <ul>
+            <li>Explain what it means for a firm to be a "price taker" and why this matters</li>
+            <li>Identify the goal of a firm: profit maximization</li>
+            <li>Calculate the profit-maximizing quantity using total revenue, total cost, marginal revenue, and marginal cost</li>
+            <li>Derive the supply curve of a competitive firm from its marginal cost curve</li>
+            <li>Distinguish between the short-run shutdown decision and the long-run exit decision</li>
+            <li>Explain the difference between a firm's supply curve and the market/sector supply curve</li>
+            <li>Understand how free entry leads to zero economic profits in the long run</li>
+            <li>Apply the concepts of break-even price and shutdown price</li>
+            <li>Differentiate between short-run and long-run supply curves</li>
+            <li>Explain why firms might stay in business despite making losses</li>
+        </ul>
+    </div>
+
+    <!-- TOPIC INTRODUCTION -->
+    <div class="card">
+        <h3>🔹 Topic Introduction</h3>
+        <p>Imagine you own a small bakery. Every day, you must decide: How many loaves of bread should I bake? If the market price of bread is high, you want to bake more. If the price drops, you might bake fewer loaves. But what about your rent? You have to pay that regardless of how much you bake. And what if the price drops so low that you can't even cover your ingredients? Should you keep baking or close the bakery temporarily?</p>
+
+        <p>This chapter answers these questions by examining how individual firms make production decisions. The goal is to understand the <strong>supply side</strong> of markets—how firms decide what quantity to produce, when to stay in business, and when to exit. This is the foundation for understanding market outcomes, prices, and the supply curves you see in economics textbooks.</p>
+
+        <div class="highlight-box">
+            <strong>Why should you care?</strong> This isn't just theory—it explains real business decisions. Why did some restaurants survive COVID while others closed? Why do gas stations raise prices when oil prices increase? Why does your favorite smartphone become cheaper over time? All of these questions connect to the concepts in this chapter.
+        </div>
+    </div>
+
+    <!-- CONCEPT 1: PERFECT COMPETITION -->
+    <div class="card">
+        <h3>🔹 Perfect Competition</h3>
+        <p><strong>Definition:</strong> Perfect competition is a market structure with <strong>five key characteristics</strong>:</p>
+
+        <ol>
+            <li><strong>Atomicity:</strong> Many buyers and sellers, each too small to influence the market price</li>
+            <li><strong>Homogeneous goods:</strong> All firms sell identical products</li>
+            <li><strong>Perfect information:</strong> Everyone knows about prices, quality, and technology</li>
+            <li><strong>Free entry and exit:</strong> Firms can enter or leave the market without barriers</li>
+            <li><strong>Price takers:</strong> Individual firms cannot influence the market price—they must accept the price determined by market supply and demand</li>
+        </ol>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> Think about wheat farming. There are thousands of wheat farmers worldwide. Each farmer's output is a tiny fraction of total wheat production. All wheat is essentially the same. Farmers can easily stop growing wheat and start growing corn (free exit), and new farmers can enter. No single farmer can charge more than the market price—customers would just buy from another farmer. Farmers are <strong>price takers</strong>.
+        </div>
+
+        <p><strong>Why are firms price takers?</strong> If one firm tries to raise its price above the market price, it loses all its customers (they'll buy from competitors at the lower market price). Conversely, there's no reason to charge less than the market price because the firm can sell all it wants at the current market price. This creates a <strong>perfectly elastic (horizontal) demand curve</strong> facing the individual firm.</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Characteristic</th><th>Meaning</th></tr>
+                <tr><td>Atomicity</td><td>Many small firms, no market power</td></tr>
+                <tr><td>Homogeneity</td><td>Identical products across firms</td></tr>
+                <tr><td>Perfect Information</td><td>Everyone knows everything relevant</td></tr>
+                <tr><td>Free Entry/Exit</td><td>No barriers to entering or leaving</td></tr>
+                <tr><td>Price Taker</td><td>Firm accepts market price as given</td></tr>
+            </table>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> Perfect competition is the "baseline" market structure that economists use as a benchmark. It's the starting point before studying more realistic markets like monopoly (one seller) or oligopoly (few sellers).</div>
+    </div>
+
+    <!-- CONCEPT 2: PROFIT MAXIMIZATION -->
+    <div class="card">
+        <h3>🔹 Profit Maximization</h3>
+        <p><strong>Definition:</strong> Profit maximization is the firm's primary objective. Firms choose the quantity of output (q) that maximizes the difference between total revenue (TR) and total cost (TC).</p>
+
+        <div class="formula-box">Profit (π) = Total Revenue (TR) - Total Cost (TC)</div>
+
+        <p><strong>Why do firms maximize profit?</strong> Firms exist to make money for their owners. To maximize profits, a firm must compare:</p>
+        <ul>
+            <li><strong>What it earns from producing one more unit</strong> (marginal revenue, MR)</li>
+            <li><strong>What it costs to produce that one more unit</strong> (marginal cost, MC)</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Decision Rules:</strong>
+            <ul>
+                <li>If <strong>MR > MC</strong>, producing the extra unit adds to profit → <strong>Increase production</strong></li>
+                <li>If <strong>MR < MC</strong>, the extra unit reduces profit → <strong>Decrease production</strong></li>
+                <li>If <strong>MR = MC</strong>, profit is maximized → <strong>This is the optimal quantity</strong></li>
+            </ul>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Term</th><th>Definition</th><th>Formula</th></tr>
+                <tr><td>Total Revenue (TR)</td><td>Total money from selling output</td><td>TR = P × q</td></tr>
+                <tr><td>Total Cost (TC)</td><td>Total cost of producing output</td><td>TC = FC + VC(q)</td></tr>
+                <tr><td>Profit (π)</td><td>Revenue minus cost</td><td>π = TR − TC</td></tr>
+                <tr><td>Marginal Revenue (MR)</td><td>Additional revenue from one more unit</td><td>MR = ΔTR/Δq</td></tr>
+                <tr><td>Marginal Cost (MC)</td><td>Additional cost of one more unit</td><td>MC = ΔTC/Δq</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- CONCEPT 3: MARGINAL REVENUE -->
+    <div class="card">
+        <h3>🔹 Marginal Revenue (MR) in Perfect Competition</h3>
+        <p><strong>Definition:</strong> Marginal revenue is the additional revenue a firm earns from selling one more unit of output. In perfect competition, <strong>MR = P</strong> (the market price). This is because the firm can sell any quantity at the same price.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> If the market price of wheat is $5 per bushel, then selling one extra bushel gives the firm exactly $5 more revenue. It doesn't have to lower its price to sell more because the firm is too small to affect the market price.
+        </div>
+
+        <p><strong>Why is MR = P in perfect competition?</strong></p>
+        <div class="formula-box">TR = P × q (since P is constant)</div>
+        <div class="formula-box">MR = ΔTR/Δq = Δ(P × q)/Δq = P</div>
+        <p>So MR equals the price and doesn't change as q increases—it's a <strong>horizontal line</strong> at the market price.</p>
+
+        <div class="exam-trap">⚠️ <strong>Key Distinction:</strong> MR = P only under perfect competition (price takers). For monopoly or firms with market power, MR < P.</div>
+    </div>
+
+    <!-- CONCEPT 4: MARGINAL COST -->
+    <div class="card">
+        <h3>🔹 Marginal Cost (MC)</h3>
+        <p><strong>Definition:</strong> Marginal cost is the additional cost incurred from producing one more unit of output.</p>
+
+        <div class="formula-box">MC = ΔTC/Δq = ΔVC/Δq (FC doesn't change with q, so MC depends only on variable costs)</div>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> A bakery producing 100 loaves of bread per day has total costs of $200. If it increases production to 101 loaves and total costs rise to $203, the marginal cost of the 101st loaf is $3.
+        </div>
+
+        <p><strong>Why is MC typically U-shaped?</strong></p>
+        <ul>
+            <li><strong>Decreasing phase (slope ↓):</strong> Initially, as output increases, workers become more productive (increasing marginal product). Additional units cost less to produce.</li>
+            <li><strong>Increasing phase (slope ↑):</strong> Eventually, diminishing returns set in—each additional worker adds less to output, so the cost of producing each extra unit rises.</li>
+        </ul>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Phase</th><th>Why it happens</th><th>Graph shape</th></tr>
+                <tr><td>Decreasing MC</td><td>Increasing marginal products</td><td>MC slopes down</td></tr>
+                <tr><td>Increasing MC</td><td>Decreasing marginal products</td><td>MC slopes up</td></tr>
+                <tr><td>Minimum MC</td><td>Where MC switches from ↓ to ↑</td><td>Bottom of U-shape</td></tr>
+            </table>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> MC is the foundation for the firm's supply curve. The profit-maximizing condition (P = MC) means the MC curve is the supply curve (above the shutdown price).</div>
+    </div>
+
+    <!-- CONCEPT 5: AVERAGE COSTS -->
+    <div class="card">
+        <h3>🔹 Average Cost (AC) and Average Variable Cost (AVC)</h3>
+
+        <p><strong>Average Cost (AC)</strong> = Total cost divided by quantity</p>
+        <div class="formula-box">AC = TC/q = FC/q + VC/q</div>
+
+        <p><strong>Average Variable Cost (AVC)</strong> = Variable cost divided by quantity</p>
+        <div class="formula-box">AVC = VC/q</div>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> If your bakery has fixed costs of $100/day (rent) and variable costs of $200/day (ingredients, wages) to produce 100 loaves:<br>
+            TC = $100 + $200 = $300<br>
+            AC = $300/100 = $3 per loaf<br>
+            AVC = $200/100 = $2 per loaf<br>
+            AFC = $100/100 = $1 per loaf
+        </div>
+
+        <p><strong>Why does AC decline initially?</strong></p>
+        <ul>
+            <li>AC declines initially because fixed costs are spread over more units (AFC falls)</li>
+            <li>AC eventually rises when MC exceeds AC, pulling the average up</li>
+            <li>AVC is always below AC because AC includes both variable and fixed costs</li>
+        </ul>
+
+        <div class="highlight-box" style="border-left-color: #c77d4a; background: #fef6ee;">
+            <strong>📌 The Critical Relationship:</strong> MC intersects AC at AC's minimum.
+            <ul>
+                <li>If <strong>MC < AC</strong>, producing one more unit pulls AC <strong>down</strong></li>
+                <li>If <strong>MC > AC</strong>, producing one more unit pulls AC <strong>up</strong></li>
+                <li>At <strong>MC = AC</strong>, AC is at its <strong>minimum point</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CONCEPT 6: PROFIT MAXIMIZING CONDITION -->
+    <div class="card">
+        <h3>🔹 The Profit-Maximizing Condition</h3>
+        <p><strong>Definition:</strong> The firm maximizes profit by producing the quantity where:</p>
+
+        <div class="formula-box">MR = MC</div>
+
+        <p>In perfect competition, since MR = P:</p>
+
+        <div class="formula-box">P = MC(q*)</div>
+        <p>Where q* is the profit-maximizing quantity.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> Using the bakery example with market price P = $171:
+            <ul>
+                <li>MC of 2nd loaf = $90 → MR ($171) > MC ($90) → <strong>Produce it!</strong></li>
+                <li>MC of 3rd loaf = $170 → MR ($171) > MC ($170) → <strong>Produce it!</strong></li>
+                <li>MC of 4th loaf = $190 → MR ($171) < MC ($190) → <strong>Stop at 3</strong></li>
+            </ul>
+            <p>The firm produces 3 loaves—the largest quantity where MR ≥ MC.</p>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Discrete-Goods Caveat:</strong> When producing whole units, choose the largest quantity where <strong>MR ≥ MC</strong> (the smallest positive difference).</div>
+    </div>
+
+    <!-- CONCEPT 7: THE FIRM'S SUPPLY CURVE -->
+    <div class="card">
+        <h3>🔹 The Firm's Supply Curve</h3>
+        <p><strong>Definition:</strong> The firm's supply curve shows the quantity the firm is willing to produce at each market price. For a competitive firm, the supply curve is the portion of the <strong>MC curve above the minimum AVC</strong> (short run) or above minimum AC (long run).</p>
+
+        <div class="formula-box">At any price P ≥ minimum AVC, firm supplies q where P = MC(q)</div>
+        <div class="formula-box">At any price P < minimum AVC, firm supplies q = 0 (shuts down)</div>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> If the bakery's MC curve shows:
+            <ul>
+                <li>At P = $91, it produces q = 2 (where MC ≈ $91)</li>
+                <li>At P = $171, it produces q = 3 (where MC = $170)</li>
+                <li>At P = $250, it produces q = 4 (where MC ≈ $240)</li>
+            </ul>
+            <p>The supply curve is <strong>upward-sloping</strong> because higher prices induce the firm to produce more.</p>
+        </div>
+
+        <p><strong>Why is the supply curve MC above minimum AVC?</strong></p>
+        <ul>
+            <li>If price is below AVC, the firm can't even cover its variable costs</li>
+            <li>It would lose less money by shutting down and only paying fixed costs than by continuing to produce</li>
+        </ul>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Price Range</th><th>Firm's Response</th><th>Supply</th></tr>
+                <tr><td>P < minimum AVC</td><td>Shut down</td><td>q = 0</td></tr>
+                <tr><td>min AVC ≤ P < min AC</td><td>Produce but make losses</td><td>q where P = MC</td></tr>
+                <tr><td>P ≥ min AC</td><td>Produce and make profits</td><td>q where P = MC</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- GRAPH: FIRM SUPPLY CURVE -->
+    <div class="card">
+        <h3>📈 Graph: The Firm's Supply Curve</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 1: Deriving the Firm's Supply Curve</div>
+            <div class="graph-subtitle">The supply curve is the MC curve above minimum AVC</div>
+            <svg viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="700" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="680" y2="400"/>
+                    <line x1="80" y1="100" x2="680" y2="100"/>
+                    <line x1="80" y1="150" x2="680" y2="150"/>
+                    <line x1="80" y1="200" x2="680" y2="200"/>
+                    <line x1="80" y1="250" x2="680" y2="250"/>
+                    <line x1="80" y1="300" x2="680" y2="300"/>
+                    <line x1="80" y1="350" x2="680" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="380" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (q)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Price / Cost ($)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="680,400 665,390 665,410" fill="#0b2b4a"/>
+                <path d="M 80,280 Q 200,120 360,150 Q 500,230 640,350" stroke="#f59e0b" stroke-width="3" fill="none"/>
+                <text x="330" y="130" font-size="14" font-weight="700" fill="#f59e0b">MC</text>
+                <path d="M 80,350 Q 200,200 360,220 Q 500,280 640,380" stroke="#dc2626" stroke-width="3" fill="none"/>
+                <text x="330" y="210" font-size="14" font-weight="700" fill="#dc2626">AC</text>
+                <path d="M 80,380 Q 200,250 360,260 Q 500,310 640,400" stroke="#16a34a" stroke-width="3" fill="none"/>
+                <text x="330" y="250" font-size="14" font-weight="700" fill="#16a34a">AVC</text>
+                <line x1="80" y1="260" x2="680" y2="260" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="8,4"/>
+                <text x="670" y="255" font-size="12" font-weight="700" fill="#2563eb">Supply Curve</text>
+                <text x="670" y="270" font-size="11" fill="#2563eb">(MC above min AVC)</text>
+                <circle cx="290" cy="260" r="5" fill="#0b2b4a"/>
+                <text x="298" y="255" font-size="10" fill="#0b2b4a">Shutdown</text>
+                <text x="298" y="268" font-size="10" fill="#0b2b4a">Point</text>
+                <rect x="470" y="280" width="190" height="100" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="300" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="315" x2="495" y2="315" stroke="#f59e0b" stroke-width="2"/>
+                <text x="505" y="319" font-size="11" fill="#1e293b">MC</text>
+                <line x1="480" y1="330" x2="495" y2="330" stroke="#dc2626" stroke-width="2"/>
+                <text x="505" y="334" font-size="11" fill="#1e293b">AC</text>
+                <line x1="480" y1="345" x2="495" y2="345" stroke="#16a34a" stroke-width="2"/>
+                <text x="505" y="349" font-size="11" fill="#1e293b">AVC</text>
+                <line x1="480" y1="360" x2="495" y2="360" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="505" y="364" font-size="11" fill="#1e293b">Supply Curve</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> The firm's supply curve is the portion of the MC curve <strong>above the minimum AVC</strong>. At prices below this point, the firm shuts down and supplies zero. The bold line represents the supply curve.</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 8: SHUTDOWN VS EXIT -->
+    <div class="card">
+        <h3>🔹 Shutdown vs. Exit</h3>
+        <p><strong>This is one of the most important distinctions in this chapter!</strong></p>
+
+        <div class="grid-2">
+            <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+                <h4 style="color: #dc2626;">Shutdown (Short-Run Decision)</h4>
+                <ul>
+                    <li>Temporary decision to stop production</li>
+                    <li>Firm pays fixed costs but avoids variable costs</li>
+                    <li>Happens when <strong>P < minimum AVC</strong></li>
+                    <li>Firm expects to reopen when conditions improve</li>
+                </ul>
+            </div>
+            <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+                <h4 style="color: #2563eb;">Exit (Long-Run Decision)</h4>
+                <ul>
+                    <li>Permanent decision to leave the market</li>
+                    <li>Firm eliminates both fixed and variable costs</li>
+                    <li>Happens when <strong>P < minimum AC</strong></li>
+                    <li>Firm permanently stops all operations</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong>
+            <ul>
+                <li><strong>Shutdown:</strong> An ice cream shop closes for winter. It still pays rent and insurance (fixed costs) but doesn't pay for ice cream, toppings, or seasonal workers (variable costs). It reopens in spring.</li>
+                <li><strong>Exit:</strong> The ice cream shop closes permanently. It sells its equipment, terminates its lease, and goes out of business.</li>
+            </ul>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Decision</th><th>Time Horizon</th><th>Decision Rule</th><th>Covered Costs</th></tr>
+                <tr><td>Shutdown</td><td>Short-run</td><td>P < AVC</td><td>Pay only FC</td></tr>
+                <tr><td>Produce (loss)</td><td>Short-run</td><td>AVC < P < AC</td><td>Pay FC + VC, but make losses</td></tr>
+                <tr><td>Produce (profit)</td><td>Both</td><td>P > AC</td><td>Pay all costs, make profit</td></tr>
+                <tr><td>Exit</td><td>Long-run</td><td>P < AC</td><td>Pay no costs (leave market)</td></tr>
+            </table>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> This distinction explains why firms sometimes stay in business despite making losses (short-run: price covers variable costs but not fixed costs) but eventually exit if losses persist (long-run: price doesn't cover total costs).</div>
+    </div>
+
+    <!-- CONCEPT 9: BREAK-EVEN AND SHUTDOWN PRICES -->
+    <div class="card">
+        <h3>🔹 Break-Even Price and Shutdown Price</h3>
+
+        <div class="grid-2">
+            <div>
+                <h4>Break-Even Price (BE)</h4>
+                <p>= <strong>Minimum of Average Cost (AC)</strong></p>
+                <ul>
+                    <li>Price where P = AC, so profit = 0</li>
+                    <li>At this price, the firm earns zero economic profit</li>
+                    <li>Below BE price → firm exits in the long run</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Shutdown Price (SD)</h4>
+                <p>= <strong>Minimum of Average Variable Cost (AVC)</strong></p>
+                <ul>
+                    <li>Price where P = AVC</li>
+                    <li>At this price, the firm is indifferent between producing and shutting down</li>
+                    <li>Below SD price → firm shuts down in the short run</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong>
+            <ul>
+                <li>Bakery: AC minimum = $150 per loaf → break-even price = $150</li>
+                <li>At $150/loaf: zero economic profit</li>
+                <li>At $120/loaf: losses → may exit if persistent</li>
+                <li>Bakery: AVC minimum = $80 per loaf → shutdown price = $80</li>
+                <li>At $80/loaf: indifferent to producing</li>
+                <li>At $70/loaf: can't cover variable costs → shut down</li>
+            </ul>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Price Level</th><th>Short-Run Decision</th><th>Long-Run Decision</th></tr>
+                <tr><td>P < min AVC</td><td><strong>Shutdown</strong></td><td>Exit (eventually)</td></tr>
+                <tr><td>min AVC < P < min AC</td><td>Produce (losses)</td><td>Exit (eventually)</td></tr>
+                <tr><td>P = min AC</td><td>Produce (zero profit)</td><td>Indifferent (zero profit)</td></tr>
+                <tr><td>P > min AC</td><td>Produce (profits)</td><td>Produce (profits)</td></tr>
+            </table>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> Break-even price represents the minimum price needed to stay in business in the long run. Shutdown price represents the minimum price needed to stay open in the short run.</div>
+    </div>
+
+    <!-- CONCEPT 10: MARKET SUPPLY CURVE -->
+    <div class="card">
+        <h3>🔹 Market/Sector Supply Curve</h3>
+        <p><strong>Definition:</strong> The market supply curve is the <strong>horizontal sum</strong> of all individual firms' supply curves. It shows the total quantity supplied by all firms at each market price.</p>
+
+        <div class="formula-box">Market Quantity (Q) = Sum of all firms' quantities (q₁ + q₂ + q₃ + ...)</div>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> If there are 100 identical bakeries and each supplies 3 loaves at P = $171, the market supply at P = $171 is 300 loaves. At P = $200, if each supplies 4 loaves, market supply is 400 loaves.
+        </div>
+
+        <p><strong>In the short run:</strong> Number of firms (N) is fixed. Each firm adjusts quantity along its MC curve (intensive margin). Market supply = sum of individual MC curves.</p>
+
+        <p><strong>In the long run:</strong> Number of firms adjusts through entry and exit (extensive margin). Free entry: if firms earn profits (P > AC), new firms enter. Free exit: if firms earn losses (P < AC), firms exit. Long-run equilibrium: P = min AC and economic profits = 0.</p>
+    </div>
+
+    <!-- CONCEPT 11: FREE ENTRY AND ZERO PROFITS -->
+    <div class="card">
+        <h3>🔹 Free Entry and Zero Profits</h3>
+        <p>In a perfectly competitive market with free entry, the long-run equilibrium is characterized by:</p>
+
+        <div class="formula-box">P = minimum AC</div>
+        <div class="formula-box">Economic profit = 0</div>
+        <p>This is the <strong>"zero-profit condition."</strong></p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> Think about the restaurant industry. When restaurants are profitable, new ones open. When too many open, competition drives prices down. In the long run, restaurants earn just enough to cover costs—not huge profits, but a "normal" return on investment. This is why many restaurants seem to barely break even.
+        </div>
+
+        <p><strong>Why does this happen?</strong></p>
+        <ul>
+            <li><strong>If P > AC</strong>, firms earn positive profits → positive profits attract new firms (free entry) → new firms increase market supply (S shifts right) → market price falls → process continues until profits are zero (P = AC)</li>
+            <li><strong>If P < AC</strong>, firms earn losses → losses cause firms to exit → exit decreases market supply (S shifts left) → market price rises → process continues until losses are eliminated (P = AC)</li>
+        </ul>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> Zero profits in economics does <strong>not</strong> mean zero accounting profits. Economic profit includes opportunity costs. "Normal profit" is the return the owner could earn elsewhere—it's included in AC. So zero economic profit means the firm is earning a competitive return, just not "above normal."</div>
+    </div>
+
+    <!-- CONCEPT 12: ECONOMIC VS ACCOUNTING PROFITS -->
+    <div class="card">
+        <h3>🔹 Economic vs. Accounting Profits</h3>
+
+        <p><strong>Accounting Profit:</strong> Total revenue minus <strong>explicit costs</strong> (monetary outflows like wages, rent, materials).</p>
+        <p><strong>Economic Profit:</strong> Total revenue minus <strong>both explicit and implicit costs</strong> (opportunity costs, like the owner's foregone salary or the foregone return on invested capital).</p>
+
+        <div class="formula-box">Accounting Profit = TR − Explicit Costs</div>
+        <div class="formula-box">Economic Profit = TR − (Explicit Costs + Implicit Costs)</div>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> You own a bakery:
+            <ul>
+                <li>Total revenue: $100,000</li>
+                <li>Explicit costs (wages, ingredients, rent): $70,000</li>
+                <li>Accounting profit: $30,000</li>
+                <li>Implicit costs: You could earn $40,000 as a manager elsewhere; you could earn $5,000 interest on your $100,000 investment</li>
+                <li>Total implicit cost: $45,000</li>
+                <li>Economic profit: $100,000 − $70,000 − $45,000 = <strong>−$15,000</strong></li>
+            </ul>
+            <p><strong>Conclusion:</strong> You're making an accounting profit ($30,000) but an economic loss ($15,000). You'd be better off closing the bakery and working as a manager.</p>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> "Zero economic profit" means the firm is earning a normal return on investment. The owner is compensated for their time and capital, just not earning anything above what they could earn elsewhere.</div>
+    </div>
+
+    <!-- CONCEPT 13: WHY FIRMS STAY IN BUSINESS -->
+    <div class="card">
+        <h3>🔹 Why Firms Stay in Business Despite Losses (Sunk Costs)</h3>
+        <p>Firms may continue operating in the short run even when making losses because <strong>fixed costs are sunk costs</strong>—they cannot be recovered if the firm shuts down or exits.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> Consider a theater company during COVID-19. They had to cancel all performances, but still had to pay rent on the theater and salaries for permanent staff (fixed costs). By producing online content (even if it lost money), they at least covered some variable costs. Shutting down completely would have meant losing all the fixed costs anyway—so staying open was the better choice.
+        </div>
+
+        <p><strong>The Shutdown Decision Rule (Short Run):</strong></p>
+        <p>The firm compares two options:</p>
+        <ul>
+            <li><strong>Produce:</strong> π(q) = TR − TC = P×q − VC(q) − FC</li>
+            <li><strong>Shut down:</strong> π(0) = −FC</li>
+        </ul>
+
+        <p>The firm produces if:</p>
+        <div class="formula-box">π(q) ≥ π(0)</div>
+        <div class="formula-box">P×q − VC(q) − FC ≥ −FC</div>
+        <div class="formula-box">P×q ≥ VC(q)</div>
+        <div class="formula-box">P ≥ AVC(q)</div>
+
+        <div class="highlight-box">
+            <strong>Key Insight:</strong> As long as P ≥ AVC (the price covers variable costs), the firm loses <strong>less</strong> by producing than by shutting down. The fixed costs are <strong>sunk</strong>—they're gone regardless.
+        </div>
+
+        <h4>Real-World Reasons Firms Stay Despite Losses</h4>
+        <ul>
+            <li><strong>Temporary price fluctuations:</strong> Firms believe prices will recover soon</li>
+            <li><strong>Sunk costs:</strong> Many costs (buildings, equipment, licenses) cannot be recovered</li>
+            <li><strong>Strategic reasons:</strong> Maintaining market presence, reputation, and customer relationships</li>
+            <li><strong>Hope for future:</strong> Firms are "betting" on future price increases</li>
+            <li><strong>Government shutdowns:</strong> During forced closures, firms keep their "doors open" (remain active) even if production is temporarily zero</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>The "Skinny Cow, Fat Cow" Analogy:</strong> Firms think in terms of cycles. They might lose money during "skinny cow" years (low prices) but stay in business because they expect "fat cow" years (high prices) in the future. This is like a farmer who keeps cows even during a drought, knowing that better times will come.
+        </div>
+    </div>
+
+    <!-- GRAPH: SHORT-RUN VS LONG-RUN -->
+    <div class="card">
+        <h3>📈 Graph: Short-Run vs. Long-Run Supply</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 2: Short-Run vs. Long-Run Supply</div>
+            <div class="graph-subtitle">Short-run supply: MC above AVC. Long-run supply: MC above AC.</div>
+            <svg viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="700" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="680" y2="400"/>
+                    <line x1="80" y1="100" x2="680" y2="100"/>
+                    <line x1="80" y1="150" x2="680" y2="150"/>
+                    <line x1="80" y1="200" x2="680" y2="200"/>
+                    <line x1="80" y1="250" x2="680" y2="250"/>
+                    <line x1="80" y1="300" x2="680" y2="300"/>
+                    <line x1="80" y1="350" x2="680" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="380" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (q)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Price / Cost ($)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="680,400 665,390 665,410" fill="#0b2b4a"/>
+                <path d="M 80,280 Q 200,120 360,150 Q 500,230 640,350" stroke="#f59e0b" stroke-width="3" fill="none"/>
+                <text x="330" y="130" font-size="14" font-weight="700" fill="#f59e0b">MC</text>
+                <path d="M 80,350 Q 200,200 360,220 Q 500,280 640,380" stroke="#dc2626" stroke-width="3" fill="none"/>
+                <text x="330" y="210" font-size="14" font-weight="700" fill="#dc2626">AC</text>
+                <path d="M 80,380 Q 200,250 360,260 Q 500,310 640,400" stroke="#16a34a" stroke-width="3" fill="none"/>
+                <text x="330" y="250" font-size="14" font-weight="700" fill="#16a34a">AVC</text>
+                <line x1="80" y1="260" x2="640" y2="350" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="8,4"/>
+                <text x="620" y="340" font-size="12" font-weight="700" fill="#2563eb">Short-Run Supply</text>
+                <text x="620" y="355" font-size="11" fill="#2563eb">(MC above AVC)</text>
+                <line x1="80" y1="220" x2="500" y2="280" stroke="#8b5cf6" stroke-width="2.5" stroke-dasharray="8,4"/>
+                <text x="480" y="285" font-size="12" font-weight="700" fill="#8b5cf6">Long-Run Supply</text>
+                <text x="480" y="300" font-size="11" fill="#8b5cf6">(MC above AC)</text>
+                <rect x="470" y="60" width="190" height="100" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="80" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="95" x2="495" y2="95" stroke="#f59e0b" stroke-width="2"/>
+                <text x="505" y="99" font-size="11" fill="#1e293b">MC</text>
+                <line x1="480" y1="110" x2="495" y2="110" stroke="#dc2626" stroke-width="2"/>
+                <text x="505" y="114" font-size="11" fill="#1e293b">AC</text>
+                <line x1="480" y1="125" x2="495" y2="125" stroke="#16a34a" stroke-width="2"/>
+                <text x="505" y="129" font-size="11" fill="#1e293b">AVC</text>
+                <line x1="480" y1="140" x2="495" y2="140" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="505" y="144" font-size="11" fill="#1e293b">Short-Run Supply</text>
+                <line x1="480" y1="155" x2="495" y2="155" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="505" y="159" font-size="11" fill="#1e293b">Long-Run Supply</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> The short-run supply curve is MC above minimum AVC. The long-run supply curve is MC above minimum AC. The gap between AVC and AC represents fixed costs that must be covered in the long run.</p></div>
+        </div>
+    </div>
+
+    <!-- FORMULAS -->
+    <div class="card">
+        <h3>🧮 Key Formulas</h3>
+
+        <div class="formula-box">Profit: π = TR − TC</div>
+        <div class="formula-box">Total Revenue: TR = P × q</div>
+        <div class="formula-box">Marginal Revenue: MR = ΔTR/Δq</div>
+        <div class="formula-box">Marginal Cost: MC = ΔTC/Δq = ΔVC/Δq</div>
+        <div class="formula-box">Average Cost: AC = TC/q</div>
+        <div class="formula-box">Average Variable Cost: AVC = VC/q</div>
+        <div class="formula-box">Average Fixed Cost: AFC = FC/q</div>
+        <div class="formula-box">Profit Maximization: MR = MC (or P = MC in perfect competition)</div>
+        <div class="formula-box">Profit at optimal output: π = (P − AC) × q*</div>
+        <div class="formula-box">Break-Even Price = minimum AC</div>
+        <div class="formula-box">Shutdown Price = minimum AVC</div>
+        <div class="formula-box">Shutdown Decision: Produce if P ≥ AVC; Shut down if P < AVC</div>
+        <div class="formula-box">Economic Profit = Accounting Profit − Implicit Costs</div>
+    </div>
+
+    <!-- EXAM SCENARIOS -->
+    <div class="card">
+        <h3>📝 Exam Scenarios & Problem-Solving</h3>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 1: Profit Maximization</h4>
+            <p><strong>Scenario:</strong> A competitive firm faces P = 50. TC = 100 + 10q + 2q². Find the profit-maximizing quantity and profit.</p>
+            <p><strong>Solution:</strong> MC = 10 + 4q. Set P = MC: 50 = 10 + 4q → q* = 10. TR = 500. TC = 100 + 100 + 200 = 400. π = 500 − 400 = <strong>100</strong>.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 2: Shutdown Decision</h4>
+            <p><strong>Scenario:</strong> A firm has FC = 50, VC = 20q + 2q², P = 30. Should the firm shut down? What is the shutdown price?</p>
+            <p><strong>Solution:</strong> AVC = 20 + 2q. Minimum AVC = 20. P = 30 > 20 → <strong>Do NOT shut down</strong>. Profit-maximizing q* = 2.5. π = −37.5 (loss). Shutdown loss = −50. Producing loses less → produce. Shutdown price = <strong>20</strong>.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 3: Long-Run Exit</h4>
+            <p><strong>Scenario:</strong> Same firm, P = 15. Should the firm shut down? Exit?</p>
+            <p><strong>Solution:</strong> P = 15 < AVC (20) → <strong>Shut down</strong>. AC minimum = 40. P = 15 < AC → <strong>Exit in the long run</strong>.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 4: Supply Curve Derivation</h4>
+            <p><strong>Scenario:</strong> MC = 2q + 4, minimum AVC = 4. What is the supply curve? At P = 10, what quantity?</p>
+            <p><strong>Solution:</strong> Supply curve: q = (P − 4)/2 for P ≥ 4; q = 0 for P < 4. At P = 10: q = (10 − 4)/2 = <strong>3</strong>.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0;">
+            <h4>Scenario 5: Market Supply and Entry</h4>
+            <p><strong>Scenario:</strong> 50 identical firms, each MC = 2q + 4, min AVC = 4. Market demand: Q = 500 − 10P. Find market supply and equilibrium.</p>
+            <p><strong>Solution:</strong> Individual supply: q = (P − 4)/2. Market supply: Q<sub>s</sub> = 25P − 100. Equilibrium: 25P − 100 = 500 − 10P → P* ≈ <strong>17.14</strong>, Q* ≈ <strong>328.6</strong>.</p>
+        </div>
+    </div>
+
+    <!-- HIGH-YIELD EXAM FOCUS -->
+    <div class="card">
+        <h3>⚡ High-Yield Exam Focus</h3>
+
+        <h4>Memorization Checklist</h4>
+        <div class="grid-2">
+            <ul>
+                <li>□ Perfect Competition</li>
+                <li>□ Price Taker</li>
+                <li>□ Profit Maximization</li>
+                <li>□ Marginal Revenue (MR)</li>
+                <li>□ Marginal Cost (MC)</li>
+                <li>□ Average Cost (AC)</li>
+                <li>□ Average Variable Cost (AVC)</li>
+                <li>□ Shutdown Price</li>
+            </ul>
+            <ul>
+                <li>□ Break-Even Price</li>
+                <li>□ Supply Curve</li>
+                <li>□ Intensive Margin</li>
+                <li>□ Extensive Margin</li>
+                <li>□ Economic Profit</li>
+                <li>□ Normal Profit</li>
+                <li>□ Sunk Cost</li>
+                <li>□ Free Entry/Exit</li>
+            </ul>
+        </div>
+
+        <h4>Common Exam Traps</h4>
+        <ul>
+            <li><strong>Confusing "Shutdown" with "Exit":</strong> Shutdown is short-run (P < AVC). Exit is long-run (P < AC).</li>
+            <li><strong>Confusing MR with Price:</strong> MR = P only in perfect competition. For firms with market power, MR < P.</li>
+            <li><strong>Thinking Zero Profit Means Bankruptcy:</strong> Zero economic profit = normal return, not bankruptcy.</li>
+            <li><strong>Forgetting the Supply Curve Starts at Minimum AVC:</strong> Below min AVC, the firm supplies zero.</li>
+            <li><strong>Thinking Fixed Costs Affect MC:</strong> MC depends only on variable costs (ΔFC = 0).</li>
+        </ul>
+
+        <h4>The "If This, Then That" Logic</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then...</th></tr>
+                <tr><td>MR > MC</td><td>Increase production</td></tr>
+                <tr><td>MR < MC</td><td>Decrease production</td></tr>
+                <tr><td>MR = MC</td><td>Profit maximized</td></tr>
+                <tr><td>P > min AVC</td><td>Produce in short run</td></tr>
+                <tr><td>P < min AVC</td><td>Shut down</td></tr>
+                <tr><td>P > min AC</td><td>Produce (positive profits)</td></tr>
+                <tr><td>P < min AC</td><td>Exit in long run</td></tr>
+                <tr><td>P = min AC</td><td>Zero economic profits</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- PRACTICE QUESTIONS -->
+    <div class="card">
+        <h3>📝 Practice Questions</h3>
+
+        <div class="question-block" id="q1">
+            <div class="q-text">Q1: In perfect competition, the firm is a:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) Price maker</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="B"><span>B) Price taker</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="C"><span>C) Price setter</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) Price leader</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>In perfect competition, firms are price takers—they cannot influence the market price and must accept the price determined by market supply and demand.</div>
+        </div>
+
+        <div class="question-block" id="q2">
+            <div class="q-text">Q2: A firm maximizes profit where:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q2" value="A"><span>A) P = AC</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="B"><span>B) MR = MC</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) P = AVC</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="D"><span>D) TR = TC</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>The profit-maximizing condition for all firms is MR = MC. In perfect competition, this becomes P = MC.</div>
+        </div>
+
+        <div class="question-block" id="q3">
+            <div class="q-text">Q3: The firm's short-run supply curve is the portion of the MC curve:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A"><span>A) Below the minimum AVC</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="B"><span>B) Above the minimum AVC</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="C"><span>C) Below the minimum AC</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="D"><span>D) Above the minimum AC</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>The short-run supply curve is the portion of the MC curve above the minimum AVC. Below this point, the firm shuts down.</div>
+        </div>
+
+        <div class="question-block" id="q4">
+            <div class="q-text">Q4: A firm should shut down in the short run when:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q4" value="A"><span>A) P < AC</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="B"><span>B) P < AVC</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="C"><span>C) MR < MC</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="D"><span>D) TR < TC</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>In the short run, the firm should shut down if it cannot cover its variable costs (P < AVC).</div>
+        </div>
+
+        <div class="question-block" id="q5">
+            <div class="q-text">Q5: In long-run equilibrium in a perfectly competitive market:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A"><span>A) Firms earn positive economic profits</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="B"><span>B) Firms earn zero economic profits</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="C"><span>C) Firms earn negative economic profits</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="D"><span>D) Firms earn positive accounting profits only</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>In long-run equilibrium with free entry and exit, firms earn zero economic profits. This means they earn a normal return (accounting profits cover all costs including opportunity costs).</div>
+        </div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="card">
+        <h3>📖 Glossary</h3>
+        <div class="glossary-term"><dt>Perfect Competition</dt><dd>Market with many firms, identical products, perfect information, free entry/exit, price takers.</dd></div>
+        <div class="glossary-term"><dt>Price Taker</dt><dd>Firm that must accept the market price—cannot influence it.</dd></div>
+        <div class="glossary-term"><dt>Profit Maximization</dt><dd>Choosing q to maximize π = TR − TC.</dd></div>
+        <div class="glossary-term"><dt>Marginal Revenue (MR)</dt><dd>Additional revenue from one more unit; in perfect competition, MR = P.</dd></div>
+        <div class="glossary-term"><dt>Marginal Cost (MC)</dt><dd>Additional cost of one more unit.</dd></div>
+        <div class="glossary-term"><dt>Average Cost (AC)</dt><dd>TC/q; includes both fixed and variable costs.</dd></div>
+        <div class="glossary-term"><dt>Average Variable Cost (AVC)</dt><dd>VC/q; excludes fixed costs.</dd></div>
+        <div class="glossary-term"><dt>Shutdown Price</dt><dd>Minimum AVC; below this, shut down in short run.</dd></div>
+        <div class="glossary-term"><dt>Break-Even Price</dt><dd>Minimum AC; below this, exit in long run.</dd></div>
+        <div class="glossary-term"><dt>Supply Curve</dt><dd>MC above minimum AVC (short run); MC above minimum AC (long run).</dd></div>
+        <div class="glossary-term"><dt>Intensive Margin</dt><dd>Adjustment through quantity (short run).</dd></div>
+        <div class="glossary-term"><dt>Extensive Margin</dt><dd>Adjustment through number of firms (long run).</dd></div>
+        <div class="glossary-term"><dt>Economic Profit</dt><dd>TR − (Explicit + Implicit costs).</dd></div>
+        <div class="glossary-term"><dt>Normal Profit</dt><dd>Zero economic profit—just covers opportunity costs.</dd></div>
+        <div class="glossary-term"><dt>Sunk Cost</dt><dd>Cost that cannot be recovered upon exit.</dd></div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+        function toggleAnswer(qId, correct) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 11: Public Goods</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+        .card li { margin: 0.3rem 0; line-height: 1.6; }
+        .highlight-box { background: #eef4fa; padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #1f6e8c; margin: 1rem 0; }
+        .formula-box { background: #e7edf6; padding: 0.8rem 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 500; color: #003153; display: inline-block; margin: 0.4rem 0; border: 1px solid #bfd3e6; }
+        .exam-trap { background: #fef6ee; border-left: 4px solid #c77d4a; padding: 0.8rem 1.5rem; border-radius: 10px; margin: 0.6rem 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .glossary-term { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #e8edf3; }
+        .glossary-term dt { font-weight: 600; color: #0b2b4a; min-width: 160px; }
+        .glossary-term dd { color: #334155; }
+        .graph-container { width: 100%; max-width: 850px; margin: 1.5rem auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 0.5rem; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .graph-container svg { width: 100%; height: auto; display: block; }
+        .graph-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; text-align: center; padding: 0.8rem 0 0.3rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .graph-subtitle { font-size: 0.85rem; color: #64748b; text-align: center; padding-bottom: 0.5rem; }
+        .graph-insight { padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 6px; margin-top: 0.5rem; }
+        .graph-insight p { font-size: 0.85rem; color: #1e293b; margin: 0; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .glossary-term { flex-direction: column; gap: 0.2rem; } .glossary-term dt { min-width: unset; } .graph-container { margin: 0.5rem 0; } .graph-container svg text { font-size: 10px !important; } .graph-title { font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Lesson 11: Public Goods</div>
+
+    <div class="page-header">
+        <h2>🏛️ 11. Public Goods</h2>
+        <div class="subtitle">Non‑rival, non‑excludable · free‑riding, common resources</div>
+    </div>
+
+    <!-- LEARNING OBJECTIVES -->
+    <div class="card">
+        <h3>📌 Learning Objectives</h3>
+        <ul>
+            <li>Classify goods by their excludability and rivalry: private goods, public goods, common resources, and club goods</li>
+            <li>Explain the free‑rider problem and why it leads to underprovision of public goods</li>
+            <li>Analyze common resources and the tragedy of the commons</li>
+            <li>Identify real‑world examples: streetlights, overfishing, national defense, Elinor Ostrom's governance</li>
+            <li>Understand why government provision is often necessary for public goods</li>
+            <li>Evaluate policy solutions for common resources (quotas, taxes, property rights)</li>
+        </ul>
+    </div>
+
+    <!-- TOPIC INTRODUCTION -->
+    <div class="card">
+        <h3>🔹 Topic Introduction</h3>
+        <p>Welcome to the world of public goods! In the previous chapter, you learned about externalities – the spillover effects that create market failures. Public goods are a special type of market failure that arises from <strong>non‑excludability</strong> and <strong>non‑rivalry</strong>.</p>
+
+        <div class="highlight-box">
+            <strong>What's the problem with public goods?</strong><br>
+            Private markets often fail to provide public goods because people can enjoy the benefits without paying – this is called the <strong>free‑rider problem</strong>. National defense, street lighting, and basic research are examples of goods that the market would underprovide.
+        </div>
+
+        <p><strong>Why should you care?</strong> Public goods are everywhere:</p>
+        <ul>
+            <li><strong>National defense</strong> – you benefit even if you don't pay taxes</li>
+            <li><strong>Street lights</strong> – you can use them without paying</li>
+            <li><strong>Basic research</strong> – scientific discoveries benefit everyone</li>
+            <li><strong>Clean air</strong> – everyone breathes it, but no one owns it</li>
+        </ul>
+        <p>Understanding public goods helps you understand why governments fund certain things and why common resources like fisheries and forests are often overused.</p>
+    </div>
+
+    <!-- CONCEPT 1: TYPES OF GOODS -->
+    <div class="card">
+        <h3>🔹 Types of Goods</h3>
+        <p>Goods can be classified along two dimensions:</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th></th><th>Excludable</th><th>Non‑Excludable</th></tr>
+                <tr><td><strong>Rivalrous</strong></td><td><strong>Private Goods</strong> (food, clothing, cars)</td><td><strong>Common Resources</strong> (fisheries, forests, water)</td></tr>
+                <tr><td><strong>Non‑Rivalrous</strong></td><td><strong>Club Goods</strong> (cable TV, fire protection, toll roads)</td><td><strong>Public Goods</strong> (national defense, streetlights, knowledge)</td></tr>
+            </table>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>1. Private Goods</h4>
+            <ul>
+                <li><strong>Excludable?</strong> Yes – you can prevent others from using it</li>
+                <li><strong>Rivalrous?</strong> Yes – one person's use reduces availability for others</li>
+                <li><strong>Examples:</strong> Food, clothing, smartphones, housing</li>
+                <li><strong>Market outcome:</strong> Efficiently provided by the market</li>
+            </ul>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>2. Public Goods</h4>
+            <ul>
+                <li><strong>Excludable?</strong> No – you can't prevent anyone from using it</li>
+                <li><strong>Rivalrous?</strong> No – one person's use doesn't reduce availability for others</li>
+                <li><strong>Examples:</strong> National defense, streetlights, air quality, basic research</li>
+                <li><strong>Market outcome:</strong> Underprovided by the market (free‑rider problem)</li>
+            </ul>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>3. Common Resources</h4>
+            <ul>
+                <li><strong>Excludable?</strong> No – you can't prevent others from using it</li>
+                <li><strong>Rivalrous?</strong> Yes – one person's use reduces availability for others</li>
+                <li><strong>Examples:</strong> Fisheries, forests, groundwater, grazing land</li>
+                <li><strong>Market outcome:</strong> Overused (tragedy of the commons)</li>
+            </ul>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+            <h4>4. Club Goods</h4>
+            <ul>
+                <li><strong>Excludable?</strong> Yes – you can prevent others from using it</li>
+                <li><strong>Rivalrous?</strong> No – one person's use doesn't reduce availability for others</li>
+                <li><strong>Examples:</strong> Cable TV, fire protection, toll roads, private parks</li>
+                <li><strong>Market outcome:</strong> Can be provided by the market</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CONCEPT 2: PUBLIC GOODS -->
+    <div class="card">
+        <h3>🔹 Public Goods</h3>
+        <p><strong>Definition:</strong> A public good is a good that is <strong>non‑excludable</strong> and <strong>non‑rivalrous</strong>.</p>
+
+        <ul>
+            <li><strong>Non‑excludable:</strong> You cannot prevent people from using the good, even if they don't pay for it.</li>
+            <li><strong>Non‑rivalrous:</strong> One person's use of the good does not reduce its availability for others.</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Example: Streetlight</strong><br>
+            Imagine a streetlight in your neighborhood. Everyone can benefit from it (non‑excludable), and one person's use doesn't reduce the light for others (non‑rivalrous). If the streetlight were privately provided, people would try to "free‑ride" – enjoy the benefit without paying. The result is <strong>underprovision</strong> – too few streetlights.
+        </div>
+
+        <h4>Free‑Rider Problem</h4>
+        <p>The <strong>free‑rider problem</strong> occurs when people can enjoy the benefits of a good without paying for it. This leads to the market providing <strong>too little</strong> of the good.</p>
+
+        <div class="highlight-box">
+            <strong>The Streetlight Game:</strong>
+            <ul>
+                <li>Ten neighbors can each contribute $100 to install a streetlight worth $1,000.</li>
+                <li>If everyone contributes, the streetlight is installed and everyone benefits.</li>
+                <li>But each person thinks: "If I don't contribute, the others might still pay, and I'll still get the light for free."</li>
+                <li><strong>Result:</strong> No one contributes, and the streetlight is not installed.</li>
+            </ul>
+        </div>
+
+        <h4>Social Value of Public Goods</h4>
+        <div class="formula-box">Social Value = Sum of Individual Marginal Benefits</div>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> For public goods, the <strong>social marginal benefit</strong> is the <strong>vertical sum</strong> of individual willingness to pay (WTP), not the horizontal sum (as with private goods). This is because the same unit of the good is consumed by everyone.</div>
+    </div>
+
+    <!-- GRAPH: PUBLIC GOOD -->
+    <div class="card">
+        <h3>📈 Graph: Public Goods</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 1: Public Good Provision</div>
+            <div class="graph-subtitle">Social value = vertical sum of individual WTP</div>
+            <svg viewBox="0 0 750 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="750" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="700" y2="400"/>
+                    <line x1="80" y1="100" x2="700" y2="100"/>
+                    <line x1="80" y1="150" x2="700" y2="150"/>
+                    <line x1="80" y1="200" x2="700" y2="200"/>
+                    <line x1="80" y1="250" x2="700" y2="250"/>
+                    <line x1="80" y1="300" x2="700" y2="300"/>
+                    <line x1="80" y1="350" x2="700" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="390" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (Q)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Willingness to Pay ($)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="700,400 685,390 685,410" fill="#0b2b4a"/>
+                <line x1="80" y1="400" x2="500" y2="200" stroke="#2563eb" stroke-width="2.5"/>
+                <text x="490" y="205" font-size="13" font-weight="700" fill="#2563eb">Person A</text>
+                <line x1="80" y1="400" x2="430" y2="250" stroke="#16a34a" stroke-width="2.5"/>
+                <text x="420" y="255" font-size="13" font-weight="700" fill="#16a34a">Person B</text>
+                <line x1="80" y1="400" x2="580" y2="100" stroke="#dc2626" stroke-width="3" stroke-dasharray="8,4"/>
+                <text x="570" y="105" font-size="14" font-weight="700" fill="#dc2626">Social</text>
+                <text x="570" y="120" font-size="14" font-weight="700" fill="#dc2626">Demand</text>
+                <text x="570" y="135" font-size="11" fill="#dc2626">(Vertical Sum)</text>
+                <line x1="150" y1="50" x2="680" y2="380" stroke="#8b5cf6" stroke-width="2.5"/>
+                <text x="670" y="390" font-size="14" font-weight="700" fill="#8b5cf6">MC</text>
+                <circle cx="360" cy="250" r="7" fill="#0b2b4a"/>
+                <text x="370" y="245" font-size="12" font-weight="600" fill="#0b2b4a">E<sub>Market</sub></text>
+                <circle cx="220" cy="180" r="7" fill="#dc2626"/>
+                <text x="230" y="175" font-size="12" font-weight="600" fill="#dc2626">E<sub>Optimal</sub></text>
+                <text x="250" y="330" font-size="12" fill="#dc2626">↓ Underprovision</text>
+                <rect x="470" y="60" width="200" height="100" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="80" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="95" x2="495" y2="95" stroke="#2563eb" stroke-width="2"/>
+                <text x="505" y="99" font-size="11" fill="#1e293b">Person A WTP</text>
+                <line x1="480" y1="110" x2="495" y2="110" stroke="#16a34a" stroke-width="2"/>
+                <text x="505" y="114" font-size="11" fill="#1e293b">Person B WTP</text>
+                <line x1="480" y1="125" x2="495" y2="125" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="505" y="129" font-size="11" fill="#1e293b">Social Demand</text>
+                <line x1="480" y1="140" x2="495" y2="140" stroke="#8b5cf6" stroke-width="2"/>
+                <text x="505" y="144" font-size="11" fill="#1e293b">MC</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> For public goods, social demand is the <strong>vertical sum</strong> of individual willingness to pay (WTP). The market equilibrium (Q<sub>M</sub>) is <strong>less than</strong> the social optimum (Q<sub>Opt</sub>), demonstrating underprovision due to the free‑rider problem.</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 3: COMMON RESOURCES -->
+    <div class="card">
+        <h3>🔹 Common Resources</h3>
+        <p><strong>Definition:</strong> A common resource is a good that is <strong>non‑excludable</strong> but <strong>rivalrous</strong>.</p>
+
+        <ul>
+            <li><strong>Non‑excludable:</strong> You cannot prevent people from using the resource.</li>
+            <li><strong>Rivalrous:</strong> One person's use reduces availability for others.</li>
+        </ul>
+
+        <h4>The Tragedy of the Commons</h4>
+        <p>The <strong>tragedy of the commons</strong> occurs when individuals acting independently and rationally according to their own self‑interest behave contrary to the best interests of the whole group by <strong>overusing</strong> a shared resource.</p>
+
+        <div class="highlight-box">
+            <strong>Example: Overfishing</strong><br>
+            Imagine a shared fishing ground. Each fisherman catches as many fish as possible. No one thinks about preserving the stock for the future because the fish are a common resource – if they don't catch them, someone else will. The result is <strong>overfishing</strong> and the depletion of fish stocks.
+        </div>
+
+        <div class="highlight-box">
+            <strong>Classic Example: Buffalo vs. Cows</strong><br>
+            Buffalo were a common resource in the American West – they were hunted to near extinction because no one owned them. Cows are a private good – owners have an incentive to maintain their herds. This illustrates the tragedy of the commons: commonly owned resources are often overused and depleted.
+        </div>
+
+        <h4>Elinor Ostrom's Governance</h4>
+        <p><strong>Elinor Ostrom</strong> (Nobel Prize 2009) showed that communities can successfully manage common resources <strong>without government regulation</strong> through:</p>
+        <ul>
+            <li><strong>Shared rules:</strong> Communities develop rules for resource use.</li>
+            <li><strong>Monitoring:</strong> Communities monitor each other's behavior.</li>
+            <li><strong>Sanctions:</strong> Communities impose penalties for rule violations.</li>
+            <li><strong>Trust:</strong> Communities build trust through repeated interactions.</li>
+        </ul>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> Common resources are NOT the same as public goods. They are rivalrous, so they can be overused. The tragedy of the commons arises from non‑excludability combined with rivalry.</div>
+    </div>
+
+    <!-- GRAPH: COMMON RESOURCES -->
+    <div class="card">
+        <h3>📈 Graph: Common Resources</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 2: Tragedy of the Commons</div>
+            <div class="graph-subtitle">Overuse of common resources</div>
+            <svg viewBox="0 0 750 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="750" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="700" y2="400"/>
+                    <line x1="80" y1="100" x2="700" y2="100"/>
+                    <line x1="80" y1="150" x2="700" y2="150"/>
+                    <line x1="80" y1="200" x2="700" y2="200"/>
+                    <line x1="80" y1="250" x2="700" y2="250"/>
+                    <line x1="80" y1="300" x2="700" y2="300"/>
+                    <line x1="80" y1="350" x2="700" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="390" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (Q)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Price / Cost ($)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="700,400 685,390 685,410" fill="#0b2b4a"/>
+                <line x1="80" y1="400" x2="680" y2="100" stroke="#2563eb" stroke-width="3"/>
+                <text x="660" y="105" font-size="16" font-weight="700" fill="#2563eb">Demand</text>
+                <line x1="150" y1="50" x2="680" y2="380" stroke="#16a34a" stroke-width="3"/>
+                <text x="670" y="390" font-size="16" font-weight="700" fill="#16a34a">MPC</text>
+                <line x1="150" y1="120" x2="680" y2="420" stroke="#dc2626" stroke-width="3" stroke-dasharray="8,4"/>
+                <text x="670" y="425" font-size="16" font-weight="700" fill="#dc2626">MSC</text>
+                <circle cx="360" cy="250" r="8" fill="#0b2b4a"/>
+                <text x="370" y="245" font-size="13" font-weight="600" fill="#0b2b4a">E<sub>Market</sub></text>
+                <circle cx="290" cy="200" r="8" fill="#dc2626"/>
+                <text x="300" y="195" font-size="13" font-weight="600" fill="#dc2626">E<sub>Optimal</sub></text>
+                <text x="370" y="330" font-size="12" fill="#dc2626">Overuse</text>
+                <text x="420" y="345" font-size="12" fill="#dc2626">(Overfishing)</text>
+                <rect x="470" y="60" width="200" height="100" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="80" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="95" x2="495" y2="95" stroke="#2563eb" stroke-width="2"/>
+                <text x="505" y="99" font-size="11" fill="#1e293b">Demand</text>
+                <line x1="480" y1="110" x2="495" y2="110" stroke="#16a34a" stroke-width="2"/>
+                <text x="505" y="114" font-size="11" fill="#1e293b">MPC</text>
+                <line x1="480" y1="125" x2="495" y2="125" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="505" y="129" font-size="11" fill="#1e293b">MSC</text>
+                <text x="480" y="145" font-size="11" fill="#dc2626">Tragedy of Commons</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> Common resources are overused because individuals don't pay for the cost they impose on others. The market equilibrium (Q<sub>M</sub>) exceeds the socially optimal quantity (Q<sub>Opt</sub>), leading to depletion.</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 4: REAL-WORLD EXAMPLES -->
+    <div class="card">
+        <h3>🔹 Real-World Examples</h3>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>1. Streetlights</h4>
+            <ul>
+                <li><strong>Type:</strong> Public good</li>
+                <li><strong>Problem:</strong> Everyone benefits from streetlights, but no one wants to pay for them.</li>
+                <li><strong>Solution:</strong> Government provision through taxes.</li>
+            </ul>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>2. Overfishing</h4>
+            <ul>
+                <li><strong>Type:</strong> Common resource</li>
+                <li><strong>Problem:</strong> Shared fishing grounds are overfished because no one owns the fish.</li>
+                <li><strong>Solution:</strong> Individual Transferable Quotas (ITQs), fishing quotas, or property rights.</li>
+            </ul>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>3. Buffalo vs. Cows</h4>
+            <ul>
+                <li><strong>Buffalo:</strong> Common resource → hunted to near extinction.</li>
+                <li><strong>Cows:</strong> Private good → owners maintain herds.</li>
+                <li><strong>Lesson:</strong> Property rights prevent the tragedy of the commons.</li>
+            </ul>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>4. National Defense</h4>
+            <ul>
+                <li><strong>Type:</strong> Public good</li>
+                <li><strong>Problem:</strong> Everyone benefits from national defense, but no one can be excluded.</li>
+                <li><strong>Solution:</strong> Government provision through taxes.</li>
+            </ul>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+            <h4>5. Club Goods</h4>
+            <ul>
+                <li><strong>Type:</strong> Club good (excludable, non‑rivalrous)</li>
+                <li><strong>Examples:</strong> Cable TV, fire protection, toll roads, private parks.</li>
+                <li><strong>Market outcome:</strong> Can be provided by the market through membership or subscription.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- FORMULAS -->
+    <div class="card">
+        <h3>🧮 Key Formulas</h3>
+
+        <div class="formula-box">Social Value = Sum of Individual Marginal Benefits</div>
+        <div class="formula-box">For public goods: MSB = Σ MB<sub>i</sub></div>
+        <div class="formula-box">Social Optimum: MSB = MC</div>
+        <div class="formula-box">Tragedy of Commons: Q<sub>Market</sub> > Q<sub>Optimal</sub></div>
+        <div class="formula-box">Free-Rider Problem: Q<sub>Market</sub> < Q<sub>Optimal</sub></div>
+    </div>
+
+    <!-- EXAM SCENARIOS -->
+    <div class="card">
+        <h3>📝 Exam Scenarios & Problem-Solving</h3>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 1: Classification of Goods</h4>
+            <p><strong>Scenario:</strong> Classify the following goods: a) National defense, b) A fishing ground, c) Cable TV, d) A sandwich.</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li><strong>National defense:</strong> Public good (non‑excludable, non‑rivalrous)</li>
+                <li><strong>Fishing ground:</strong> Common resource (non‑excludable, rivalrous)</li>
+                <li><strong>Cable TV:</strong> Club good (excludable, non‑rivalrous)</li>
+                <li><strong>Sandwich:</strong> Private good (excludable, rivalrous)</li>
+            </ul>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 2: Free-Rider Problem</h4>
+            <p><strong>Scenario:</strong> A neighborhood of 10 residents wants to install a security camera worth $1,000. Each resident values the camera at $150. Will the camera be installed?</p>
+            <p><strong>Solution:</strong> Total value = 10 × 150 = $1,500 > $1,000. The camera is socially desirable. But each resident thinks: "If I don't contribute, the others might still pay." The free‑rider problem leads to <strong>underprovision</strong> – the camera may not be installed without government intervention.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 3: Tragedy of the Commons</h4>
+            <p><strong>Scenario:</strong> A shared grazing land can support 100 cows. Each cow yields $200 of profit. If there are 150 cows, each cow yields $100 of profit. How many cows will be grazed?</p>
+            <p><strong>Solution:</strong> Each farmer adds a cow until marginal profit = 0. With 100 cows, profit/cow = $200. With 150 cows, profit/cow = $100. The tragedy of the commons leads to <strong>overgrazing</strong> – more cows than the land can sustainably support.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 4: Elinor Ostrom's Governance</h4>
+            <p><strong>Scenario:</strong> A fishing community has used a common fishing ground for generations. What rules might they develop to prevent overfishing?</p>
+            <p><strong>Solution:</strong> Communities can develop rules for resource use, monitor each other, impose sanctions, and build trust through repeated interactions. This is the basis of Elinor Ostrom's Nobel Prize work.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0;">
+            <h4>Scenario 5: Policy Solutions</h4>
+            <p><strong>Scenario:</strong> What policies can solve the overfishing problem?</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li><strong>Individual Transferable Quotas (ITQs):</strong> Allocate fishing rights to individuals</li>
+                <li><strong>Fishing quotas:</strong> Set limits on total catch</li>
+                <li><strong>Property rights:</strong> Assign ownership of fishing grounds</li>
+                <li><strong>Taxes:</strong> Tax fishing to reduce overuse</li>
+                <li><strong>Regulation:</strong> Limit fishing seasons, gear types, or areas</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- HIGH-YIELD EXAM FOCUS -->
+    <div class="card">
+        <h3>⚡ High-Yield Exam Focus</h3>
+
+        <h4>Memorization Checklist</h4>
+        <div class="grid-2">
+            <ul>
+                <li>□ Excludable / Non‑excludable</li>
+                <li>□ Rivalrous / Non‑rivalrous</li>
+                <li>□ Private Good</li>
+                <li>□ Public Good</li>
+                <li>□ Common Resource</li>
+                <li>□ Club Good</li>
+                <li>□ Free‑Rider Problem</li>
+                <li>□ Tragedy of the Commons</li>
+            </ul>
+            <ul>
+                <li>□ Underprovision / Overprovision</li>
+                <li>□ Elinor Ostrom</li>
+                <li>□ Individual Transferable Quotas (ITQs)</li>
+                <li>□ Social Value</li>
+                <li>□ Vertical Summation</li>
+                <li>□ Government Provision</li>
+                <li>□ Property Rights</li>
+            </ul>
+        </div>
+
+        <h4>Common Exam Traps</h4>
+        <ul>
+            <li><strong>Confusing Public Goods with Common Resources:</strong> Public goods are non‑rivalrous and non‑excludable (underprovided). Common resources are rivalrous and non‑excludable (overused).</li>
+            <li><strong>Confusing Public Goods with Club Goods:</strong> Public goods are non‑excludable; club goods are excludable.</li>
+            <li><strong>Thinking Free‑Rider Problem Only Applies to Public Goods:</strong> Free‑riding also occurs with common resources (e.g., overfishing).</li>
+            <li><strong>Forgetting Elinor Ostrom's Work:</strong> Communities can manage common resources without government intervention.</li>
+        </ul>
+
+        <h4>The "If This, Then That" Logic</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then...</th></tr>
+                <tr><td>Good is non‑excludable and non‑rivalrous</td><td>It's a PUBLIC GOOD → Underprovision</td></tr>
+                <tr><td>Good is non‑excludable and rivalrous</td><td>It's a COMMON RESOURCE → Overuse</td></tr>
+                <tr><td>Good is excludable and non‑rivalrous</td><td>It's a CLUB GOOD → Market provision</td></tr>
+                <tr><td>Good is excludable and rivalrous</td><td>It's a PRIVATE GOOD → Market provision</td></tr>
+                <tr><td>People can benefit without paying</td><td>Free‑rider problem → Underprovision</td></tr>
+                <tr><td>Resource is shared and unowned</td><td>Tragedy of the commons → Overuse</td></tr>
+                <tr><td>Property rights are established</td><td>Tragedy of the commons can be avoided</td></tr>
+            </table>
+        </div>
+
+        <h4>Quick Reference: Four Types of Goods</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Type</th><th>Excludable?</th><th>Rivalrous?</th><th>Examples</th><th>Problem</th></tr>
+                <tr><td><strong>Private Good</strong></td><td>Yes</td><td>Yes</td><td>Food, clothing, cars</td><td>None (market works)</td></tr>
+                <tr><td><strong>Public Good</strong></td><td>No</td><td>No</td><td>National defense, streetlights</td><td>Free‑rider (underprovision)</td></tr>
+                <tr><td><strong>Common Resource</strong></td><td>No</td><td>Yes</td><td>Fisheries, forests, water</td><td>Tragedy of commons (overuse)</td></tr>
+                <tr><td><strong>Club Good</strong></td><td>Yes</td><td>No</td><td>Cable TV, toll roads</td><td>None (market works)</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- PRACTICE QUESTIONS -->
+    <div class="card">
+        <h3>📝 Practice Questions</h3>
+
+        <div class="question-block" id="q1">
+            <div class="q-text">Q1: A public good is:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) Excludable and rivalrous</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="B"><span>B) Excludable and non‑rivalrous</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="C"><span>C) Non‑excludable and non‑rivalrous</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) Non‑excludable and rivalrous</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1', 'C')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: C</strong><br>A public good is non‑excludable (you can't prevent anyone from using it) and non‑rivalrous (one person's use doesn't reduce availability for others).</div>
+        </div>
+
+        <div class="question-block" id="q2">
+            <div class="q-text">Q2: The free‑rider problem leads to:</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="A"><span>A) Underprovision of public goods</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="B"><span>B) Overprovision of public goods</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) Efficient provision of public goods</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="D"><span>D) No market failure</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2', 'A')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: A</strong><br>The free‑rider problem leads to underprovision of public goods because people can enjoy the benefits without paying.</div>
+        </div>
+
+        <div class="question-block" id="q3">
+            <div class="q-text">Q3: A common resource is:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A"><span>A) Excludable and rivalrous</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="B"><span>B) Excludable and non‑rivalrous</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="C"><span>C) Non‑excludable and non‑rivalrous</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="D"><span>D) Non‑excludable and rivalrous</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3', 'D')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: D</strong><br>A common resource is non‑excludable (you can't prevent use) but rivalrous (one person's use reduces availability for others).</div>
+        </div>
+
+        <div class="question-block" id="q4">
+            <div class="q-text">Q4: The tragedy of the commons occurs when:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q4" value="A"><span>A) A resource is privately owned</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="B"><span>B) A common resource is overused</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="C"><span>C) A public good is underprovided</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="D"><span>D) A club good is underprovided</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>The tragedy of the commons occurs when a common resource is overused because individuals don't pay for the cost they impose on others.</div>
+        </div>
+
+        <div class="question-block" id="q5">
+            <div class="q-text">Q5: Which of the following is a public good?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A"><span>A) A sandwich</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="B"><span>B) A fishing ground</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="C"><span>C) National defense</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="D"><span>D) Cable TV</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5', 'C')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: C</strong><br>National defense is a public good because it is non‑excludable and non‑rivalrous. A sandwich is a private good, a fishing ground is a common resource, and cable TV is a club good.</div>
+        </div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="card">
+        <h3>📖 Glossary</h3>
+        <div class="glossary-term"><dt>Private Good</dt><dd>Excludable and rivalrous (food, clothing, cars).</dd></div>
+        <div class="glossary-term"><dt>Public Good</dt><dd>Non‑excludable and non‑rivalrous (national defense, streetlights).</dd></div>
+        <div class="glossary-term"><dt>Common Resource</dt><dd>Non‑excludable and rivalrous (fisheries, forests, water).</dd></div>
+        <div class="glossary-term"><dt>Club Good</dt><dd>Excludable and non‑rivalrous (cable TV, toll roads).</dd></div>
+        <div class="glossary-term"><dt>Excludable</dt><dd>You can prevent people from using the good.</dd></div>
+        <div class="glossary-term"><dt>Non‑excludable</dt><dd>You cannot prevent people from using the good.</dd></div>
+        <div class="glossary-term"><dt>Rivalrous</dt><dd>One person's use reduces availability for others.</dd></div>
+        <div class="glossary-term"><dt>Non‑rivalrous</dt><dd>One person's use does not reduce availability for others.</dd></div>
+        <div class="glossary-term"><dt>Free‑Rider Problem</dt><dd>People enjoy benefits without paying → underprovision.</dd></div>
+        <div class="glossary-term"><dt>Tragedy of the Commons</dt><dd>Common resources are overused → depletion.</dd></div>
+        <div class="glossary-term"><dt>Elinor Ostrom</dt><dd>Nobel laureate who showed communities can manage common resources.</dd></div>
+        <div class="glossary-term"><dt>Individual Transferable Quotas (ITQs)</dt><dd>Allocating fishing rights to individuals.</dd></div>
+        <div class="glossary-term"><dt>Social Value</dt><dd>Sum of individual marginal benefits (for public goods).</dd></div>
+        <div class="glossary-term"><dt>Vertical Summation</dt><dd>Adding willingness to pay across individuals for public goods.</dd></div>
+        <div class="glossary-term"><dt>Underprovision</dt><dd>Producing less than the socially optimal quantity (public goods).</dd></div>
+        <div class="glossary-term"><dt>Overprovision</dt><dd>Producing more than the socially optimal quantity (common resources).</dd></div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+        function toggleAnswer(qId, correct) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

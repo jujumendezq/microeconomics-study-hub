@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 2: The Market</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+        .card li { margin: 0.3rem 0; line-height: 1.6; }
+        .highlight-box { background: #eef4fa; padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #1f6e8c; margin: 1rem 0; }
+        .formula-box { background: #e7edf6; padding: 0.8rem 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 500; color: #003153; display: inline-block; margin: 0.4rem 0; border: 1px solid #bfd3e6; }
+        .exam-trap { background: #fef6ee; border-left: 4px solid #c77d4a; padding: 0.8rem 1.5rem; border-radius: 10px; margin: 0.6rem 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .glossary-term { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #e8edf3; }
+        .glossary-term dt { font-weight: 600; color: #0b2b4a; min-width: 160px; }
+        .glossary-term dd { color: #334155; }
+        .graph-container { width: 100%; max-width: 850px; margin: 1.5rem auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 0.5rem; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .graph-container svg { width: 100%; height: auto; display: block; }
+        .graph-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; text-align: center; padding: 0.8rem 0 0.3rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .graph-subtitle { font-size: 0.85rem; color: #64748b; text-align: center; padding-bottom: 0.5rem; }
+        .graph-insight { padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 6px; margin-top: 0.5rem; }
+        .graph-insight p { font-size: 0.85rem; color: #1e293b; margin: 0; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .glossary-term { flex-direction: column; gap: 0.2rem; } .glossary-term dt { min-width: unset; } .graph-container { margin: 0.5rem 0; } .graph-container svg text { font-size: 10px !important; } .graph-title { font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Lesson 2: The Market</div>
+
+    <div class="page-header">
+        <h2>📊 2. The Market: When Supply Meets Demand</h2>
+        <div class="subtitle">Demand, supply, equilibrium · the core of microeconomics</div>
+    </div>
+
+    <!-- LEARNING OBJECTIVES -->
+    <div class="card">
+        <h3>📌 Learning Objectives</h3>
+        <ul>
+            <li>Define a market and identify its key components (buyers and sellers)</li>
+            <li>Explain the Law of Demand and the Law of Supply, including why they hold true</li>
+            <li>Construct and interpret demand and supply curves</li>
+            <li>Distinguish between a movement along a demand/supply curve and a shift of the entire curve</li>
+            <li>List and explain the factors that cause demand and supply to shift</li>
+            <li>Define and identify different types of goods: Normal vs. Inferior; Substitutes vs. Complements</li>
+            <li>Find the market equilibrium (equilibrium price and quantity) graphically and mathematically</li>
+            <li>Analyze what happens to equilibrium when there's a shock to demand or supply</li>
+        </ul>
+    </div>
+
+    <!-- TOPIC INTRODUCTION -->
+    <div class="card">
+        <h3>🔹 Topic Introduction</h3>
+        <p>Welcome to one of the most important chapters in all of economics! This chapter introduces you to the market—the central organizing mechanism of our economy. Think of a market as a meeting place (not necessarily physical) where buyers and sellers come together to exchange goods and services.</p>
+        <div class="highlight-box">
+            <strong>Why should you care?</strong> Because markets are everywhere! Every time you buy a coffee, sell your old textbooks, or even bid on a candy bag in class, you're participating in a market. Understanding how markets work helps you understand why prices rise and fall, why some products are abundant while others are scarce, and how governments can influence the economy through policies like taxes or price controls.
+        </div>
+        <p>By the end of this chapter, you'll have the fundamental tools to analyze any market—from the market for smartphones to the market for oil to the market for labor. These tools will serve as the foundation for almost everything else you'll learn in microeconomics.</p>
+    </div>
+
+    <!-- CONCEPT 1: WHAT IS A MARKET -->
+    <div class="card">
+        <h3>🔹 What is a Market?</h3>
+        <p>A <strong>market</strong> is a group of buyers and sellers of a particular good or service. Markets can be:</p>
+        <ul>
+            <li><strong>Physical:</strong> like a farmer's market or a car dealership</li>
+            <li><strong>Virtual:</strong> like Amazon, eBay, or a stock exchange</li>
+            <li><strong>Abstract:</strong> like the market for oil or foreign currency</li>
+        </ul>
+        <p><strong>Key point:</strong> Markets don't require a physical location. What matters is that buyers and sellers can interact to exchange goods or services.</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr>
+                    <th>Side</th>
+                    <th>Who</th>
+                    <th>What They Do</th>
+                </tr>
+                <tr>
+                    <td>Demand Side</td>
+                    <td>Buyers (consumers)</td>
+                    <td>Determine how much they want to purchase at different prices</td>
+                </tr>
+                <tr>
+                    <td>Supply Side</td>
+                    <td>Sellers (producers)</td>
+                    <td>Determine how much they want to sell at different prices</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>The "Invisible Hand"</strong><br>
+            When buyers and sellers interact, they collectively determine the price of the good. This happens through a process of negotiation, bargaining, and competition—even if we can't "see" it happening. Adam Smith called this the <strong>invisible hand</strong> of the market.
+        </div>
+    </div>
+
+    <!-- CONCEPT 2: THE DEMAND CURVE -->
+    <div class="card">
+        <h3>🔹 The Demand Curve</h3>
+        <p><strong>Demand</strong> refers to the quantity of a good or service that buyers are <strong>willing and able</strong> to purchase at various prices.</p>
+
+        <p><strong>The Law of Demand</strong> states: There is an <strong>inverse (negative) relationship</strong> between price and quantity demanded—as the price of a good increases, the quantity demanded decreases, <em>ceteris paribus</em> (all else equal).</p>
+
+        <h4>The "Why" Behind the Law of Demand</h4>
+        <ul>
+            <li><strong>The Substitution Effect:</strong> When the price of a good rises, it becomes relatively more expensive compared to other goods. Consumers "substitute" away from the more expensive good toward cheaper alternatives.<br>
+            <em>Example: If the price of coffee increases, you might switch to drinking tea instead.</em></li>
+            <li><strong>The Income Effect:</strong> When the price of a good rises, your purchasing power decreases—your money doesn't go as far. With effectively less income, you'll buy less of the good.<br>
+            <em>Example: If the price of gasoline doubles, you might drive less and take the bus more often.</em></li>
+        </ul>
+
+        <h4>Demand Schedule Example</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Price (per candy bag)</th><th>Quantity Demanded</th></tr>
+                <tr><td>$1.50</td><td>1</td></tr>
+                <tr><td>$1.25</td><td>3</td></tr>
+                <tr><td>$1.00</td><td>5</td></tr>
+                <tr><td>$0.75</td><td>10</td></tr>
+                <tr><td>$0.50</td><td>15</td></tr>
+                <tr><td>$0.25</td><td>20</td></tr>
+            </table>
+        </div>
+        <p><strong>Notice:</strong> As price goes down, quantity demanded goes up.</p>
+    </div>
+
+    <!-- INDIVIDUAL VS MARKET DEMAND -->
+    <div class="card">
+        <h3>🔹 Individual vs. Market Demand</h3>
+        <p><strong>Individual Demand Curve:</strong> Each person has their own demand curve based on their preferences, income, and needs. These curves are <strong>heterogeneous</strong>—they differ from person to person.</p>
+        <p><strong>Example:</strong> At $6, Person A wants 10 units, Person B wants 0 units.</p>
+
+        <p><strong>Market Demand Curve:</strong> The market demand curve is the <strong>horizontal sum</strong> of all individual demand curves. For each price, we add up how many units all consumers want.</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Price</th><th>Person A Demand</th><th>Person B Demand</th><th>Market Demand (A + B)</th></tr>
+                <tr><td>$6</td><td>10</td><td>0</td><td>10</td></tr>
+                <tr><td>$3</td><td>20</td><td>30</td><td>50</td></tr>
+                <tr><td>$0</td><td>30</td><td>50</td><td>80</td></tr>
+            </table>
+        </div>
+        <p><strong>Important observation:</strong> The market demand curve is flatter (more elastic) than individual curves because we're adding up quantities at each price.</p>
+    </div>
+
+    <!-- DETERMINANTS OF DEMAND -->
+    <div class="card">
+        <h3>🔹 Factors That Shift Demand</h3>
+
+        <div class="exam-trap">⚠️ <strong>Movement Along vs. Shift: The Crucial Difference</strong></div>
+
+        <div class="table-wrap">
+            <table>
+                <tr>
+                    <th></th>
+                    <th>Movement Along the Curve</th>
+                    <th>Shift of the Curve</th>
+                </tr>
+                <tr>
+                    <td><strong>What causes it?</strong></td>
+                    <td>Change in the good's OWN price</td>
+                    <td>Change in other factors (income, tastes, prices of related goods)</td>
+                </tr>
+                <tr>
+                    <td><strong>What it's called</strong></td>
+                    <td>Change in <strong>quantity demanded</strong></td>
+                    <td>Change in <strong>demand</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Visual</strong></td>
+                    <td>Moving from one point to another on the SAME curve</td>
+                    <td>The ENTIRE curve moves left or right</td>
+                </tr>
+            </table>
+        </div>
+
+        <h4>Factors That Shift Demand (The Determinants of Demand)</h4>
+        <ul>
+            <li><strong>Tastes and Preferences (T):</strong> Change in consumer preferences → shift in demand<br>
+            <em>Example: A medical lecture on sugar's health risks shifts candy demand LEFT</em></li>
+
+            <li><strong>Income and Wealth (R):</strong>
+                <ul>
+                    <li><strong>Normal goods:</strong> As income increases, demand increases (shift RIGHT)</li>
+                    <li><strong>Inferior goods:</strong> As income increases, demand decreases (shift LEFT)</li>
+                </ul>
+            </li>
+
+            <li><strong>Prices of Related Goods:</strong>
+                <ul>
+                    <li><strong>Substitutes:</strong> Goods used in place of each other. If the price of a substitute rises, demand for the original good increases (shift RIGHT)</li>
+                    <li><strong>Complements:</strong> Goods used together. If the price of a complement rises, demand for the original good decreases (shift LEFT)</li>
+                </ul>
+            </li>
+
+            <li><strong>Number of Buyers:</strong> More buyers → demand shifts RIGHT; Fewer buyers → demand shifts LEFT</li>
+
+            <li><strong>Expectations About the Future:</strong> Expecting higher future prices → buy more NOW (shift RIGHT); Expecting lower future prices → buy less NOW (shift LEFT)</li>
+        </ul>
+
+        <h4>Substitutes vs. Complements: Detailed Examples</h4>
+        <div class="grid-2">
+            <div>
+                <h4>Substitutes (replace each other)</h4>
+                <ul>
+                    <li>Coca-Cola and Pepsi</li>
+                    <li>Tea and Coffee</li>
+                    <li>Cars and Bikes</li>
+                </ul>
+                <p><strong>Example:</strong> Government introduces a CO₂ tax on gasoline → price of driving cars increases → demand for (electric) bikes shifts RIGHT.</p>
+            </div>
+            <div>
+                <h4>Complements (used together)</h4>
+                <ul>
+                    <li>Cars and Gasoline</li>
+                    <li>Smartphones and Phone Cases</li>
+                    <li>Coffee and Sugar</li>
+                    <li>Flights and Holidays</li>
+                </ul>
+                <p><strong>Example:</strong> CO₂ tax increases flight prices → demand for holidays in faraway islands shifts LEFT.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- THE SUPPLY CURVE -->
+    <div class="card">
+        <h3>🔹 The Supply Curve</h3>
+        <p><strong>Supply</strong> refers to the quantity of a good or service that sellers are <strong>willing and able</strong> to sell at various prices.</p>
+
+        <p><strong>The Law of Supply</strong> states: There is a <strong>positive (direct) relationship</strong> between price and quantity supplied—as the price of a good increases, the quantity supplied increases, <em>ceteris paribus</em>.</p>
+
+        <h4>The "Why" Behind the Law of Supply</h4>
+        <ul>
+            <li><strong>Higher prices cover higher costs:</strong> As firms produce more, they face increasing marginal costs. They need higher prices to justify producing additional units.</li>
+            <li><strong>Profit motive:</strong> Higher prices mean higher potential profits, which incentivizes firms to produce and sell more.</li>
+            <li><strong>Opportunity cost:</strong> Sellers require compensation for giving up their goods. The higher the price, the more sellers are willing to part with their goods.</li>
+        </ul>
+
+        <h4>Supply Schedule Example</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Price</th><th>Quantity Supplied</th></tr>
+                <tr><td>$10</td><td>Almost 0</td></tr>
+                <tr><td>$200</td><td>A few students</td></tr>
+                <tr><td>$50,000</td><td>Almost all students</td></tr>
+            </table>
+        </div>
+        <p><strong>Notice:</strong> As price goes up, quantity supplied goes up.</p>
+    </div>
+
+    <!-- DETERMINANTS OF SUPPLY -->
+    <div class="card">
+        <h3>🔹 Factors That Shift Supply</h3>
+
+        <div class="table-wrap">
+            <table>
+                <tr>
+                    <th></th>
+                    <th>Movement Along the Curve</th>
+                    <th>Shift of the Curve</th>
+                </tr>
+                <tr>
+                    <td><strong>What causes it?</strong></td>
+                    <td>Change in the good's OWN price</td>
+                    <td>Change in other factors (production costs, technology, etc.)</td>
+                </tr>
+                <tr>
+                    <td><strong>What it's called</strong></td>
+                    <td>Change in <strong>quantity supplied</strong></td>
+                    <td>Change in <strong>supply</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Visual</strong></td>
+                    <td>Moving along the SAME curve</td>
+                    <td>The ENTIRE curve moves left or right</td>
+                </tr>
+            </table>
+        </div>
+
+        <h4>Factors That Shift Supply</h4>
+        <ul>
+            <li><strong>Input Prices / Production Costs:</strong> Costs go UP → supply shifts LEFT (less profitable to produce); Costs go DOWN → supply shifts RIGHT (more profitable to produce)<br>
+            <em>Example: Price of lithium increases → smartphone supply shifts LEFT</em></li>
+
+            <li><strong>Technology:</strong> Better technology → lower costs → supply shifts RIGHT<br>
+            <em>Example: Fracking technology → oil supply shifts RIGHT</em></li>
+
+            <li><strong>Number of Sellers:</strong> More sellers → supply shifts RIGHT; Fewer sellers → supply shifts LEFT</li>
+
+            <li><strong>Sellers' Expectations:</strong> Expect higher future prices → supply shifts LEFT (hold back inventory); Expect lower future prices → supply shifts RIGHT (sell more now)</li>
+
+            <li><strong>Prices of Other Goods:</strong> If the price of an alternative good rises, producers shift production to that good</li>
+        </ul>
+    </div>
+
+    <!-- MARKET EQUILIBRIUM -->
+    <div class="card">
+        <h3>🔹 Market Equilibrium</h3>
+        <p><strong>Market equilibrium</strong> occurs when the quantity demanded equals the quantity supplied at a particular price. This price is called the <strong>equilibrium price</strong> (or market-clearing price), and the corresponding quantity is the <strong>equilibrium quantity</strong>.</p>
+
+        <div class="formula-box">At equilibrium: Q<sub>D</sub> = Q<sub>S</sub></div>
+
+        <p><strong>At equilibrium:</strong></p>
+        <ul>
+            <li>Every buyer willing to pay the equilibrium price can find a seller</li>
+            <li>Every seller willing to accept the equilibrium price can find a buyer</li>
+            <li>There is no pressure for the price to change</li>
+        </ul>
+
+        <h4>The Adjustment Mechanism</h4>
+        <div class="grid-2">
+            <div>
+                <h4>Case 1: Excess Supply (Surplus)</h4>
+                <ul>
+                    <li>When price is ABOVE equilibrium:</li>
+                    <li>Quantity supplied > Quantity demanded</li>
+                    <li>Sellers have unsold goods (inventories build up)</li>
+                    <li>Sellers compete by lowering prices</li>
+                    <li>Price falls until equilibrium is reached</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Case 2: Excess Demand (Shortage)</h4>
+                <ul>
+                    <li>When price is BELOW equilibrium:</li>
+                    <li>Quantity demanded > Quantity supplied</li>
+                    <li>Consumers can't find enough goods</li>
+                    <li>Consumers compete by bidding prices up</li>
+                    <li>Price rises until equilibrium is reached</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>The Short Side of the Market:</strong> In a disequilibrium situation, the <strong>short side of the market</strong> prevails—the actual quantity exchanged is the smaller of quantity demanded and quantity supplied.</div>
+    </div>
+
+    <!-- ANALYZING SHOCKS -->
+    <div class="card">
+        <h3>🔹 Analyzing Shocks to Equilibrium</h3>
+
+        <h4>Step-by-Step Framework:</h4>
+        <ol>
+            <li>Identify the shock (what changed?)</li>
+            <li>Determine which curve is affected (demand or supply?)</li>
+            <li>Determine direction (shift left or right?)</li>
+            <li>Compare new equilibrium to old equilibrium</li>
+            <li>State results (P↑ or P↓? Q↑ or Q↓?)</li>
+        </ol>
+
+        <div class="table-wrap">
+            <table>
+                <tr>
+                    <th>Type of Shift</th>
+                    <th>Change in Price</th>
+                    <th>Change in Quantity</th>
+                </tr>
+                <tr><td>Demand → Right (↑)</td><td>P ↑</td><td>Q ↑</td></tr>
+                <tr><td>Demand → Left (↓)</td><td>P ↓</td><td>Q ↓</td></tr>
+                <tr><td>Supply → Right (↑)</td><td>P ↓</td><td>Q ↑</td></tr>
+                <tr><td>Supply → Left (↓)</td><td>P ↑</td><td>Q ↓</td></tr>
+            </table>
+        </div>
+
+        <h4>Simultaneous Shifts</h4>
+        <div class="table-wrap">
+            <table>
+                <tr>
+                    <th>Scenario</th>
+                    <th>Effect on Price</th>
+                    <th>Effect on Quantity</th>
+                </tr>
+                <tr><td>Demand ↑, Supply ↑</td><td>Ambiguous</td><td>Q ↑</td></tr>
+                <tr><td>Demand ↑, Supply ↓</td><td>P ↑</td><td>Ambiguous</td></tr>
+                <tr><td>Demand ↓, Supply ↑</td><td>P ↓</td><td>Ambiguous</td></tr>
+                <tr><td>Demand ↓, Supply ↓</td><td>Ambiguous</td><td>Q ↓</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- GRAPH: MARKET EQUILIBRIUM -->
+    <div class="card">
+        <h3>📈 Graph: Market Equilibrium</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 1: Supply and Demand Equilibrium</div>
+            <div class="graph-subtitle">The intersection of supply and demand determines equilibrium price and quantity</div>
+            <svg viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="700" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="680" y2="400"/>
+                    <line x1="80" y1="100" x2="680" y2="100"/>
+                    <line x1="80" y1="150" x2="680" y2="150"/>
+                    <line x1="80" y1="200" x2="680" y2="200"/>
+                    <line x1="80" y1="250" x2="680" y2="250"/>
+                    <line x1="80" y1="300" x2="680" y2="300"/>
+                    <line x1="80" y1="350" x2="680" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="380" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (Q)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Price (P)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="680,400 665,390 665,410" fill="#0b2b4a"/>
+                <line x1="80" y1="400" x2="680" y2="100" stroke="#2563eb" stroke-width="3"/>
+                <text x="660" y="105" font-size="16" font-weight="700" fill="#2563eb">D</text>
+                <line x1="150" y1="50" x2="680" y2="350" stroke="#16a34a" stroke-width="3"/>
+                <text x="670" y="360" font-size="16" font-weight="700" fill="#16a34a">S</text>
+                <circle cx="380" cy="230" r="8" fill="#0b2b4a"/>
+                <text x="390" y="225" font-size="14" font-weight="600" fill="#0b2b4a">E</text>
+                <text x="390" y="240" font-size="11" fill="#0b2b4a">(P*, Q*)</text>
+                <line x1="80" y1="230" x2="380" y2="230" stroke="#0b2b4a" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="60" y="235" font-size="13" font-weight="600" fill="#0b2b4a">P*</text>
+                <line x1="380" y1="230" x2="380" y2="400" stroke="#0b2b4a" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="370" y="420" font-size="13" font-weight="600" fill="#0b2b4a">Q*</text>
+                <rect x="470" y="280" width="190" height="85" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="300" font-size="13" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="315" x2="500" y2="315" stroke="#2563eb" stroke-width="2"/>
+                <text x="510" y="319" font-size="11" fill="#1e293b">Demand (D)</text>
+                <line x1="480" y1="330" x2="500" y2="330" stroke="#16a34a" stroke-width="2"/>
+                <text x="510" y="334" font-size="11" fill="#1e293b">Supply (S)</text>
+                <circle cx="488" cy="348" r="4" fill="#0b2b4a"/>
+                <text x="510" y="352" font-size="11" fill="#1e293b">Equilibrium</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> At equilibrium, quantity demanded equals quantity supplied. The market "clears"—no shortage and no surplus.</p></div>
+        </div>
+    </div>
+
+    <!-- GRAPH: DEMAND SHIFT -->
+    <div class="card">
+        <h3>📈 Graph: Increase in Demand</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 2: Increase in Demand (Shift Right)</div>
+            <div class="graph-subtitle">A factor other than price (income, tastes, etc.) increases demand</div>
+            <svg viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="700" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="680" y2="400"/>
+                    <line x1="80" y1="150" x2="680" y2="150"/>
+                    <line x1="80" y1="250" x2="680" y2="250"/>
+                    <line x1="80" y1="350" x2="680" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                </g>
+                <text x="380" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (Q)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Price (P)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="680,400 665,390 665,410" fill="#0b2b4a"/>
+                <line x1="80" y1="400" x2="680" y2="50" stroke="#2563eb" stroke-width="2.5"/>
+                <text x="660" y="55" font-size="14" font-weight="700" fill="#2563eb">D₁</text>
+                <line x1="140" y1="400" x2="700" y2="100" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="6,4"/>
+                <text x="680" y="95" font-size="14" font-weight="700" fill="#93c5fd">D₂</text>
+                <line x1="150" y1="50" x2="680" y2="350" stroke="#16a34a" stroke-width="2.5"/>
+                <text x="670" y="360" font-size="14" font-weight="700" fill="#16a34a">S</text>
+                <circle cx="360" cy="250" r="7" fill="#0b2b4a"/>
+                <text x="370" y="245" font-size="12" font-weight="600" fill="#0b2b4a">E₁</text>
+                <circle cx="480" cy="190" r="7" fill="#dc2626"/>
+                <text x="490" y="185" font-size="12" font-weight="600" fill="#dc2626">E₂</text>
+                <text x="420" y="165" font-size="14" font-weight="700" fill="#2563eb">⟶</text>
+                <text x="430" y="150" font-size="11" fill="#2563eb">Shift RIGHT</text>
+                <rect x="470" y="280" width="190" height="85" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="300" font-size="13" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="315" x2="500" y2="315" stroke="#2563eb" stroke-width="2"/>
+                <text x="510" y="319" font-size="11" fill="#1e293b">Demand D₁</text>
+                <line x1="480" y1="330" x2="500" y2="330" stroke="#93c5fd" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="510" y="334" font-size="11" fill="#1e293b">New Demand D₂</text>
+                <line x1="480" y1="345" x2="500" y2="345" stroke="#16a34a" stroke-width="2"/>
+                <text x="510" y="349" font-size="11" fill="#1e293b">Supply (S)</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> When demand increases (shifts RIGHT), both equilibrium price AND quantity increase. This happens when income rises (for normal goods), tastes change, or substitute prices increase.</p></div>
+        </div>
+    </div>
+
+    <!-- FORMULAS -->
+    <div class="card">
+        <h3>🧮 Key Formulas</h3>
+
+        <div class="formula-box">Q<sub>D</sub> = a − bP (Linear Demand)</div>
+        <div class="formula-box">Q<sub>S</sub> = c + mP (Linear Supply)</div>
+        <div class="formula-box">At equilibrium: a − bP = c + mP → solve for P*, then Q*</div>
+
+        <h4>Step-by-Step Example</h4>
+        <p>Given: Q<sub>D</sub> = 200 − 10P, Q<sub>S</sub> = −40 + 50P</p>
+        <ol>
+            <li>Set equal: 200 − 10P = −40 + 50P</li>
+            <li>Add 40: 240 − 10P = 50P</li>
+            <li>Add 10P: 240 = 60P</li>
+            <li>Divide: P* = 4</li>
+            <li>Substitute: Q* = 200 − 10(4) = 160</li>
+        </ol>
+        <div class="highlight-box"><strong>Answer:</strong> Equilibrium price is $4, equilibrium quantity is 160 units.</div>
+
+        <div class="formula-box">Complete demand: Q<sub>D</sub> = a − b₁P + b₂R + b₃P<sub>C</sub> + b₄P<sub>S</sub></div>
+        <div class="formula-box">Complete supply: Q<sub>S</sub> = c + m₁P − m₂W + m₃τ</div>
+
+        <div class="formula-box">Indirect Demand Function: P = a/b − (1/b)Q<sub>D</sub></div>
+        <p><strong>Example:</strong> Q<sub>D</sub> = 200 − 10P → P = 20 − 0.1Q<sub>D</sub></p>
+    </div>
+
+    <!-- EXAM SCENARIOS -->
+    <div class="card">
+        <h3>📝 Exam Scenarios & Problem-Solving</h3>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 1: Demand Shift (Candy Demand)</h4>
+            <p><strong>Scenario:</strong> A class runs an auction for a candy bag. The highest bid is 500 million CHF. If students attend a medical lecture about the dangers of sugar before the auction, what happens to the demand curve?</p>
+            <p><strong>Solution:</strong> The demand curve shifts LEFT. Students are now willing to pay less for the candy bag at every price. Result: P ↓, Q ↓.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 2: Supply Shift (Smartphones)</h4>
+            <p><strong>Scenario:</strong> You're selling your smartphone in class. Lithium (a key component in smartphone batteries) just became 50% more expensive. What happens to the supply curve?</p>
+            <p><strong>Solution:</strong> The supply curve shifts LEFT. At any price, sellers are willing to supply fewer smartphones because production costs are higher. Result: P ↑, Q ↓.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 3: Substitutes vs Complements</h4>
+            <p><strong>Scenario:</strong> The government introduces a CO₂ tax that makes driving cars more expensive. How does this affect the demand for (electric) bikes and the demand for holidays in faraway islands?</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li><strong>Bikes (substitutes):</strong> Demand shifts RIGHT → P ↑, Q ↑</li>
+                <li><strong>Holidays (complements):</strong> Demand shifts LEFT → P ↓, Q ↓</li>
+            </ul>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 4: Equilibrium Analysis with Income Change</h4>
+            <p><strong>Scenario:</strong> Coffee market at P=$4, Q=160. Income increases from $5,000 to $7,000. Given: Q<sub>D</sub> = 200 − 10P + 0.03R, Q<sub>S</sub> = −40 + 50P</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Initial: Q<sub>D</sub> = 200 − 10P + 0.03(5000) = 350 − 10P</li>
+                <li>New: Q<sub>D</sub> = 200 − 10P + 0.03(7000) = 410 − 10P</li>
+                <li>Set equal: 410 − 10P = −40 + 50P → 450 = 60P → P* = 7.5</li>
+                <li>Q* = 410 − 10(7.5) = 335</li>
+            </ul>
+            <div class="highlight-box"><strong>Result:</strong> P ↑ from $4 to $7.50, Q ↑ from 160 to 335.</div>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0;">
+            <h4>Scenario 5: Simultaneous Shifts</h4>
+            <p><strong>Scenario:</strong> Smartphone market experiences TWO changes: income increases (normal good) and production technology improves. What happens to equilibrium?</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Income ↑ → Demand shifts RIGHT (P ↑, Q ↑)</li>
+                <li>Technology ↑ → Supply shifts RIGHT (P ↓, Q ↑)</li>
+                <li><strong>Net effect:</strong> Q ↑ definitely; P is AMBIGUOUS</li>
+            </ul>
+            <div class="highlight-box"><strong>Answer:</strong> Quantity increases for sure; price depends on which shift is larger.</div>
+        </div>
+    </div>
+
+    <!-- HIGH-YIELD EXAM FOCUS -->
+    <div class="card">
+        <h3>⚡ High-Yield Exam Focus</h3>
+
+        <h4>Memorization Checklist</h4>
+        <div class="grid-2">
+            <ul>
+                <li>□ Market</li>
+                <li>□ Demand / Quantity Demanded</li>
+                <li>□ Supply / Quantity Supplied</li>
+                <li>□ Law of Demand</li>
+                <li>□ Law of Supply</li>
+                <li>□ Demand Schedule / Supply Schedule</li>
+                <li>□ Market Demand (Horizontal Summation)</li>
+                <li>□ Equilibrium / Equilibrium Price / Equilibrium Quantity</li>
+            </ul>
+            <ul>
+                <li>□ Excess Demand (Shortage)</li>
+                <li>□ Excess Supply (Surplus)</li>
+                <li>□ Substitutes / Complements</li>
+                <li>□ Normal Goods / Inferior Goods</li>
+                <li>□ Movement Along the Curve</li>
+                <li>□ Shift of the Curve</li>
+                <li>□ Ceteris Paribus (All Else Equal)</li>
+            </ul>
+        </div>
+
+        <h4>Common Exam Traps</h4>
+        <ul>
+            <li><strong>Movement vs. Shift:</strong> Price change = movement along the curve. Anything else (income, tastes, etc.) = shift of the curve.</li>
+            <li><strong>Normal vs. Inferior:</strong> Income ↑ → Normal good demand ↑ (RIGHT); Inferior good demand ↓ (LEFT).</li>
+            <li><strong>Substitutes vs. Complements:</strong> Substitute price ↑ → demand for other ↑; Complement price ↑ → demand for other ↓.</li>
+            <li><strong>Supply Shift Direction:</strong> Input costs ↑ → supply LEFT; Technology ↑ → supply RIGHT.</li>
+            <li><strong>Simultaneous Shifts:</strong> If both D and S shift, one effect is ambiguous (price or quantity).</li>
+        </ul>
+
+        <h4>The "If This, Then That" Logic</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then...</th></tr>
+                <tr><td>Income increases (Normal Good)</td><td>Demand shifts RIGHT → P ↑, Q ↑</td></tr>
+                <tr><td>Income increases (Inferior Good)</td><td>Demand shifts LEFT → P ↓, Q ↓</td></tr>
+                <tr><td>Price of Substitute increases</td><td>Demand for the other good shifts RIGHT</td></tr>
+                <tr><td>Price of Complement increases</td><td>Demand for the other good shifts LEFT</td></tr>
+                <tr><td>Input Costs increase</td><td>Supply shifts LEFT → P ↑, Q ↓</td></tr>
+                <tr><td>Technology improves</td><td>Supply shifts RIGHT → P ↓, Q ↑</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- PRACTICE QUESTIONS -->
+    <div class="card">
+        <h3>📝 Practice Questions</h3>
+
+        <div class="question-block" id="q1">
+            <div class="q-text">Q1: If the price of a good increases, what happens to quantity demanded?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) Increases</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="B"><span>B) Decreases</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="C"><span>C) Stays the same</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) It depends on the good</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>According to the Law of Demand, there is an inverse relationship between price and quantity demanded. When price increases, quantity demanded decreases.</div>
+        </div>
+
+        <div class="question-block" id="q2">
+            <div class="q-text">Q2: Coffee and tea are substitutes. If the price of coffee increases, what happens to the demand for tea?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q2" value="A"><span>A) Demand for tea decreases (shifts LEFT)</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="B"><span>B) Demand for tea increases (shifts RIGHT)</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) Quantity demanded of tea decreases</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="D"><span>D) Quantity demanded of tea increases</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>When the price of a substitute increases, consumers switch to the alternative, causing demand for the other good to increase (shift RIGHT).</div>
+        </div>
+
+        <div class="question-block" id="q3">
+            <div class="q-text">Q3: A technological breakthrough reduces production costs for smartphones. What happens to equilibrium?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A"><span>A) Price ↑, Quantity ↑</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="B"><span>B) Price ↑, Quantity ↓</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="C"><span>C) Price ↓, Quantity ↑</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="D"><span>D) Price ↓, Quantity ↓</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3', 'C')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: C</strong><br>Lower production costs shift supply to the RIGHT. At any given price, more is supplied, leading to a lower equilibrium price and higher equilibrium quantity.</div>
+        </div>
+
+        <div class="question-block" id="q4">
+            <div class="q-text">Q4: Given Q<sub>D</sub> = 100 − 5P and Q<sub>S</sub> = 20 + 3P, what is the equilibrium price and quantity?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q4" value="A"><span>A) P = 8, Q = 60</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="B"><span>B) P = 10, Q = 50</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="C"><span>C) P = 12, Q = 40</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="D"><span>D) P = 15, Q = 25</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>100 − 5P = 20 + 3P → 80 = 8P → P* = 10 → Q* = 100 − 5(10) = 50</div>
+        </div>
+
+        <div class="question-block" id="q5">
+            <div class="q-text">Q5: If both demand and supply increase simultaneously, what happens to equilibrium?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A"><span>A) Price ↑, Quantity ↑</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="B"><span>B) Price ↓, Quantity ↑</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="C"><span>C) Price ambiguous, Quantity ↑</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="D"><span>D) Price ↑, Quantity ambiguous</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5', 'C')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: C</strong><br>When both demand and supply increase, quantity definitely increases. Price is ambiguous—it depends on which shift is larger.</div>
+        </div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="card">
+        <h3>📖 Glossary</h3>
+        <div class="glossary-term"><dt>Market</dt><dd>A group of buyers and sellers of a particular good or service.</dd></div>
+        <div class="glossary-term"><dt>Demand</dt><dd>The quantity of a good consumers are willing and able to buy at various prices.</dd></div>
+        <div class="glossary-term"><dt>Supply</dt><dd>The quantity of a good producers are willing and able to sell at various prices.</dd></div>
+        <div class="glossary-term"><dt>Quantity Demanded</dt><dd>The amount bought at a SPECIFIC price.</dd></div>
+        <div class="glossary-term"><dt>Quantity Supplied</dt><dd>The amount sold at a SPECIFIC price.</dd></div>
+        <div class="glossary-term"><dt>Law of Demand</dt><dd>Price and quantity demanded move in opposite directions (inverse relationship).</dd></div>
+        <div class="glossary-term"><dt>Law of Supply</dt><dd>Price and quantity supplied move in the same direction (direct relationship).</dd></div>
+        <div class="glossary-term"><dt>Equilibrium</dt><dd>Price where quantity demanded equals quantity supplied.</dd></div>
+        <div class="glossary-term"><dt>Excess Demand</dt><dd>Demand > Supply (shortage).</dd></div>
+        <div class="glossary-term"><dt>Excess Supply</dt><dd>Supply > Demand (surplus).</dd></div>
+        <div class="glossary-term"><dt>Substitutes</dt><dd>Goods used in place of each other (Coffee and Tea).</dd></div>
+        <div class="glossary-term"><dt>Complements</dt><dd>Goods used together (Coffee and Sugar).</dd></div>
+        <div class="glossary-term"><dt>Normal Good</dt><dd>Demand increases when income increases.</dd></div>
+        <div class="glossary-term"><dt>Inferior Good</dt><dd>Demand decreases when income increases.</dd></div>
+        <div class="glossary-term"><dt>Movement Along the Curve</dt><dd>Change in quantity due to price change.</dd></div>
+        <div class="glossary-term"><dt>Shift of the Curve</dt><dd>Change in demand/supply due to other factors.</dd></div>
+        <div class="glossary-term"><dt>Horizontal Summation</dt><dd>Adding quantities at each price to get market curve.</dd></div>
+        <div class="glossary-term"><dt>Short Side of the Market</dt><dd>In disequilibrium, the smaller of Q<sub>D</sub> and Q<sub>S</sub> determines trade.</dd></div>
+        <div class="glossary-term"><dt>Ceteris Paribus</dt><dd>"All else equal" — assumption that other variables are held constant.</dd></div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+        function toggleAnswer(qId, correct) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

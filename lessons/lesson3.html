@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 3: Elasticity</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+        .card li { margin: 0.3rem 0; line-height: 1.6; }
+        .highlight-box { background: #eef4fa; padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #1f6e8c; margin: 1rem 0; }
+        .formula-box { background: #e7edf6; padding: 0.8rem 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 500; color: #003153; display: inline-block; margin: 0.4rem 0; border: 1px solid #bfd3e6; }
+        .exam-trap { background: #fef6ee; border-left: 4px solid #c77d4a; padding: 0.8rem 1.5rem; border-radius: 10px; margin: 0.6rem 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .glossary-term { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #e8edf3; }
+        .glossary-term dt { font-weight: 600; color: #0b2b4a; min-width: 160px; }
+        .glossary-term dd { color: #334155; }
+        .graph-container { width: 100%; max-width: 850px; margin: 1.5rem auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 0.5rem; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .graph-container svg { width: 100%; height: auto; display: block; }
+        .graph-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; text-align: center; padding: 0.8rem 0 0.3rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .graph-subtitle { font-size: 0.85rem; color: #64748b; text-align: center; padding-bottom: 0.5rem; }
+        .graph-insight { padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 6px; margin-top: 0.5rem; }
+        .graph-insight p { font-size: 0.85rem; color: #1e293b; margin: 0; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .grid-3 { grid-template-columns: 1fr; } .glossary-term { flex-direction: column; gap: 0.2rem; } .glossary-term dt { min-width: unset; } .graph-container { margin: 0.5rem 0; } .graph-container svg text { font-size: 10px !important; } .graph-title { font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Lesson 3: Elasticity</div>
+
+    <div class="page-header">
+        <h2>📈 3. Elasticity</h2>
+        <div class="subtitle">Price, income, and cross‑elasticity · measuring responsiveness</div>
+    </div>
+
+    <!-- LEARNING OBJECTIVES -->
+    <div class="card">
+        <h3>📌 Learning Objectives</h3>
+        <ul>
+            <li>Master the concept of "elasticity" and distinguish it from slope</li>
+            <li>Calculate and interpret three demand elasticities: own-price, cross-price, and income elasticity of demand</li>
+            <li>Classify goods as substitutes/complements, normal/inferior, luxury/necessity</li>
+            <li>Explain the relationship between price elasticity of demand and total revenue</li>
+            <li>Calculate and interpret price elasticity of supply</li>
+            <li>Apply elasticity concepts to real-world policy questions</li>
+            <li>Understand consumer and producer surplus as measures of economic welfare</li>
+        </ul>
+    </div>
+
+    <!-- TOPIC INTRODUCTION -->
+    <div class="card">
+        <h3>🔹 Topic Introduction</h3>
+        <p>Elasticity is one of the most practical and powerful tools in microeconomics. While demand and supply curves tell us the <strong>direction</strong> of change when prices or other factors shift, elasticity tells us the <strong>magnitude</strong>—how much quantity will change. This matters for businesses deciding whether to raise prices, governments designing tax policies, and understanding who bears the burden of economic shocks.</p>
+        <div class="highlight-box">
+            <strong>Why should you care?</strong> If you ever run a business, set prices, or analyze markets, elasticity will help you predict consumer behavior and maximize revenue. It's also guaranteed to appear on your exam!
+        </div>
+    </div>
+
+    <!-- CONCEPT 1: THE CONCEPT OF ELASTICITY -->
+    <div class="card">
+        <h3>🔹 The Concept of Elasticity</h3>
+        <p><strong>Definition:</strong> Elasticity measures the <strong>sensitivity or responsiveness</strong> of one variable to changes in another variable. More formally, it's the <strong>percentage change in one variable</strong> resulting from a <strong>1% increase in another variable</strong>.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> If the price of coffee increases by 10%, and as a result, the quantity demanded decreases by 20%, the demand for coffee is very sensitive to price changes—we say it's "elastic."
+        </div>
+
+        <h4>Elasticity vs. Slope: Why We Can't Just Use Slope</h4>
+        <p><strong>Problem 1: Units of Measurement</strong></p>
+        <ul>
+            <li>Suppose coffee demand: Price increases by $1, quantity falls by 10 tons</li>
+            <li>Suppose another good: Price increases by $1, quantity falls by 10 meters</li>
+            <li>How do we compare these? The units (tons vs. meters) are meaningless for comparison!</li>
+        </ul>
+        <p><strong>Problem 2: Scale Matters</strong></p>
+        <ul>
+            <li>A 10-ton drop is a lot if total demand is 20 tons (50% drop)</li>
+            <li>A 10-ton drop is tiny if total demand is 1,000 tons (1% drop)</li>
+            <li>Similarly, a $1 price increase is huge if the price is $2 (50% increase) but tiny if the price is $100 (1% increase)</li>
+        </ul>
+        <p><strong>The Solution:</strong> Elasticity uses <strong>percentages</strong>!</p>
+        <ul>
+            <li>Percentages are unit-free, so we can compare across goods</li>
+            <li>Percentages account for the size of the change relative to the starting point</li>
+        </ul>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> Elasticity is related to slope but is <strong>not the same thing</strong>. A steep demand curve can be elastic or inelastic depending on where you are on the curve!</div>
+
+        <div class="formula-box">Elasticity = %Δ Variable A / %Δ Variable B = (ΔA/A) / (ΔB/B)</div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Variable</th><th>Definition</th></tr>
+                <tr><td>ΔA</td><td>Change in variable A</td></tr>
+                <tr><td>A</td><td>Initial value of variable A</td></tr>
+                <tr><td>ΔB</td><td>Change in variable B</td></tr>
+                <tr><td>B</td><td>Initial value of variable B</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- CONCEPT 2: OWN-PRICE ELASTICITY OF DEMAND -->
+    <div class="card">
+        <h3>🔹 Own-Price Elasticity of Demand (ε<sub>P</sub><sup>D</sup>)</h3>
+        <p><strong>Definition:</strong> The percentage change in quantity demanded resulting from a 1% increase in the price of the good itself.</p>
+
+        <div class="formula-box">ε<sub>P</sub><sup>D</sup> = %ΔQ<sub>D</sub> / %ΔP = (ΔQ<sub>D</sub>/Q<sub>D</sub>) / (ΔP/P)</div>
+
+        <div class="formula-box">ε<sub>P</sub><sup>D</sup> = (Q<sub>1</sub><sup>D</sup> − Q<sub>0</sub><sup>D</sup>) / Q<sub>0</sub><sup>D</sup> ÷ (P<sub>1</sub> − P<sub>0</sub>) / P<sub>0</sub></div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Variable</th><th>Definition</th></tr>
+                <tr><td>Q<sub>0</sub><sup>D</sup></td><td>Initial quantity demanded</td></tr>
+                <tr><td>Q<sub>1</sub><sup>D</sup></td><td>New quantity demanded</td></tr>
+                <tr><td>P<sub>0</sub></td><td>Initial price</td></tr>
+                <tr><td>P<sub>1</sub></td><td>New price</td></tr>
+            </table>
+        </div>
+
+        <h4>Step-by-Step Example</h4>
+        <p><strong>Scenario:</strong> The price of a pizza increases from $16 to $18. Quantity demanded falls from 300 pizzas to 240 pizzas.</p>
+        <ol>
+            <li><strong>Identify values:</strong> P₀ = 16, P₁ = 18, Q₀ = 300, Q₁ = 240</li>
+            <li><strong>Calculate changes:</strong> ΔP = 2, ΔQ = −60</li>
+            <li><strong>Calculate percentage changes:</strong> %ΔP = 2/16 = 12.5%, %ΔQ = −60/300 = −20%</li>
+            <li><strong>Calculate elasticity:</strong> ε = −20% / 12.5% = <strong>−1.6</strong></li>
+        </ol>
+        <div class="highlight-box"><strong>Interpretation:</strong> A 1% increase in price leads to a 1.6% decrease in quantity demanded. Demand is <strong>elastic</strong>.</div>
+
+        <h4>Alternative Calculation Methods</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Method</th><th>Formula</th></tr>
+                <tr><td>Initial Point (Standard)</td><td>ε = (Q₁−Q₀)/Q₀ ÷ (P₁−P₀)/P₀</td></tr>
+                <tr><td>Final Point</td><td>ε = (Q₁−Q₀)/Q₁ ÷ (P₁−P₀)/P₁</td></tr>
+                <tr><td>Midpoint (Arc)</td><td>ε = (Q₁−Q₀)/((Q₀+Q₁)/2) ÷ (P₁−P₀)/((P₀+P₁)/2)</td></tr>
+            </table>
+        </div>
+        <div class="exam-trap">⚠️ <strong>Exam tip:</strong> If nothing is specified about which method to use, use the <strong>initial point method</strong> (Method 1).</div>
+
+        <h4>Interpreting Elasticity Values</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Absolute Value</th><th>Term</th><th>Meaning</th><th>Example</th></tr>
+                <tr><td>|ε| > 1</td><td>Elastic</td><td>Quantity changes more than proportionally to price</td><td>Luxury goods</td></tr>
+                <tr><td>|ε| < 1</td><td>Inelastic</td><td>Quantity changes less than proportionally to price</td><td>Necessities</td></tr>
+                <tr><td>|ε| = 1</td><td>Unit-Elastic</td><td>Quantity changes proportionally to price</td><td>Fixed budget goods</td></tr>
+                <tr><td>|ε| = 0</td><td>Perfectly Inelastic</td><td>Quantity doesn't change at all with price</td><td>Life-saving drugs</td></tr>
+                <tr><td>|ε| = ∞</td><td>Perfectly Elastic</td><td>Any price change causes quantity to drop to zero</td><td>Perfectly competitive market</td></tr>
+            </table>
+        </div>
+
+        <h4>Factors Affecting Own-Price Elasticity of Demand</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Factor</th><th>Explanation</th><th>Example</th></tr>
+                <tr><td>More substitutes</td><td>Easier to switch to alternatives</td><td>Olive oil (many substitutes) vs. Nutmeg (few substitutes)</td></tr>
+                <tr><td>Luxury good</td><td>Can postpone or forgo purchase</td><td>Flowers vs. Food</td></tr>
+                <tr><td>Narrow market</td><td>More specific definition means more substitutes</td><td>Chicken legs vs. Meat overall</td></tr>
+                <tr><td>Longer time horizon</td><td>More time to adjust behavior</td><td>Petrol demand in 3 years vs. next month</td></tr>
+                <tr><td>Larger budget share</td><td>Price changes are more noticeable</td><td>Housing rent vs. Matches</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- CONCEPT 3: ELASTICITY ALONG LINEAR DEMAND -->
+    <div class="card">
+        <h3>🔹 Elasticity Along a Linear Demand Curve</h3>
+        <p><strong>Key Insight:</strong> Even though a linear demand curve has a <strong>constant slope</strong>, the <strong>elasticity varies</strong> along the curve!</p>
+
+        <p><strong>Why?</strong> Because elasticity = (1/slope) × (P/Q). Since P/Q changes as you move along the curve, elasticity changes too.</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Location on Curve</th><th>Price vs. Quantity</th><th>|ε|</th><th>Category</th></tr>
+                <tr><td>Top (high P, low Q)</td><td>P is high, Q is low</td><td>> 1</td><td>Elastic</td></tr>
+                <tr><td>Midpoint</td><td>P = Q</td><td>= 1</td><td>Unit Elastic</td></tr>
+                <tr><td>Bottom (low P, high Q)</td><td>P is low, Q is high</td><td>< 1</td><td>Inelastic</td></tr>
+            </table>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Memory trick:</strong> "High Price = High Elasticity" (At high prices, people are very sensitive to changes!)</div>
+
+        <h4>Example: Rental Housing</h4>
+        <p>Demand: Q<sub>D</sub> = 1000 + 0.25R − P, with R = 4000 → Q<sub>D</sub> = 2000 − P</p>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Price (P)</th><th>Quantity (Q)</th><th>|ε|</th><th>Elasticity Type</th></tr>
+                <tr><td>1600</td><td>400</td><td>4.0</td><td>Elastic</td></tr>
+                <tr><td>1000</td><td>1000</td><td>1.0</td><td>Unit Elastic (midpoint!)</td></tr>
+                <tr><td>800</td><td>1200</td><td>0.67</td><td>Inelastic</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- GRAPH: ELASTICITY ALONG LINEAR DEMAND -->
+    <div class="card">
+        <h3>📈 Graph: Elasticity Along a Linear Demand Curve</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 1: Elasticity Along a Linear Demand Curve</div>
+            <div class="graph-subtitle">Elasticity varies at every point on a linear demand curve</div>
+            <svg viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="700" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="680" y2="400"/>
+                    <line x1="80" y1="100" x2="680" y2="100"/>
+                    <line x1="80" y1="150" x2="680" y2="150"/>
+                    <line x1="80" y1="200" x2="680" y2="200"/>
+                    <line x1="80" y1="250" x2="680" y2="250"/>
+                    <line x1="80" y1="300" x2="680" y2="300"/>
+                    <line x1="80" y1="350" x2="680" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="380" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (Q)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Price (P)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="680,400 665,390 665,410" fill="#0b2b4a"/>
+                <line x1="80" y1="400" x2="680" y2="50" stroke="#2563eb" stroke-width="3"/>
+                <text x="660" y="55" font-size="16" font-weight="700" fill="#2563eb">D</text>
+                <polygon points="80,400 360,225 80,225" fill="#86efac" fill-opacity="0.3"/>
+                <text x="180" y="330" font-size="15" font-weight="700" fill="#166534" transform="rotate(-45, 180, 330)">|ε| > 1</text>
+                <text x="180" y="350" font-size="12" font-weight="600" fill="#166534" transform="rotate(-45, 180, 350)">ELASTIC</text>
+                <circle cx="360" cy="225" r="10" fill="#f59e0b"/>
+                <text x="370" y="215" font-size="14" font-weight="700" fill="#f59e0b">|ε| = 1</text>
+                <text x="370" y="235" font-size="11" fill="#f59e0b">(Unit Elastic)</text>
+                <polygon points="360,225 680,50 680,400 360,400" fill="#fca5a5" fill-opacity="0.3"/>
+                <text x="520" y="360" font-size="15" font-weight="700" fill="#991b1b" transform="rotate(-45, 520, 360)">|ε| < 1</text>
+                <text x="520" y="380" font-size="12" font-weight="600" fill="#991b1b" transform="rotate(-45, 520, 380)">INELASTIC</text>
+                <line x1="80" y1="225" x2="360" y2="225" stroke="#0b2b4a" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="60" y="230" font-size="11" fill="#0b2b4a">P*</text>
+                <line x1="360" y1="225" x2="360" y2="400" stroke="#0b2b4a" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="350" y="420" font-size="11" fill="#0b2b4a">Q*</text>
+                <rect x="470" y="280" width="190" height="100" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="300" font-size="13" font-weight="700" fill="#0b2b4a">Legend</text>
+                <rect x="480" y="312" width="15" height="10" fill="#86efac" fill-opacity="0.5" stroke="#16a34a" stroke-width="1"/>
+                <text x="505" y="321" font-size="11" fill="#1e293b">Elastic Zone</text>
+                <rect x="480" y="328" width="15" height="10" fill="#fca5a5" fill-opacity="0.5" stroke="#dc2626" stroke-width="1"/>
+                <text x="505" y="337" font-size="11" fill="#1e293b">Inelastic Zone</text>
+                <circle cx="487" cy="350" r="4" fill="#f59e0b"/>
+                <text x="505" y="354" font-size="11" fill="#1e293b">Unit Elastic Point</text>
+                <line x1="480" y1="365" x2="495" y2="365" stroke="#2563eb" stroke-width="2"/>
+                <text x="505" y="369" font-size="11" fill="#1e293b">Demand Curve</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> Even though a linear demand curve has a constant slope, elasticity varies at every point. At high prices (top of the curve), demand is elastic. At low prices (bottom), demand is inelastic. The midpoint is unit-elastic.</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 4: TOTAL REVENUE AND ELASTICITY -->
+    <div class="card">
+        <h3>🔹 Price Elasticity of Demand and Total Revenue</h3>
+        <p><strong>Total Revenue (TR) = Price × Quantity = P × Q</strong></p>
+
+        <p><strong>The Critical Question:</strong> If you increase price, does total revenue increase or decrease?</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>If Demand Is...</th><th>When Price Increases</th><th>When Price Decreases</th></tr>
+                <tr><td>Elastic (|ε| > 1)</td><td>Revenue <strong>Decreases</strong></td><td>Revenue <strong>Increases</strong></td></tr>
+                <tr><td>Unit-Elastic (|ε| = 1)</td><td>Revenue <strong>Unchanged</strong></td><td>Revenue <strong>Unchanged</strong></td></tr>
+                <tr><td>Inelastic (|ε| < 1)</td><td>Revenue <strong>Increases</strong></td><td>Revenue <strong>Decreases</strong></td></tr>
+            </table>
+        </div>
+
+        <h4>The Mathematics of Total Revenue and Elasticity</h4>
+        <div class="formula-box">ΔTR/ΔP = Q(1 − |ε|)</div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then...</th></tr>
+                <tr><td>|ε| < 1 (Inelastic)</td><td>ΔTR/ΔP > 0 → Price ↑ → TR ↑</td></tr>
+                <tr><td>|ε| > 1 (Elastic)</td><td>ΔTR/ΔP < 0 → Price ↑ → TR ↓</td></tr>
+                <tr><td>|ε| = 1 (Unit-Elastic)</td><td>ΔTR/ΔP = 0 → Price ↑ → TR unchanged</td></tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Real-World Application: Agricultural Goods</strong><br>
+            A bad weather shock destroys crops → supply shifts LEFT → price increases, quantity decreases.<br>
+            Demand for agricultural goods is typically <strong>inelastic</strong> (food is a necessity).<br>
+            <strong>Result:</strong> Total revenue INCREASES despite the bad harvest!<br>
+            This explains why farmers might support policies that restrict production.
+        </div>
+    </div>
+
+    <!-- CONCEPT 5: CROSS-PRICE ELASTICITY -->
+    <div class="card">
+        <h3>🔹 Cross-Price Elasticity of Demand (ε<sub>P<sub>y</sub></sub><sup>D<sub>x</sub></sup>)</h3>
+        <p><strong>Definition:</strong> The percentage change in quantity demanded of good X resulting from a 1% increase in the price of good Y.</p>
+
+        <div class="formula-box">ε<sub>P<sub>y</sub></sub><sup>D<sub>x</sub></sup> = %ΔQ<sub>x</sub><sup>D</sup> / %ΔP<sub>y</sub> = (ΔQ<sub>x</sub>/Q<sub>x</sub>) / (ΔP<sub>y</sub>/P<sub>y</sub>)</div>
+
+        <h4>Interpretation</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Sign</th><th>Relationship</th><th>Example</th></tr>
+                <tr><td>ε > 0</td><td><strong>Substitutes</strong></td><td>Price of Coke ↑ → Demand for Pepsi ↑</td></tr>
+                <tr><td>ε < 0</td><td><strong>Complements</strong></td><td>Price of printers ↑ → Demand for ink ↓</td></tr>
+                <tr><td>ε ≈ 0</td><td><strong>Unrelated</strong></td><td>Computers and grain</td></tr>
+            </table>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>IMPORTANT:</strong> We CANNOT take the absolute value here! Both <strong>sign AND magnitude</strong> matter.</div>
+
+        <h4>Step-by-Step Example</h4>
+        <p>Price of Coke increases from $2 to $2.20, demand for Pepsi increases from 100 to 120.</p>
+        <ul>
+            <li>%ΔP<sub>Coke</sub> = 0.20/2 = 10%</li>
+            <li>%ΔQ<sub>Pepsi</sub> = 20/100 = 20%</li>
+            <li>ε = 20%/10% = <strong>2.0</strong></li>
+        </ul>
+        <div class="highlight-box"><strong>Interpretation:</strong> Coke and Pepsi are <strong>substitutes</strong>. A 1% increase in Coke price leads to a 2% increase in Pepsi demand.</div>
+
+        <h4>Examples of Cross-Price Elasticities</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Goods</th><th>Cross-Price Elasticity</th><th>Interpretation</th></tr>
+                <tr><td>Meat and Fish</td><td>1.6</td><td>Strong substitutes</td></tr>
+                <tr><td>Clothing and Entertainment</td><td>0.6</td><td>Weak substitutes</td></tr>
+                <tr><td>Whole Milk and Low-Fat Milk</td><td>0.5</td><td>Substitutes</td></tr>
+                <tr><td>Meat and Potatoes</td><td>-0.2</td><td>Weak complements</td></tr>
+                <tr><td>Food and Entertainment</td><td>-0.7</td><td>Complements</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- CONCEPT 6: INCOME ELASTICITY -->
+    <div class="card">
+        <h3>🔹 Income Elasticity of Demand (ε<sub>R</sub><sup>D</sup>)</h3>
+        <p><strong>Definition:</strong> The percentage change in quantity demanded resulting from a 1% increase in income.</p>
+
+        <div class="formula-box">ε<sub>R</sub><sup>D</sup> = %ΔQ<sub>D</sub> / %ΔR = (ΔQ/Q) / (ΔR/R)</div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Sign</th><th>Classification</th><th>Definition</th></tr>
+                <tr><td>ε<sub>R</sub><sup>D</sup> > 0</td><td>Normal Good</td><td>Demand increases when income increases</td></tr>
+                <tr><td>ε<sub>R</sub><sup>D</sup> < 0</td><td>Inferior Good</td><td>Demand decreases when income increases</td></tr>
+                <tr><td>ε<sub>R</sub><sup>D</sup> > 1</td><td>Luxury</td><td>Demand increases more than proportionally to income</td></tr>
+                <tr><td>0 < ε<sub>R</sub><sup>D</sup> < 1</td><td>Necessity</td><td>Demand increases less than proportionally to income</td></tr>
+            </table>
+        </div>
+
+        <h4>Step-by-Step Example</h4>
+        <p>Income increases from $30,000 to $33,000, demand for restaurant meals increases from 50 to 60.</p>
+        <ul>
+            <li>%ΔR = 3,000/30,000 = 10%</li>
+            <li>%ΔQ = 10/50 = 20%</li>
+            <li>ε<sub>R</sub><sup>D</sup> = 20%/10% = <strong>2.0</strong></li>
+        </ul>
+        <div class="highlight-box"><strong>Interpretation:</strong> Restaurant meals are a <strong>luxury normal good</strong> (ε > 1). A 1% increase in income leads to a 2% increase in demand.</div>
+
+        <h4>Examples of Income Elasticities</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Good</th><th>Income Elasticity</th><th>Classification</th></tr>
+                <tr><td>Foreign Vacation</td><td>2.10</td><td>Luxury</td></tr>
+                <tr><td>Domestic Vacation</td><td>1.70</td><td>Luxury</td></tr>
+                <tr><td>Vacation Home</td><td>1.20</td><td>Luxury</td></tr>
+                <tr><td>Healthcare</td><td>1.18</td><td>Luxury</td></tr>
+                <tr><td>Meats</td><td>1.15</td><td>Luxury</td></tr>
+                <tr><td>Housing</td><td>0.70</td><td>Necessity</td></tr>
+                <tr><td>Fruits and Vegetables</td><td>0.61</td><td>Necessity</td></tr>
+                <tr><td>Gasoline</td><td>0.48</td><td>Necessity</td></tr>
+                <tr><td>Cereal</td><td>0.32</td><td>Necessity</td></tr>
+                <tr><td>Electricity</td><td>0.23</td><td>Necessity</td></tr>
+                <tr><td>Rice</td><td>-0.44</td><td>Inferior</td></tr>
+                <tr><td>Public Transit</td><td>-0.75</td><td>Inferior</td></tr>
+            </table>
+        </div>
+
+        <h4>Three Engel Laws</h4>
+        <ul>
+            <li><strong>Law 1:</strong> Food expenditure share falls as income rises → Food is a normal necessity (0 < ε<sub>R</sub><sup>D</sup> < 1)</li>
+            <li><strong>Law 2:</strong> Expenditure shares on clothing, lighting, heating, housing are independent of income → These goods have income elasticity near 1</li>
+            <li><strong>Law 3:</strong> Expenditure shares on education, health, and leisure rise with income → These are normal luxury goods (ε<sub>R</sub><sup>D</sup> > 1)</li>
+        </ul>
+    </div>
+
+    <!-- CONCEPT 7: PRICE ELASTICITY OF SUPPLY -->
+    <div class="card">
+        <h3>🔹 Price Elasticity of Supply (ε<sub>P</sub><sup>S</sup>)</h3>
+        <p><strong>Definition:</strong> The percentage change in quantity supplied resulting from a 1% increase in price.</p>
+
+        <div class="formula-box">ε<sub>P</sub><sup>S</sup> = %ΔQ<sub>S</sub> / %ΔP = (ΔQ<sub>S</sub>/Q<sub>S</sub>) / (ΔP/P)</div>
+
+        <p><strong>Sign:</strong> ALWAYS POSITIVE (Law of Supply)</p>
+
+        <h4>Special Cases</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Elasticity Value</th><th>Term</th><th>Shape</th><th>What It Means</th></tr>
+                <tr><td>ε<sub>P</sub><sup>S</sup> = 0</td><td>Perfectly Inelastic</td><td>Vertical</td><td>Quantity doesn't change with price</td></tr>
+                <tr><td>ε<sub>P</sub><sup>S</sup> = ∞</td><td>Perfectly Elastic</td><td>Horizontal</td><td>Any price below market → supply drops to zero</td></tr>
+                <tr><td>ε<sub>P</sub><sup>S</sup> = 1</td><td>Unit-Elastic</td><td>Through origin</td><td>Quantity changes proportionally to price</td></tr>
+                <tr><td>ε<sub>P</sub><sup>S</sup> < 1</td><td>Relatively Inelastic</td><td>Steep</td><td>Quantity changes less than price</td></tr>
+                <tr><td>ε<sub>P</sub><sup>S</sup> > 1</td><td>Relatively Elastic</td><td>Flat</td><td>Quantity changes more than price</td></tr>
+            </table>
+        </div>
+
+        <h4>Factors Affecting Price Elasticity of Supply</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Factor</th><th>Explanation</th><th>Example</th></tr>
+                <tr><td>More inventory</td><td>Can sell from stock without new production</td><td>Retailers with large warehouses</td></tr>
+                <tr><td>Easier access to inputs</td><td>Can hire workers/factors quickly</td><td>Services vs. specialized manufacturing</td></tr>
+                <tr><td>Longer time horizon</td><td>More time to adjust production</td><td>Oil supply in 5 years vs. next month</td></tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Real-World Application: The 1973 Oil Crisis</strong><br>
+            OPEC embargo → Supply and demand for oil were both highly inelastic → World oil price quadrupled!<br>
+            <strong>Why?</strong> Demand: Few substitutes for oil in the short run. Supply: Takes time to increase oil production.<br>
+            <strong>Recent Changes:</strong> Fracking technology has made oil supply more elastic → Supply now adjusts more easily at around $70/barrel → Helps stabilize prices.
+        </div>
+    </div>
+
+    <!-- CONCEPT 8: CONSUMER AND PRODUCER SURPLUS -->
+    <div class="card">
+        <h3>🔹 Consumer and Producer Surplus</h3>
+
+        <h4>Consumer Surplus (CS)</h4>
+        <p><strong>Definition:</strong> The difference between what buyers are willing to pay and what they actually pay.</p>
+        <div class="formula-box">CS = Willingness to Pay − Market Price</div>
+        <div class="formula-box">For linear demand: CS = ½ × Q* × (P<sub>max</sub> − P*)</div>
+
+        <div class="highlight-box">
+            <strong>Example:</strong> Demand: P = 50 − 2Q, Market price = $20.<br>
+            Q* = 15, P<sub>max</sub> = 50<br>
+            CS = ½ × 15 × (50 − 20) = <strong>225</strong>
+        </div>
+
+        <h4>Producer Surplus (PS)</h4>
+        <p><strong>Definition:</strong> The difference between what sellers receive and what they're willing to accept.</p>
+        <div class="formula-box">PS = Market Price − Willingness to Sell</div>
+        <div class="formula-box">For linear supply: PS = ½ × Q* × (P* − P<sub>min</sub>)</div>
+
+        <div class="highlight-box">
+            <strong>Example:</strong> Supply: P = 5 + Q, Market price = $20.<br>
+            Q* = 15, P<sub>min</sub> = 5<br>
+            PS = ½ × 15 × (20 − 5) = <strong>112.5</strong>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> Total Surplus (CS + PS) is <strong>maximized</strong> at market equilibrium.</div>
+    </div>
+
+    <!-- ALL FORMULAS -->
+    <div class="card">
+        <h3>🧮 All Formulas</h3>
+
+        <div class="formula-box">Own-Price Elasticity: ε<sub>P</sub><sup>D</sup> = %ΔQ<sub>D</sub> / %ΔP</div>
+        <div class="formula-box">Cross-Price Elasticity: ε<sub>P<sub>y</sub></sub><sup>D<sub>x</sub></sup> = %ΔQ<sub>x</sub> / %ΔP<sub>y</sub></div>
+        <div class="formula-box">Income Elasticity: ε<sub>R</sub><sup>D</sup> = %ΔQ / %ΔR</div>
+        <div class="formula-box">Price Elasticity of Supply: ε<sub>P</sub><sup>S</sup> = %ΔQ<sub>S</sub> / %ΔP</div>
+        <div class="formula-box">Midpoint Method: ε = (Q₁−Q₀)/((Q₀+Q₁)/2) ÷ (P₁−P₀)/((P₀+P₁)/2)</div>
+        <div class="formula-box">Total Revenue: TR = P × Q</div>
+        <div class="formula-box">Consumer Surplus: CS = ½ × Q* × (P<sub>max</sub> − P*)</div>
+        <div class="formula-box">Producer Surplus: PS = ½ × Q* × (P* − P<sub>min</sub>)</div>
+        <div class="formula-box">Lerner Index: (P − MC) / P = 1 / |ε|</div>
+    </div>
+
+    <!-- EXAM SCENARIOS -->
+    <div class="card">
+        <h3>📝 Exam Scenarios & Problem-Solving</h3>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 1: Total Revenue and Agricultural Goods</h4>
+            <p><strong>Scenario:</strong> A bad weather shock destroys a significant portion of the wheat harvest. Using your knowledge of elasticity, analyze the effect on farmers' total revenue.</p>
+            <p><strong>Solution:</strong> Demand for agricultural goods is typically inelastic (food is a necessity). When supply shifts LEFT, price increases a lot while quantity decreases only a little. Therefore, total revenue (P × Q) INCREASES despite the bad harvest.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 2: Olive Oil Price Increase</h4>
+            <p><strong>Scenario:</strong> You are a producer of olive oil considering increasing the price. Will your total revenue increase?</p>
+            <p><strong>Solution:</strong> If olive oil has close substitutes (other cooking oils), demand may be elastic → price increase would REDUCE total revenue. If olive oil has few substitutes, demand may be inelastic → price increase would INCREASE total revenue.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 3: Energy Crisis</h4>
+            <p><strong>Scenario:</strong> Energy prices have risen sharply. Which type of household is hurt the most?</p>
+            <p><strong>Solution:</strong> Energy is a necessity with low income elasticity. Low-income households spend a larger share of their income on energy. When energy prices rise, low-income households are hurt disproportionately.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 4: Drug Policy</h4>
+            <p><strong>Scenario:</strong> To fight drug-related crimes, authorities consider constraining supply or reducing demand. Which is more effective?</p>
+            <p><strong>Solution:</strong> Drug demand is relatively inelastic (addiction), drug supply is relatively elastic. Constraining supply → Price increases a lot, quantity decreases only a little → Drug-related crime may INCREASE. Reducing demand → Quantity decreases a lot → Crime DECREASES. <strong>Reducing demand is more effective.</strong></p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0;">
+            <h4>Scenario 5: Linear Demand Curve</h4>
+            <p><strong>Scenario:</strong> Q<sub>D</sub> = 200 − 10P. At what price is demand unit-elastic?</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>dQ/dP = −10</li>
+                <li>ε = −10 × (P/Q) = −10 × (P/(200−10P))</li>
+                <li>Set ε = −1: −10 × (P/(200−10P)) = −1</li>
+                <li>10P = 200 − 10P → 20P = 200 → <strong>P = 10</strong></li>
+            </ul>
+            <div class="highlight-box"><strong>Answer:</strong> At P = 10, demand is unit-elastic. Above P = 10, demand is elastic. Below P = 10, demand is inelastic.</div>
+        </div>
+    </div>
+
+    <!-- HIGH-YIELD EXAM FOCUS -->
+    <div class="card">
+        <h3>⚡ High-Yield Exam Focus</h3>
+
+        <h4>Memorization Checklist</h4>
+        <div class="grid-2">
+            <ul>
+                <li>□ Elasticity</li>
+                <li>□ Own-price elasticity of demand</li>
+                <li>□ Cross-price elasticity of demand</li>
+                <li>□ Income elasticity of demand</li>
+                <li>□ Price elasticity of supply</li>
+                <li>□ Elastic demand</li>
+                <li>□ Inelastic demand</li>
+                <li>□ Unit-elastic demand</li>
+            </ul>
+            <ul>
+                <li>□ Perfectly elastic / Perfectly inelastic</li>
+                <li>□ Substitutes / Complements</li>
+                <li>□ Normal / Inferior goods</li>
+                <li>□ Luxury / Necessity goods</li>
+                <li>□ Total Revenue (TR)</li>
+                <li>□ Midpoint method / Arc elasticity</li>
+                <li>□ Consumer Surplus / Producer Surplus</li>
+                <li>□ Engel's Laws</li>
+            </ul>
+        </div>
+
+        <h4>Common Exam Traps</h4>
+        <ul>
+            <li><strong>Confusing Elasticity with Slope:</strong> "A steep demand curve means demand is inelastic" — FALSE. Elasticity depends on both slope AND P/Q ratio.</li>
+            <li><strong>Confusing Movement vs. Shift:</strong> "If income increases, we move along the demand curve" — FALSE. Income changes SHIFT the demand curve.</li>
+            <li><strong>Incorrect Absolute Value for Cross-Price:</strong> "Cross-price elasticity is -0.5, so they are substitutes" — FALSE. Negative means COMPLEMENTS.</li>
+            <li><strong>Mixing Up Classifications:</strong> "Normal goods have negative income elasticity" — FALSE. Normal goods have POSITIVE income elasticity.</li>
+            <li><strong>Misapplying Revenue Rule:</strong> "If demand is elastic, increasing price increases revenue" — FALSE. Elastic demand → price ↑ → revenue ↓.</li>
+            <li><strong>Forgetting the Law of Demand Sign:</strong> "Price elasticity of demand is positive" — FALSE. It's negative (we use absolute value for interpretation).</li>
+            <li><strong>Confusing Luxury vs. Necessity:</strong> "Luxury goods have income elasticity between 0 and 1" — FALSE. Luxury goods have ε > 1.</li>
+            <li><strong>Confusing Surplus:</strong> "Consumer surplus is the area above the demand curve" — FALSE. CS is BELOW demand and ABOVE market price.</li>
+            <li><strong>The Reversibility Problem:</strong> "Elasticity from A to B is the same as from B to A" — FALSE. Use the midpoint method for consistent results.</li>
+        </ul>
+
+        <h4>The "If This, Then That" Logic</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then...</th></tr>
+                <tr><td>|ε| > 1</td><td>Demand is ELASTIC → Price ↑ → Revenue ↓</td></tr>
+                <tr><td>|ε| < 1</td><td>Demand is INELASTIC → Price ↑ → Revenue ↑</td></tr>
+                <tr><td>|ε| = 1</td><td>Demand is UNIT-ELASTIC → Price ↑ → Revenue ↔</td></tr>
+                <tr><td>ε<sub>R</sub><sup>D</sup> > 0</td><td>Good is NORMAL → ε > 1 = Luxury, ε < 1 = Necessity</td></tr>
+                <tr><td>ε<sub>R</sub><sup>D</sup> < 0</td><td>Good is INFERIOR</td></tr>
+                <tr><td>ε<sub>P<sub>y</sub></sub><sup>D<sub>x</sub></sup> > 0</td><td>Goods are SUBSTITUTES</td></tr>
+                <tr><td>ε<sub>P<sub>y</sub></sub><sup>D<sub>x</sub></sup> < 0</td><td>Goods are COMPLEMENTS</td></tr>
+            </table>
+        </div>
+
+        <h4>Quick Reference: Elasticity Values</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>|ε| Value</th><th>Type</th><th>Price ↑ Effect on TR</th><th>Price ↓ Effect on TR</th></tr>
+                <tr><td>> 1</td><td>Elastic</td><td>TR ↓</td><td>TR ↑</td></tr>
+                <tr><td>= 1</td><td>Unit Elastic</td><td>TR ↔</td><td>TR ↔</td></tr>
+                <tr><td>< 1</td><td>Inelastic</td><td>TR ↑</td><td>TR ↓</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- PRACTICE QUESTIONS -->
+    <div class="card">
+        <h3>📝 Practice Questions</h3>
+
+        <div class="question-block" id="q1">
+            <div class="q-text">Q1: The price of a good increases from $10 to $12, and quantity demanded falls from 100 to 80. What is the own-price elasticity of demand?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) -0.5</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="B"><span>B) -0.8</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="C"><span>C) -1.0</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) -1.2</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1', 'C')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: C</strong><br>%ΔQ = (80-100)/100 = -20%<br>%ΔP = (12-10)/10 = 20%<br>ε = -20%/20% = <strong>-1.0</strong></div>
+        </div>
+
+        <div class="question-block" id="q2">
+            <div class="q-text">Q2: If demand is elastic (|ε| > 1), what happens to total revenue when price increases?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q2" value="A"><span>A) Total revenue increases</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="B"><span>B) Total revenue decreases</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) Total revenue stays the same</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="D"><span>D) It depends on the size of the price increase</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>When demand is elastic, the quantity effect dominates. The percentage decrease in quantity is larger than the percentage increase in price, so total revenue decreases.</div>
+        </div>
+
+        <div class="question-block" id="q3">
+            <div class="q-text">Q3: The price of Coke increases by 10%, and demand for Pepsi increases by 15%. What is the cross-price elasticity?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A"><span>A) 0.67, Substitutes</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="B"><span>B) 1.5, Substitutes</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="C"><span>C) 0.67, Complements</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="D"><span>D) 1.5, Complements</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>ε = 15%/10% = <strong>1.5</strong><br>Positive elasticity → <strong>Substitutes</strong></div>
+        </div>
+
+        <div class="question-block" id="q4">
+            <div class="q-text">Q4: Income increases by 5%, and demand for restaurant meals increases by 15%. What is the income elasticity?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q4" value="A"><span>A) 3.0, Normal Necessity</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="B"><span>B) 3.0, Luxury</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="C"><span>C) 0.33, Normal Necessity</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="D"><span>D) 0.33, Luxury</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>ε<sub>R</sub><sup>D</sup> = 15%/5% = <strong>3.0</strong><br>Since ε > 1, restaurant meals are a <strong>luxury normal good</strong></div>
+        </div>
+
+        <div class="question-block" id="q5">
+            <div class="q-text">Q5: Given Q<sub>D</sub> = 100 − 2P and Q<sub>S</sub> = 20 + 2P, find equilibrium and consumer surplus.</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="A"><span>A) P=20, Q=60, CS=400</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="B"><span>B) P=20, Q=60, CS=600</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="C"><span>C) P=40, Q=20, CS=200</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="D"><span>D) P=30, Q=40, CS=300</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5', 'A')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: A</strong><br>100 − 2P = 20 + 2P → 80 = 4P → P* = 20<br>Q* = 60<br>Demand intercept: Q=0 → P=50<br>CS = ½ × 60 × (50 − 20) = <strong>400</strong></div>
+        </div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="card">
+        <h3>📖 Glossary</h3>
+        <div class="glossary-term"><dt>Elasticity</dt><dd>Measure of responsiveness of one variable to changes in another; the percentage change in one variable resulting from a 1% increase in another.</dd></div>
+        <div class="glossary-term"><dt>Own-price elasticity</dt><dd>Percentage change in quantity demanded from a 1% increase in the good's own price.</dd></div>
+        <div class="glossary-term"><dt>Cross-price elasticity</dt><dd>Percentage change in quantity demanded of one good from a 1% increase in the price of another good.</dd></div>
+        <div class="glossary-term"><dt>Income elasticity</dt><dd>Percentage change in quantity demanded from a 1% increase in income.</dd></div>
+        <div class="glossary-term"><dt>Price elasticity of supply</dt><dd>Percentage change in quantity supplied from a 1% increase in price.</dd></div>
+        <div class="glossary-term"><dt>Total Revenue</dt><dd>Price × Quantity; total amount received from selling a good.</dd></div>
+        <div class="glossary-term"><dt>Midpoint method</dt><dd>Method for calculating elasticity between two points that gives the same result regardless of direction.</dd></div>
+        <div class="glossary-term"><dt>Consumer Surplus</dt><dd>Difference between willingness to pay and actual price paid.</dd></div>
+        <div class="glossary-term"><dt>Producer Surplus</dt><dd>Difference between price received and willingness to sell.</dd></div>
+        <div class="glossary-term"><dt>Total Surplus</dt><dd>Sum of consumer and producer surplus; CS + PS.</dd></div>
+        <div class="glossary-term"><dt>Substitutes</dt><dd>Goods where an increase in the price of one leads to an increase in demand for the other.</dd></div>
+        <div class="glossary-term"><dt>Complements</dt><dd>Goods where an increase in the price of one leads to a decrease in demand for the other.</dd></div>
+        <div class="glossary-term"><dt>Normal Good</dt><dd>Demand increases when income increases (positive income elasticity).</dd></div>
+        <div class="glossary-term"><dt>Inferior Good</dt><dd>Demand decreases when income increases (negative income elasticity).</dd></div>
+        <div class="glossary-term"><dt>Luxury Good</dt><dd>Normal good where demand increases more than proportionally to income (ε<sub>R</sub><sup>D</sup> > 1).</dd></div>
+        <div class="glossary-term"><dt>Necessity Good</dt><dd>Normal good where demand increases less than proportionally to income (0 < ε<sub>R</sub><sup>D</sup> < 1).</dd></div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+        function toggleAnswer(qId, correct) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

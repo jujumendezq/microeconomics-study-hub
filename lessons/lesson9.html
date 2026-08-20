@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 9: Oligopoly</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+        .card li { margin: 0.3rem 0; line-height: 1.6; }
+        .highlight-box { background: #eef4fa; padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #1f6e8c; margin: 1rem 0; }
+        .formula-box { background: #e7edf6; padding: 0.8rem 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 500; color: #003153; display: inline-block; margin: 0.4rem 0; border: 1px solid #bfd3e6; }
+        .exam-trap { background: #fef6ee; border-left: 4px solid #c77d4a; padding: 0.8rem 1.5rem; border-radius: 10px; margin: 0.6rem 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .glossary-term { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #e8edf3; }
+        .glossary-term dt { font-weight: 600; color: #0b2b4a; min-width: 160px; }
+        .glossary-term dd { color: #334155; }
+        .graph-container { width: 100%; max-width: 850px; margin: 1.5rem auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 0.5rem; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .graph-container svg { width: 100%; height: auto; display: block; }
+        .graph-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; text-align: center; padding: 0.8rem 0 0.3rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .graph-subtitle { font-size: 0.85rem; color: #64748b; text-align: center; padding-bottom: 0.5rem; }
+        .graph-insight { padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 6px; margin-top: 0.5rem; }
+        .graph-insight p { font-size: 0.85rem; color: #1e293b; margin: 0; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .glossary-term { flex-direction: column; gap: 0.2rem; } .glossary-term dt { min-width: unset; } .graph-container { margin: 0.5rem 0; } .graph-container svg text { font-size: 10px !important; } .graph-title { font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Lesson 9: Oligopoly</div>
+
+    <div class="page-header">
+        <h2>🎲 9. Oligopoly, Game Theory & Externalities</h2>
+        <div class="subtitle">Strategic interaction, collusion, and the Prisoner's Dilemma</div>
+    </div>
+
+    <!-- LEARNING OBJECTIVES -->
+    <div class="card">
+        <h3>📌 Learning Objectives</h3>
+        <ul>
+            <li>Define oligopoly and identify its core characteristics</li>
+            <li>Distinguish oligopoly from perfect competition and monopoly</li>
+            <li>Understand the concept of residual demand</li>
+            <li>Explain the conflicting incentives oligopolists face</li>
+            <li>Perform the mathematical analysis of a duopoly</li>
+            <li>Understand what a cartel is and why explicit collusion is illegal</li>
+            <li>Apply basic Game Theory tools: identify players, strategies, payoffs, dominant strategies, and Nash equilibrium</li>
+            <li>Explain the Prisoner's Dilemma and why it illustrates the difficulty of cooperation</li>
+            <li>Define externalities and distinguish between positive and negative externalities</li>
+        </ul>
+    </div>
+
+    <!-- TOPIC INTRODUCTION -->
+    <div class="card">
+        <h3>🔹 Topic Introduction</h3>
+        <p>Welcome to the world of market structures! So far in microeconomics, you've explored two extremes: <strong>Perfect Competition</strong> (many tiny firms, no market power) and <strong>Pure Monopoly</strong> (one giant firm, total market power). But most real-world markets fall somewhere in between. This chapter introduces <strong>Oligopoly</strong> – a market dominated by a few large firms – and explains why their strategic interactions are fascinating and economically important.</p>
+
+        <div class="highlight-box">
+            <strong>Why should you care?</strong> Because oligopolies are everywhere! Think about:
+            <ul>
+                <li><strong>Airlines</strong> (Swiss, Air France, Lufthansa)</li>
+                <li><strong>Mobile phone providers</strong> (Swisscom, Sunrise, Salt)</li>
+                <li><strong>Supermarkets</strong> (Migros, Coop, Aldi)</li>
+                <li><strong>Soft drinks</strong> (Coca-Cola vs. Pepsi)</li>
+            </ul>
+            Understanding oligopoly explains why prices aren't always as low as they could be, why firms advertise so heavily, and why governments have laws against "collusion" (firms secretly agreeing to keep prices high).
+        </div>
+    </div>
+
+    <!-- CONCEPT 1: WHAT IS AN OLIGOPOLY -->
+    <div class="card">
+        <h3>🔹 What is an Oligopoly?</h3>
+        <p><strong>Definition:</strong> An oligopoly is a market structure with a <strong>small number of large firms</strong>. Each firm has significant market power (it can influence price), but unlike a monopoly, firms must consider how their competitors will react to their decisions.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> Imagine the market for smartphones. Apple, Samsung, and Google (with a few others) dominate. If Apple decides to increase prices, they need to think: "Will Samsung keep prices the same (allowing Apple to make more profit), or will Samsung lower prices to steal our customers?" This mutual awareness is the essence of oligopoly.
+        </div>
+
+        <p><strong>Why do oligopolies exist?</strong> Because of <strong>barriers to entry</strong> – factors that make it difficult for new firms to enter the market:</p>
+        <ul>
+            <li><strong>High start-up costs</strong> (building a new airline requires billions for planes and airports)</li>
+            <li><strong>Patents and intellectual property</strong> (pharmaceutical companies)</li>
+            <li><strong>Economies of scale</strong> (it's cheaper per unit to produce a lot, so small new firms can't compete on cost)</li>
+            <li><strong>Brand loyalty</strong> (people trust Coca-Cola – a new cola brand would struggle)</li>
+        </ul>
+        <p>Because of these barriers, existing firms can earn <strong>positive economic profits (π > 0)</strong> in the long run, unlike in perfect competition where profits are competed away.</p>
+    </div>
+
+    <!-- CONCEPT 2: CORE CHARACTERISTICS -->
+    <div class="card">
+        <h3>🔹 Core Characteristics of Oligopoly</h3>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Characteristic</th><th>Definition</th><th>Why It Matters</th></tr>
+                <tr><td>Few Firms</td><td>Only a handful of producers control the market</td><td>Each firm's decisions have significant impact</td></tr>
+                <tr><td>Downward Sloping Demand</td><td>Each firm faces a downward-sloping residual demand curve</td><td>Firms have market power – they can't sell more without lowering price</td></tr>
+                <tr><td>Barriers to Entry</td><td>Obstacles prevent new firms from entering</td><td>Allows positive long-run economic profits</td></tr>
+                <tr><td>Interdependence</td><td>Each firm's decisions affect others, and they know it</td><td>Strategic behavior: firms must anticipate reactions</td></tr>
+            </table>
+        </div>
+
+        <h4>The Residual Demand Function</h4>
+        <p>A firm in an oligopoly doesn't face the entire market demand curve. Instead, it faces the <strong>residual demand</strong> – what's left over after competitors have supplied their output.</p>
+
+        <div class="formula-box">Residual Demand = Market Demand − Quantity Supplied by Competitors</div>
+
+        <div class="highlight-box">
+            <strong>Example:</strong> If total market demand is 100 units and competitors supply 60 units, your residual demand is 40 units. If you want to sell 10 more units, you must reduce price, and competitors might react.
+        </div>
+
+        <h4>Conflicting Incentives – The Core Trade-off</h4>
+        <p><strong>This is THE most important idea in oligopoly:</strong></p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th></th><th>Long-Term Incentive</th><th>Short-Term Incentive</th></tr>
+                <tr><td><strong>Action</strong></td><td>Cooperate/Collude</td><td>Deviate/Cheat</td></tr>
+                <tr><td><strong>Why?</strong></td><td>Restrict output → higher prices → higher industry profits</td><td>Increase your output → capture larger market share → higher individual profit... briefly.</td></tr>
+                <tr><td><strong>Risk</strong></td><td>Other firms might cheat (then you lose out)</td><td>Other firms will retaliate (then everyone loses)</td></tr>
+            </table>
+        </div>
+        <p>This tension is why oligopoly is so interesting – and why <strong>game theory</strong> is the perfect tool to analyze it.</p>
+    </div>
+
+    <!-- CONCEPT 3: DUOPOLY NUMERICAL EXAMPLE -->
+    <div class="card">
+        <h3>🔹 The Duopoly Numerical Example</h3>
+        <p><strong>Definition:</strong> A duopoly is an oligopoly with exactly two firms. We'll analyze this case because the math is simple and the insights extend to larger oligopolies.</p>
+
+        <h4>The Setup</h4>
+        <ul>
+            <li>Two identical firms: <strong>Firm 1</strong> and <strong>Firm 2</strong></li>
+            <li>They produce the same good (homogeneous product)</li>
+            <li>Market (inverse) demand: <strong>P = 13 − Q</strong>, where Q = Q₁ + Q₂</li>
+            <li>Both firms have <strong>MC = 1, FC = 0</strong></li>
+        </ul>
+
+        <h4>Step 1: The Two Extreme Benchmarks</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Structure</th><th>Condition</th><th>Calculation</th><th>Q</th><th>P</th><th>π</th></tr>
+                <tr><td>Perfect Competition</td><td>P = MC</td><td>13 − Q = 1 → Q = 12</td><td>12</td><td>1</td><td>0</td></tr>
+                <tr><td>Monopoly</td><td>MR = MC</td><td>MR = 13 − 2Q; 13 − 2Q = 1 → Q = 6</td><td>6</td><td>7</td><td>36</td></tr>
+            </table>
+        </div>
+        <p><strong>Interpretation:</strong> Perfect competition produces the most output at the lowest price. Monopoly produces the least output at the highest price. <strong>Oligopoly will fall somewhere in between.</strong></p>
+
+        <h4>Step 2: The Collusive Solution (Cooperation)</h4>
+        <p>If the two firms agree to act like a monopoly and split everything equally:</p>
+        <ul>
+            <li>They produce Q = 6 total (the monopoly quantity)</li>
+            <li>Each produces Q₁ = Q₂ = 3</li>
+            <li>Price: P = 13 − 6 = <strong>7</strong></li>
+            <li>Industry profit = 36 (same as monopoly)</li>
+            <li>Each firm's profit = <strong>18</strong></li>
+        </ul>
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> This is the "dream outcome" for the firms – maximum collective profit. But is it <strong>stable</strong>?</div>
+
+        <h4>Step 3: The Incentive to Deviate (Cheating)</h4>
+        <p>Suppose Firm 2 sticks to the agreement and produces Q₂ = 3.</p>
+        <ul>
+            <li>Firm 1's profit function: π₁ = (13 − Q₁ − Q₂) × Q₁ − 1 × Q₁</li>
+            <li>With Q₂ = 3: π₁ = (10 − Q₁) × Q₁ − Q₁ = 9Q₁ − Q₁²</li>
+            <li>Maximize: dπ₁/dQ₁ = 9 − 2Q₁ = 0 → <strong>Q₁ = 4.5</strong></li>
+        </ul>
+        <p><strong>What happens?</strong></p>
+        <ul>
+            <li>Total quantity: Q = 4.5 + 3 = 7.5</li>
+            <li>New price: P = 13 − 7.5 = <strong>5.5</strong></li>
+            <li>Firm 1's profit: π₁ = (5.5 − 1) × 4.5 = <strong>20.25</strong> (> 18 – better for cheater!)</li>
+            <li>Firm 2's profit: π₂ = (5.5 − 1) × 3 = <strong>13.5</strong> (< 18 – worse for the sucker)</li>
+        </ul>
+        <div class="highlight-box">
+            <strong>Moral of the story:</strong> In the short term, <strong>cheating pays!</strong> The deviator increases profit from 18 to 20.25. But the other firm gets hurt (13.5) and will retaliate in the next period.
+        </div>
+
+        <h4>Step 4: The Non-Cooperative Equilibrium (Cournot-Nash Result)</h4>
+        <p>Now both firms decide simultaneously, each maximizing their own profit while taking the other's quantity as given.</p>
+        <ul>
+            <li>Firm 1's profit: π₁ = 12Q₁ − Q₁² − Q₂Q₁</li>
+            <li>Firm 2's profit: π₂ = 12Q₂ − Q₂² − Q₁Q₂</li>
+            <li>First-Order Conditions: Q₁ = (12 − Q₂)/2, Q₂ = (12 − Q₁)/2</li>
+            <li>Solve simultaneously: <strong>Q₁ = 4, Q₂ = 4</strong></li>
+        </ul>
+        <p><strong>What happens?</strong></p>
+        <ul>
+            <li>Total quantity: Q = <strong>8</strong></li>
+            <li>Price: P = 13 − 8 = <strong>5</strong></li>
+            <li>Each firm's profit: π = (5 − 1) × 4 = <strong>16</strong></li>
+        </ul>
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> Neither firm can improve its profit by unilaterally changing quantity. This is a <strong>Nash equilibrium</strong>.</div>
+
+        <h4>Step 5: Summary of the Three Outcomes</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Scenario</th><th>Q₁</th><th>Q₂</th><th>Total Q</th><th>Price</th><th>π₁</th><th>π₂</th><th>Total π</th></tr>
+                <tr><td>Collusion</td><td>3</td><td>3</td><td>6</td><td>7</td><td>18</td><td>18</td><td>36</td></tr>
+                <tr><td>Deviation (Firm 1 cheats)</td><td>4.5</td><td>3</td><td>7.5</td><td>5.5</td><td>20.25</td><td>13.5</td><td>33.75</td></tr>
+                <tr><td>Non-Cooperative</td><td>4</td><td>4</td><td>8</td><td>5</td><td>16</td><td>16</td><td>32</td></tr>
+            </table>
+        </div>
+        <p><strong>Welfare Comparison:</strong></p>
+        <ul>
+            <li><strong>Quantity:</strong> Monopoly (6) < Oligopoly (8) < Perfect Competition (12)</li>
+            <li><strong>Price:</strong> Monopoly (7) > Oligopoly (5) > Perfect Competition (1)</li>
+            <li><strong>Consumer Surplus:</strong> Perfect Competition > Oligopoly > Monopoly</li>
+        </ul>
+    </div>
+
+    <!-- CONCEPT 4: INTRODUCTION TO GAME THEORY -->
+    <div class="card">
+        <h3>🔹 Introduction to Game Theory</h3>
+        <p><strong>Definition:</strong> Game theory is the study of <strong>strategic decision-making</strong> – analyzing situations where the outcome depends on what multiple "players" do, and each player knows this.</p>
+
+        <p><strong>Why do we need game theory?</strong> Oligopolies are strategic environments. A firm can't just say, "We'll produce X units." It must think, "If we produce X, how will our competitors respond?" Game theory provides the mathematical framework for analyzing these situations.</p>
+
+        <h4>The Three Essential Components of a Game</h4>
+        <ul>
+            <li><strong>Players:</strong> The decision-makers (e.g., Firm 1, Firm 2; Air France, Swiss)</li>
+            <li><strong>Strategies:</strong> All possible actions each player can take (e.g., "Produce 48 flights" or "Produce 64 flights")</li>
+            <li><strong>Payoffs:</strong> The outcomes (profits, years in prison, etc.) for every possible combination of strategies</li>
+        </ul>
+
+        <h4>The Payoff Matrix</h4>
+        <p>A convenient table showing payoffs for each combination of strategies. By convention:</p>
+        <ul>
+            <li><strong>First number</strong> = payoff for Row player (player on the left)</li>
+            <li><strong>Second number</strong> = payoff for Column player (player on top)</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>The Air France vs. Swiss Example:</strong>
+            <p>Two airlines deciding how many flights between Zurich and Paris (48 or 64).</p>
+            <div class="table-wrap">
+                <table>
+                    <tr><th></th><th>Air France: 48</th><th>Air France: 64</th></tr>
+                    <tr><th>Swiss: 48</th><td>(46, 46)</td><td>(38, 51)</td></tr>
+                    <tr><th>Swiss: 64</th><td>(51, 38)</td><td>(41, 41)</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <h4>Finding the Dominant Strategy</h4>
+        <p><strong>For Swiss (row player):</strong></p>
+        <ul>
+            <li>If AF chooses 48 → Swiss gets 46 (if 48) or 51 (if 64) → <strong>64 is better</strong></li>
+            <li>If AF chooses 64 → Swiss gets 38 (if 48) or 41 (if 64) → <strong>64 is better</strong></li>
+            <li><strong>Conclusion: 64 is Swiss's dominant strategy</strong></li>
+        </ul>
+        <p><strong>For Air France (column player):</strong></p>
+        <ul>
+            <li>If Swiss chooses 48 → AF gets 46 (if 48) or 51 (if 64) → <strong>64 is better</strong></li>
+            <li>If Swiss chooses 64 → AF gets 38 (if 48) or 41 (if 64) → <strong>64 is better</strong></li>
+            <li><strong>Conclusion: 64 is Air France's dominant strategy</strong></li>
+        </ul>
+
+        <div class="formula-box">Dominant Strategy: A strategy that yields the highest payoff for a player regardless of what the other player does.</div>
+
+        <h4>Nash Equilibrium</h4>
+        <p>The outcome <strong>(64, 64)</strong> is a Nash equilibrium because:</p>
+        <ul>
+            <li>Given Air France chooses 64, Swiss does best by choosing 64</li>
+            <li>Given Swiss chooses 64, Air France does best by choosing 64</li>
+            <li>No one can unilaterally improve their payoff by changing strategy</li>
+        </ul>
+
+        <div class="formula-box">Nash Equilibrium: A set of strategies where no player can improve their outcome by unilaterally changing their strategy, given what the other players are doing.</div>
+    </div>
+
+    <!-- GRAPH: PAYOFF MATRIX -->
+    <div class="card">
+        <h3>📈 Graph: Payoff Matrix (Game Theory)</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 1: Payoff Matrix Example</div>
+            <div class="graph-subtitle">Air France vs. Swiss Airlines</div>
+            <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="600" height="400" fill="#f8fafc" rx="8"/>
+                <rect x="100" y="60" width="400" height="280" rx="5" fill="white" stroke="#0b2b4a" stroke-width="2"/>
+                <line x1="300" y1="60" x2="300" y2="340" stroke="#0b2b4a" stroke-width="2"/>
+                <line x1="100" y1="200" x2="500" y2="200" stroke="#0b2b4a" stroke-width="2"/>
+                <text x="300" y="50" text-anchor="middle" font-size="16" font-weight="700" fill="#0b2b4a">Air France</text>
+                <text x="70" y="200" text-anchor="middle" font-size="16" font-weight="700" fill="#0b2b4a" transform="rotate(-90, 70, 200)">Swiss</text>
+                <text x="200" y="90" text-anchor="middle" font-size="13" font-weight="600" fill="#2563eb">48 flights</text>
+                <text x="400" y="90" text-anchor="middle" font-size="13" font-weight="600" fill="#2563eb">64 flights</text>
+                <text x="170" y="160" text-anchor="middle" font-size="13" font-weight="600" fill="#16a34a">48 flights</text>
+                <text x="170" y="280" text-anchor="middle" font-size="13" font-weight="600" fill="#16a34a">64 flights</text>
+                <text x="200" y="145" text-anchor="middle" font-size="18" font-weight="700" fill="#0b2b4a">(46, 46)</text>
+                <text x="400" y="145" text-anchor="middle" font-size="18" font-weight="700" fill="#0b2b4a">(38, 51)</text>
+                <text x="200" y="265" text-anchor="middle" font-size="18" font-weight="700" fill="#0b2b4a">(51, 38)</text>
+                <text x="400" y="265" text-anchor="middle" font-size="18" font-weight="700" fill="#0b2b4a">(41, 41)</text>
+                <rect x="380" y="225" width="40" height="35" fill="#fbbf24" fill-opacity="0.4" stroke="#d97706" stroke-width="2"/>
+                <text x="400" y="248" text-anchor="middle" font-size="14" font-weight="700" fill="#92400e">★</text>
+                <text x="420" y="265" font-size="11" fill="#92400e">Nash Eq.</text>
+                <rect x="470" y="60" width="120" height="85" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="80" font-size="11" font-weight="700" fill="#0b2b4a">Legend</text>
+                <text x="480" y="98" font-size="10" fill="#1e293b">Row = Swiss</text>
+                <text x="480" y="113" font-size="10" fill="#1e293b">Col = Air France</text>
+                <text x="480" y="128" font-size="10" fill="#1e293b">(Swiss, Air France)</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> The Nash equilibrium is (64, 64) with payoffs (41, 41). Neither player can improve by unilaterally changing strategy. The Pareto optimal outcome (48, 48) with (46, 46) is NOT a Nash equilibrium because each player has an incentive to cheat.</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 5: PRISONER'S DILEMMA -->
+    <div class="card">
+        <h3>🔹 The Prisoner's Dilemma</h3>
+        <p><strong>Definition:</strong> A classic game showing why rational individuals often fail to cooperate even when cooperation would make them both better off.</p>
+
+        <div class="highlight-box">
+            <strong>The Story:</strong> Two suspects are arrested for a crime. The police lack sufficient evidence for the main charge but have enough for a minor charge.
+            <div class="table-wrap">
+                <table>
+                    <tr><th></th><th>Prisoner 2: Confess</th><th>Prisoner 2: Not Confess</th></tr>
+                    <tr><th>Prisoner 1: Confess</th><td>(8 years, 8 years)</td><td>(0 years, 20 years)</td></tr>
+                    <tr><th>Prisoner 1: Not Confess</th><td>(20 years, 0 years)</td><td>(1 year, 1 year)</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <h4>The Analysis</h4>
+        <p><strong>For Prisoner 1:</strong></p>
+        <ul>
+            <li>If P2 confesses → confess gives 8 years, not confess gives 20 years → <strong>confess is better</strong></li>
+            <li>If P2 doesn't confess → confess gives 0 years, not confess gives 1 year → <strong>confess is better</strong></li>
+            <li><strong>Confess is the dominant strategy</strong></li>
+        </ul>
+        <p><strong>For Prisoner 2:</strong> Same logic → Confess is the dominant strategy</p>
+        <p><strong>Nash Equilibrium:</strong> (Confess, Confess) → <strong>8 years each</strong></p>
+
+        <h4>The Tragedy</h4>
+        <ul>
+            <li><strong>Pareto Optimal outcome:</strong> (Not Confess, Not Confess) → <strong>1 year each</strong></li>
+            <li>But this is <strong>NOT a Nash equilibrium</strong> because each prisoner has an incentive to cheat (confess)</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Real-World Parallel:</strong> The prisoner's dilemma explains why oligopolists often fail to cooperate even though cooperation would increase their profits. They're afraid the other firm will cheat!
+        </div>
+    </div>
+
+    <!-- CONCEPT 6: EXTERNALITIES -->
+    <div class="card">
+        <h3>🔹 Externalities</h3>
+        <p><strong>Definition:</strong> An externality occurs when someone's actions affect another person's well-being <strong>without compensation or reward</strong>. It's an "uncompensated impact."</p>
+
+        <p><strong>Why do externalities matter?</strong> Externalities are a type of <strong>market failure</strong> – the market price doesn't reflect the full social cost or benefit of a good. This leads to <strong>overproduction</strong> (negative externalities) or <strong>underproduction</strong> (positive externalities) from society's perspective.</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Type</th><th>Definition</th><th>Example</th></tr>
+                <tr><td><strong>Negative Production Externality</strong></td><td>A firm's production imposes costs on others without paying</td><td>Factory polluting a river, truck emitting black smoke</td></tr>
+                <tr><td><strong>Negative Consumption Externality</strong></td><td>A person's consumption imposes costs on others</td><td>Smoking in a public place, driving during rush hour</td></tr>
+                <tr><td><strong>Positive Production Externality</strong></td><td>A firm's production benefits others without reward</td><td>A company's R&D that creates knowledge others can use</td></tr>
+                <tr><td><strong>Positive Consumption Externality</strong></td><td>A person's consumption benefits others without reward</td><td>Getting a flu vaccination, cycling to reduce traffic and pollution</td></tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Professor's Anecdotes (Real-Life Examples):</strong>
+            <ul>
+                <li><strong>Negative (Production):</strong> The professor got stuck behind a truck emitting black smoke – the truck driver didn't pay for the health costs imposed.</li>
+                <li><strong>Negative (Consumption):</strong> The professor (hypothetically) scared an elderly pedestrian by cycling on the footpath – no compensation was paid.</li>
+                <li><strong>Positive (Consumption):</strong> Cycling to work is healthier and reduces noise; the cyclist isn't rewarded for these benefits.</li>
+            </ul>
+        </div>
+
+        <h4>Why Externalities Are "Market Failures"</h4>
+        <ul>
+            <li><strong>Negative externality:</strong> The actor doesn't pay for the cost they impose → they produce/consume <strong>too much</strong></li>
+            <li><strong>Positive externality:</strong> The actor isn't rewarded for the benefit they provide → they produce/consume <strong>too little</strong></li>
+        </ul>
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> Externalities explain why governments intervene in markets – to correct these inefficiencies.</div>
+    </div>
+
+    <!-- FORMULAS -->
+    <div class="card">
+        <h3>🧮 Key Formulas</h3>
+
+        <div class="formula-box">Profit: π = TR − TC</div>
+        <div class="formula-box">Total Revenue: TR = P × Q</div>
+        <div class="formula-box">MR = a − 2bQ (linear demand)</div>
+        <div class="formula-box">Duopoly Profit: π₁ = (a − b(Q₁ + Q₂) − MC) × Q₁</div>
+        <div class="formula-box">Best Response: Q₁ = (a − MC − Q₂)/2b</div>
+        <div class="formula-box">Residual Demand: P_residual = P_market − Q_competitor</div>
+        <div class="formula-box">Markup: P/MC</div>
+        <div class="formula-box">Lerner Index: (P − MC)/P = 1/|ε|</div>
+    </div>
+
+    <!-- EXAM SCENARIOS -->
+    <div class="card">
+        <h3>📝 Exam Scenarios & Problem-Solving</h3>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 1: Analyzing the Incentive to Cheat</h4>
+            <p><strong>Scenario:</strong> Two firms agree to collude and split monopoly profit equally. Alpha is considering whether to cheat. What happens?</p>
+            <p><strong>Solution:</strong> Alpha's profit increases from 18 to 20.25 by cheating. Beta's profit falls from 18 to 13.5. In the short term, <strong>cheating pays!</strong> But Beta will retaliate in the future.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 2: Finding the Non-Cooperative Equilibrium</h4>
+            <p><strong>Scenario:</strong> P = 13 − (Q_A + Q_B), MC = 1. Find the Cournot-Nash equilibrium.</p>
+            <p><strong>Solution:</strong> Q_A = (12 − Q_B)/2, Q_B = (12 − Q_A)/2. Solve: Q_A = 4, Q_B = 4. P = 5. Each profit = 16.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 3: The Prisoner's Dilemma Logic</h4>
+            <p><strong>Scenario:</strong> Two firms choose "Advertise" or "Don't Advertise." Payoffs: both don't advertise = (100, 100); both advertise = (60, 60); one advertises = (120, 40). What happens?</p>
+            <p><strong>Solution:</strong> "Advertise" is the dominant strategy for both. Nash Equilibrium: (Advertise, Advertise) → (60, 60). Both would prefer (Don't, Don't) → (100, 100), but each has an incentive to cheat.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 4: Multiple Equilibria (Arms Race)</h4>
+            <p><strong>Scenario:</strong> USA and USSR choose "Arm" or "Disarm." Payoffs: (Disarm, Disarm) = (4, 4); (Arm, Arm) = (3, 3); (Arm, Disarm) = (3, 1); (Disarm, Arm) = (1, 3).</p>
+            <p><strong>Solution:</strong> Two Nash equilibria: (Disarm, Disarm) and (Arm, Arm). (Disarm, Disarm) is Pareto optimal (better for both), but both are Nash equilibria.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0;">
+            <h4>Scenario 5: Cartels and Oligopoly</h4>
+            <p><strong>Scenario:</strong> Which statement is correct about cartels?</p>
+            <p><strong>Solution:</strong> Creating a cartel is optimal for firms (maximizes joint profits), but cartels are <strong>unstable</strong> because each firm has an incentive to cheat. Cartel quantity = monopoly quantity < competitive quantity. Consumer surplus is the same as monopoly.</p>
+        </div>
+    </div>
+
+    <!-- HIGH-YIELD EXAM FOCUS -->
+    <div class="card">
+        <h3>⚡ High-Yield Exam Focus</h3>
+
+        <h4>Memorization Checklist</h4>
+        <div class="grid-2">
+            <ul>
+                <li>□ Oligopoly</li>
+                <li>□ Duopoly</li>
+                <li>□ Collusion / Cartel</li>
+                <li>□ Deviation / Cheating</li>
+                <li>□ Non-cooperative equilibrium</li>
+                <li>□ Cournot-Nash equilibrium</li>
+                <li>□ Dominant strategy</li>
+                <li>□ Nash equilibrium</li>
+            </ul>
+            <ul>
+                <li>□ Pareto optimal</li>
+                <li>□ Game theory</li>
+                <li>□ Payoff matrix</li>
+                <li>□ Residual demand</li>
+                <li>□ Prisoner's Dilemma</li>
+                <li>□ Externality</li>
+                <li>□ Negative / Positive externality</li>
+                <li>□ Antitrust legislation</li>
+            </ul>
+        </div>
+
+        <h4>Common Exam Traps</h4>
+        <ul>
+            <li><strong>Confusing Market Demand vs. Residual Demand:</strong> A firm in an oligopoly faces residual demand, not the entire market demand curve.</li>
+            <li><strong>Thinking Collusion is Stable:</strong> The collusive solution is NOT a Nash equilibrium because each firm has an incentive to cheat.</li>
+            <li><strong>Confusing Pareto Optimal with Equilibrium:</strong> A Pareto optimal outcome might NOT be a Nash equilibrium.</li>
+            <li><strong>Forgetting Antitrust Laws:</strong> Explicit collusion (cartels) is illegal in most countries.</li>
+            <li><strong>Mixing Up Profits Across Scenarios:</strong> Collusion: π = 18 each; Cheating: Cheater π = 20.25, Victim π = 13.5; Non-cooperative: π = 16 each.</li>
+        </ul>
+
+        <h4>The "If This, Then That" Logic</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then...</th></tr>
+                <tr><td>Market has few firms</td><td>It's an oligopoly → strategic behavior</td></tr>
+                <tr><td>Firms cooperate</td><td>They produce monopoly quantity (6), charge monopoly price (7), profit 18 each</td></tr>
+                <tr><td>Firm cheats</td><td>Deviator produces 4.5, price 5.5, deviator profit 20.25, victim profit 13.5</td></tr>
+                <tr><td>Firms don't cooperate</td><td>Both produce 4, price 5, profit 16 each (Nash equilibrium)</td></tr>
+                <tr><td>Strategy is best regardless of others</td><td>It's a DOMINANT strategy</td></tr>
+                <tr><td>No one can improve by changing strategy</td><td>It's a NASH equilibrium</td></tr>
+                <tr><td>Cooperation would be better, but cheating is dominant</td><td>It's a PRISONER'S DILEMMA</td></tr>
+                <tr><td>Negative externality</td><td>Overproduction (e.g., pollution)</td></tr>
+                <tr><td>Positive externality</td><td>Underproduction (e.g., vaccinations)</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- PRACTICE QUESTIONS -->
+    <div class="card">
+        <h3>📝 Practice Questions</h3>
+
+        <div class="question-block" id="q1">
+            <div class="q-text">Q1: In an oligopoly, firms are:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) Price takers</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="B"><span>B) Strategically interdependent</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="C"><span>C) Independent of each other</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) Always colluding</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>In an oligopoly, firms are strategically interdependent—each firm's decisions affect others, and they know it.</div>
+        </div>
+
+        <div class="question-block" id="q2">
+            <div class="q-text">Q2: In a duopoly with P = 13 − Q and MC = 1, the non-cooperative equilibrium quantity for each firm is:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q2" value="A"><span>A) 3</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="B"><span>B) 4</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) 4.5</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="D"><span>D) 6</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>The Cournot-Nash equilibrium is Q₁ = 4, Q₂ = 4. Total quantity = 8, Price = 5.</div>
+        </div>
+
+        <div class="question-block" id="q3">
+            <div class="q-text">Q3: A strategy that yields the highest payoff regardless of what the other player does is called:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A"><span>A) Nash equilibrium</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="B"><span>B) Dominant strategy</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="C"><span>C) Pareto optimal</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="D"><span>D) Best response</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>A dominant strategy yields the highest payoff for a player regardless of what the other player does.</div>
+        </div>
+
+        <div class="question-block" id="q4">
+            <div class="q-text">Q4: In the Prisoner's Dilemma, the Nash equilibrium is:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q4" value="A"><span>A) Pareto optimal</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="B"><span>B) Not Pareto optimal</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="C"><span>C) Always the best outcome for both</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="D"><span>D) The same as the cooperative outcome</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>In the Prisoner's Dilemma, the Nash equilibrium (Confess, Confess) is NOT Pareto optimal because both would prefer (Not Confess, Not Confess).</div>
+        </div>
+
+        <div class="question-block" id="q5">
+            <div class="q-text">Q5: A negative externality leads to:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A"><span>A) Underproduction</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="B"><span>B) Overproduction</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="C"><span>C) Efficient production</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="D"><span>D) No market failure</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>A negative externality leads to overproduction because the producer doesn't pay for the cost imposed on others.</div>
+        </div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="card">
+        <h3>📖 Glossary</h3>
+        <div class="glossary-term"><dt>Oligopoly</dt><dd>Market with a few large firms that are interdependent.</dd></div>
+        <div class="glossary-term"><dt>Duopoly</dt><dd>An oligopoly with exactly two firms.</dd></div>
+        <div class="glossary-term"><dt>Residual Demand</dt><dd>Demand a firm faces after competitors have supplied their output.</dd></div>
+        <div class="glossary-term"><dt>Collusion</dt><dd>When firms secretly cooperate to maximize joint profits.</dd></div>
+        <div class="glossary-term"><dt>Cartel</dt><dd>A formal agreement between firms to cooperate on prices or output.</dd></div>
+        <div class="glossary-term"><dt>Deviation / Cheating</dt><dd>When a firm breaks a collusive agreement to increase its own profit.</dd></div>
+        <div class="glossary-term"><dt>Game Theory</dt><dd>The study of strategic decision-making.</dd></div>
+        <div class="glossary-term"><dt>Players</dt><dd>The decision-makers in a game.</dd></div>
+        <div class="glossary-term"><dt>Strategies</dt><dd>The possible actions available to each player.</dd></div>
+        <div class="glossary-term"><dt>Payoffs</dt><dd>The outcomes for each combination of strategies.</dd></div>
+        <div class="glossary-term"><dt>Dominant Strategy</dt><dd>A strategy that gives the highest payoff regardless of what others do.</dd></div>
+        <div class="glossary-term"><dt>Nash Equilibrium</dt><dd>A situation where no player can improve by unilaterally changing strategy.</dd></div>
+        <div class="glossary-term"><dt>Pareto Optimal</dt><dd>A situation where no one can be made better off without making someone else worse off.</dd></div>
+        <div class="glossary-term"><dt>Prisoner's Dilemma</dt><dd>A game showing why rational individuals might fail to cooperate.</dd></div>
+        <div class="glossary-term"><dt>Externality</dt><dd>An uncompensated impact of one person's actions on another's well-being.</dd></div>
+        <div class="glossary-term"><dt>Negative Externality</dt><dd>An externality that imposes a cost on others.</dd></div>
+        <div class="glossary-term"><dt>Positive Externality</dt><dd>An externality that provides a benefit to others.</dd></div>
+        <div class="glossary-term"><dt>Antitrust Legislation</dt><dd>Laws that prohibit collusion and other anti-competitive practices.</dd></div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+        function toggleAnswer(qId, correct) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

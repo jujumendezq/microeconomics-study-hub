@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 8: Monopoly</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+        .card li { margin: 0.3rem 0; line-height: 1.6; }
+        .highlight-box { background: #eef4fa; padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #1f6e8c; margin: 1rem 0; }
+        .formula-box { background: #e7edf6; padding: 0.8rem 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 500; color: #003153; display: inline-block; margin: 0.4rem 0; border: 1px solid #bfd3e6; }
+        .exam-trap { background: #fef6ee; border-left: 4px solid #c77d4a; padding: 0.8rem 1.5rem; border-radius: 10px; margin: 0.6rem 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .glossary-term { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #e8edf3; }
+        .glossary-term dt { font-weight: 600; color: #0b2b4a; min-width: 160px; }
+        .glossary-term dd { color: #334155; }
+        .graph-container { width: 100%; max-width: 850px; margin: 1.5rem auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 0.5rem; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .graph-container svg { width: 100%; height: auto; display: block; }
+        .graph-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; text-align: center; padding: 0.8rem 0 0.3rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .graph-subtitle { font-size: 0.85rem; color: #64748b; text-align: center; padding-bottom: 0.5rem; }
+        .graph-insight { padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 6px; margin-top: 0.5rem; }
+        .graph-insight p { font-size: 0.85rem; color: #1e293b; margin: 0; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .glossary-term { flex-direction: column; gap: 0.2rem; } .glossary-term dt { min-width: unset; } .graph-container { margin: 0.5rem 0; } .graph-container svg text { font-size: 10px !important; } .graph-title { font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Lesson 8: Monopoly</div>
+
+    <div class="page-header">
+        <h2>👑 8. Market Power: Monopoly</h2>
+        <div class="subtitle">Single seller, price maker, and the welfare cost of market power</div>
+    </div>
+
+    <!-- LEARNING OBJECTIVES -->
+    <div class="card">
+        <h3>📌 Learning Objectives</h3>
+        <ul>
+            <li>Compare perfect competition vs. monopoly market structures</li>
+            <li>Identify the reasons why monopolies arise (entry barriers)</li>
+            <li>Explain why Marginal Revenue (MR) is lower than Price (P) for a monopolist</li>
+            <li>Determine the profit-maximizing quantity for a monopolist using MR = MC</li>
+            <li>Evaluate the welfare cost of monopoly (deadweight loss)</li>
+            <li>Identify situations where monopoly might be efficient (price discrimination, regulation, natural monopoly)</li>
+            <li>Understand the Lerner Index as a measure of market power</li>
+            <li>Explain price discrimination and its three types</li>
+        </ul>
+    </div>
+
+    <!-- TOPIC INTRODUCTION -->
+    <div class="card">
+        <h3>🔹 Topic Introduction</h3>
+        <p>Welcome to the world of market power! In previous chapters, you learned about perfect competition—a market where many small firms compete and no single firm can influence the market price. Now we're going to explore the complete opposite: <strong>monopoly</strong>. A monopoly exists when there is only one seller in the market for a good or service with no close substitutes. This single seller has enormous power over the price—they're a <strong>price maker</strong>, not a price taker.</p>
+
+        <div class="highlight-box">
+            <strong>Why should you care?</strong> Monopolies are everywhere in real life! Think about:
+            <ul>
+                <li>Your local utility company (electricity, water)</li>
+                <li>Pharmaceutical companies with patents on life-saving drugs</li>
+                <li>DeBeers in the diamond market</li>
+                <li>Your campus cafeteria (maybe not a pure monopoly, but close!)</li>
+            </ul>
+            Understanding monopoly helps you understand why some goods are expensive, why governments regulate certain industries, and how firms with market power make decisions.
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>The Big Question:</strong> Is monopoly better or worse for society than perfect competition? The answer is <strong>ambiguous</strong>—it depends on the specific situation. Static welfare analysis says monopoly is worse, but dynamic considerations like innovation and natural monopolies can make monopoly preferable in some cases.</div>
+    </div>
+
+    <!-- CONCEPT 1: WHAT IS A MONOPOLY -->
+    <div class="card">
+        <h3>🔹 What is a Monopoly?</h3>
+        <p><strong>Definition:</strong> A monopoly is a market structure where a <strong>single seller</strong> produces a good or service with <strong>no close substitutes</strong>.</p>
+
+        <div class="highlight-box">
+            <strong>Simple Analogy:</strong> Imagine you're the only person in your town who sells drinking water. Everyone needs water, and they can only buy it from you. You have complete control over the price!
+        </div>
+
+        <h4>Key Characteristics of a Monopoly</h4>
+        <ul>
+            <li><strong>Single Seller:</strong> One firm produces the entire market output</li>
+            <li><strong>No Close Substitutes:</strong> Consumers can't easily switch to another product</li>
+            <li><strong>Price Maker:</strong> The firm can influence market price by changing output</li>
+            <li><strong>Barriers to Entry:</strong> Other firms cannot easily enter the market</li>
+            <li><strong>Faces Entire Market Demand:</strong> The monopolist's demand curve IS the market demand curve</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Real-World Examples:</strong>
+            <ul>
+                <li><strong>DeBeers:</strong> Controlled ~40% of the world's diamond market</li>
+                <li><strong>Local Utility Companies:</strong> Your electricity or water provider</li>
+                <li><strong>Patent-Protected Drugs:</strong> Pharmaceutical companies with exclusive rights</li>
+                <li><strong>SBB/CFF/FFS:</strong> Swiss Federal Railways (natural monopoly)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CONCEPT 2: PERFECT COMPETITION VS MONOPOLY -->
+    <div class="card">
+        <h3>🔹 Perfect Competition vs. Monopoly</h3>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Feature</th><th>Perfect Competition</th><th>Monopoly</th></tr>
+                <tr><td>Number of Firms</td><td>Many</td><td>One</td></tr>
+                <tr><td>Substitutes</td><td>Many close substitutes</td><td>No close substitutes</td></tr>
+                <tr><td>Demand Curve Facing Firm</td><td>Perfectly elastic (horizontal)</td><td>Downward-sloping (market demand)</td></tr>
+                <tr><td>Price Control</td><td>Price taker</td><td>Price maker</td></tr>
+                <tr><td>MR vs. P</td><td>MR = P</td><td>MR < P</td></tr>
+                <tr><td>Profit-Maximizing Rule</td><td>P = MC</td><td>MR = MC</td></tr>
+                <tr><td>Long-Run Profit</td><td>Zero economic profit</td><td>Can earn positive economic profit</td></tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Critical Insight:</strong> In perfect competition, the firm is so small that it can sell as much as it wants at the market price. In monopoly, the firm is the entire market—to sell more, it must <strong>lower the price on ALL units sold</strong>.
+        </div>
+    </div>
+
+    <!-- CONCEPT 3: BARRIERS TO ENTRY -->
+    <div class="card">
+        <h3>🔹 Why Do Monopolies Arise? (Barriers to Entry)</h3>
+        <p><strong>Definition:</strong> Barriers to entry are factors that prevent other firms from entering the market and competing with the monopolist.</p>
+
+        <h4>Three Main Types of Barriers</h4>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>Type 1: Legal Market Power (Government-Created)</h4>
+            <p>The government gives a firm the exclusive right to produce a good or service.</p>
+            <ul>
+                <li><strong>Patents:</strong> Exclusive rights to produce an invention (e.g., pharmaceutical drugs)</li>
+                <li><strong>Copyrights:</strong> Exclusive rights to creative works (e.g., books, music)</li>
+                <li><strong>Licenses/Franchises:</strong> Government permission to operate (e.g., TV/radio stations)</li>
+                <li><strong>Import Tariffs/Quotas:</strong> Restrictions on foreign competition</li>
+            </ul>
+            <div class="highlight-box">
+                <strong>Why does the government do this?</strong> To encourage innovation! If companies know they'll have a temporary monopoly on their inventions, they're more willing to invest in expensive R&D. The trade-off: Political authorities accept the welfare loss of high prices to incentivize future creation.
+            </div>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>Type 2: Exclusive Ownership of a Key Resource</h4>
+            <p>A single firm owns a resource essential for production.</p>
+            <ul>
+                <li><strong>Alcoa:</strong> Controlled bauxite (used for aluminum production)</li>
+                <li><strong>DeBeers:</strong> Controlled diamond mines (historically ~80% of supply)</li>
+                <li>A hotel that owns the only beachfront property on an island</li>
+            </ul>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+            <h4>Type 3: Natural Monopoly (Technical Monopoly)</h4>
+            <p>When a single firm can produce at a lower cost than multiple firms.</p>
+            <ul>
+                <li><strong>Characteristics:</strong> Economies of Scale (increasing returns to scale), High Fixed Costs, low or zero Marginal Cost, AC > MC throughout the relevant output range</li>
+                <li><strong>Examples:</strong> Electricity Distribution, Railway Networks (SBB/CFF/FFS in Switzerland), Bridges/Highways</li>
+            </ul>
+            <div class="exam-trap">⚠️ <strong>Key Insight:</strong> In a natural monopoly, breaking up the firm into competitors would <strong>increase average costs</strong> for everyone! This creates a trade-off between production efficiency and allocative efficiency.</div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 4: MARGINAL REVENUE IN MONOPOLY -->
+    <div class="card">
+        <h3>🔹 Marginal Revenue in Monopoly (MR < P)</h3>
+        <p><strong>Definition:</strong> Marginal Revenue (MR) is the additional revenue a firm earns from selling one more unit of output.</p>
+
+        <div class="highlight-box">
+            <strong>The Big Difference from Perfect Competition:</strong>
+            <ul>
+                <li>In perfect competition: <strong>MR = P</strong> (firm can sell all it wants at the market price)</li>
+                <li>In monopoly: <strong>MR < P</strong> (to sell more, the firm must lower the price on ALL units)</li>
+            </ul>
+        </div>
+
+        <p><strong>Why is MR < P? (The Trade-Off)</strong></p>
+        <p>When a monopolist wants to sell ONE more unit:</p>
+        <ul>
+            <li><strong>Good News 📈</strong> The firm earns revenue on the additional unit sold</li>
+            <li><strong>Bad News 📉</strong> To sell that extra unit, the firm must lower the price; the lower price applies to ALL units sold</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Example:</strong> Suppose a monopolist sells 4 units at $8 each:
+            <ul>
+                <li>Output 4 units: P = $8, TR = $32</li>
+                <li>Output 5 units: P = $7, TR = $35</li>
+                <li>MR = $35 − $32 = <strong>$3</strong></li>
+                <li>Revenue from the 5th unit: $7 (good news)</li>
+                <li>Revenue lost by lowering price on first 4 units: $4 (bad news: $1 × 4 units)</li>
+                <li>Net MR = $7 − $4 = <strong>$3</strong></li>
+            </ul>
+            <p><strong>MR is LESS than the price ($3 < $7)!</strong></p>
+        </div>
+
+        <div class="formula-box">For linear demand: P = a − bQ → MR = a − 2bQ</div>
+        <p>The MR curve has the <strong>same intercept</strong> as demand but is <strong>twice as steep</strong>.</p>
+    </div>
+
+    <!-- CONCEPT 5: PROFIT MAXIMIZATION -->
+    <div class="card">
+        <h3>🔹 Profit Maximization for a Monopolist</h3>
+        <p><strong>The Rule:</strong> All firms (both competitive and monopoly) maximize profit where:</p>
+
+        <div class="formula-box">MR = MC</div>
+
+        <p><strong>The Difference:</strong></p>
+        <ul>
+            <li><strong>Perfect Competition:</strong> MR = P, so the rule becomes P = MC</li>
+            <li><strong>Monopoly:</strong> MR < P, so the rule is MR = MC, but <strong>P > MC</strong></li>
+        </ul>
+
+        <h4>Step-by-Step Reasoning</h4>
+        <ul>
+            <li>If <strong>MR > MC</strong> → Producing one more unit adds to profit → <strong>Do it!</strong></li>
+            <li>If <strong>MR < MC</strong> → Producing one more unit reduces profit → <strong>Don't do it!</strong></li>
+            <li>If <strong>MR = MC</strong> → Profit is maximized → <strong>Stop!</strong></li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Numerical Example:</strong>
+            <ul>
+                <li>Demand: Q = 20 − P (or P = 20 − Q)</li>
+                <li>Total Cost: TC = 16 + 2Q</li>
+                <li>TR = P × Q = (20 − Q) × Q = 20Q − Q²</li>
+                <li>MR = dTR/dQ = 20 − 2Q</li>
+                <li>MC = dTC/dQ = 2</li>
+                <li>Set MR = MC: 20 − 2Q = 2 → Q = 9</li>
+                <li>P = 20 − 9 = <strong>11</strong></li>
+                <li>TR = 11 × 9 = 99, TC = 16 + 2(9) = 34</li>
+                <li>π = 99 − 34 = <strong>65</strong></li>
+            </ul>
+            <p><strong>Key Result:</strong> The monopolist produces where MR = MC, but charges a price above MC. At the optimum: P = 11, MC = 2. The markup (P − MC) = 9.</p>
+        </div>
+    </div>
+
+    <!-- GRAPH: MONOPOLY -->
+    <div class="card">
+        <h3>📈 Graph: Monopoly Profit Maximization</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 1: Monopoly Equilibrium</div>
+            <div class="graph-subtitle">Profit-maximizing quantity where MR = MC, price read from demand</div>
+            <svg viewBox="0 0 750 480" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="750" height="480" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="430"/>
+                    <line x1="80" y1="430" x2="700" y2="430"/>
+                    <line x1="80" y1="100" x2="700" y2="100"/>
+                    <line x1="80" y1="150" x2="700" y2="150"/>
+                    <line x1="80" y1="200" x2="700" y2="200"/>
+                    <line x1="80" y1="250" x2="700" y2="250"/>
+                    <line x1="80" y1="300" x2="700" y2="300"/>
+                    <line x1="80" y1="350" x2="700" y2="350"/>
+                    <line x1="80" y1="400" x2="700" y2="400"/>
+                    <line x1="150" y1="430" x2="150" y2="50"/>
+                    <line x1="220" y1="430" x2="220" y2="50"/>
+                    <line x1="290" y1="430" x2="290" y2="50"/>
+                    <line x1="360" y1="430" x2="360" y2="50"/>
+                    <line x1="430" y1="430" x2="430" y2="50"/>
+                    <line x1="500" y1="430" x2="500" y2="50"/>
+                    <line x1="570" y1="430" x2="570" y2="50"/>
+                    <line x1="640" y1="430" x2="640" y2="50"/>
+                </g>
+                <text x="390" y="460" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (Q)</text>
+                <text x="30" y="240" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 240)">Price / Cost ($)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="700,430 685,420 685,440" fill="#0b2b4a"/>
+                <line x1="80" y1="430" x2="680" y2="80" stroke="#2563eb" stroke-width="3"/>
+                <text x="660" y="85" font-size="16" font-weight="700" fill="#2563eb">D</text>
+                <line x1="80" y1="430" x2="450" y2="80" stroke="#f59e0b" stroke-width="3" stroke-dasharray="8,4"/>
+                <text x="430" y="85" font-size="16" font-weight="700" fill="#f59e0b">MR</text>
+                <line x1="200" y1="50" x2="700" y2="350" stroke="#16a34a" stroke-width="3"/>
+                <text x="690" y="360" font-size="16" font-weight="700" fill="#16a34a">MC</text>
+                <circle cx="360" cy="230" r="8" fill="#dc2626"/>
+                <text x="370" y="225" font-size="14" font-weight="600" fill="#dc2626">E<sub>M</sub></text>
+                <line x1="80" y1="175" x2="360" y2="175" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="60" y="180" font-size="13" font-weight="600" fill="#dc2626">P<sub>M</sub></text>
+                <text x="60" y="195" font-size="11" fill="#dc2626">(=11)</text>
+                <line x1="360" y1="175" x2="360" y2="430" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="350" y="450" font-size="13" font-weight="600" fill="#dc2626">Q<sub>M</sub></text>
+                <text x="350" y="465" font-size="11" fill="#dc2626">(=9)</text>
+                <rect x="470" y="60" width="190" height="85" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="80" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="95" x2="495" y2="95" stroke="#2563eb" stroke-width="2"/>
+                <text x="505" y="99" font-size="11" fill="#1e293b">Demand (D)</text>
+                <line x1="480" y1="110" x2="495" y2="110" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="505" y="114" font-size="11" fill="#1e293b">MR</text>
+                <line x1="480" y1="125" x2="495" y2="125" stroke="#16a34a" stroke-width="2"/>
+                <text x="505" y="129" font-size="11" fill="#1e293b">MC</text>
+                <circle cx="487" cy="142" r="4" fill="#dc2626"/>
+                <text x="505" y="146" font-size="11" fill="#1e293b">Monopoly Eq.</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> The monopolist maximizes profit where MR = MC (Q<sub>M</sub> = 9). The price is read from the demand curve (P<sub>M</sub> = 11). Since MR < P, the monopolist charges a price above marginal cost.</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 6: WELFARE COST OF MONOPOLY -->
+    <div class="card">
+        <h3>🔹 The Welfare Cost of Monopoly (Deadweight Loss)</h3>
+        <p><strong>Definition:</strong> Deadweight Loss (DWL) is the loss of total surplus (consumer surplus + producer surplus) that results from a market not being at the competitive equilibrium.</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Variable</th><th>Perfect Competition</th><th>Monopoly</th></tr>
+                <tr><td>Price</td><td>Lower (P = MC)</td><td>Higher (P > MC)</td></tr>
+                <tr><td>Quantity</td><td>Higher (Q<sub>PC</sub>)</td><td>Lower (Q<sub>M</sub>)</td></tr>
+                <tr><td>Consumer Surplus</td><td>Larger</td><td>Smaller</td></tr>
+                <tr><td>Producer Surplus</td><td>Smaller</td><td>Larger</td></tr>
+                <tr><td>Total Surplus</td><td>Maximized</td><td>Reduced (DWL)</td></tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>The Problem:</strong> When a monopolist reduces quantity from Q<sub>PC</sub> to Q<sub>M</sub>:
+            <ul>
+                <li>Some units that would have been produced in perfect competition are not produced</li>
+                <li>Consumers lose surplus on these units</li>
+                <li>Some producer surplus is gained (transferred from consumers)</li>
+                <li>The net effect is a <strong>loss of total surplus</strong> = Deadweight Loss</li>
+            </ul>
+        </div>
+
+        <div class="formula-box">DWL = ½ × (Q<sub>PC</sub> − Q<sub>M</sub>) × (P<sub>M</sub> − MC)</div>
+
+        <div class="exam-trap">⚠️ <strong>Important Note:</strong> The DWL is <strong>not just a transfer</strong> from consumers to producers—it's a <strong>destruction of surplus</strong> that benefits no one! Similar to taxation: both monopoly and taxes create a gap between what buyers pay and what it costs to produce, both lead to reduced trade and DWL. Difference: Tax revenue goes to government; monopoly profit goes to private firm.</div>
+    </div>
+
+    <!-- GRAPH: DWL -->
+    <div class="card">
+        <h3>📈 Graph: Deadweight Loss from Monopoly</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 2: Deadweight Loss from Monopoly</div>
+            <div class="graph-subtitle">DWL is the triangle between demand, MC, and the monopoly quantity</div>
+            <svg viewBox="0 0 750 480" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="750" height="480" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="430"/>
+                    <line x1="80" y1="430" x2="700" y2="430"/>
+                    <line x1="80" y1="100" x2="700" y2="100"/>
+                    <line x1="80" y1="150" x2="700" y2="150"/>
+                    <line x1="80" y1="200" x2="700" y2="200"/>
+                    <line x1="80" y1="250" x2="700" y2="250"/>
+                    <line x1="80" y1="300" x2="700" y2="300"/>
+                    <line x1="80" y1="350" x2="700" y2="350"/>
+                    <line x1="80" y1="400" x2="700" y2="400"/>
+                    <line x1="150" y1="430" x2="150" y2="50"/>
+                    <line x1="220" y1="430" x2="220" y2="50"/>
+                    <line x1="290" y1="430" x2="290" y2="50"/>
+                    <line x1="360" y1="430" x2="360" y2="50"/>
+                    <line x1="430" y1="430" x2="430" y2="50"/>
+                    <line x1="500" y1="430" x2="500" y2="50"/>
+                    <line x1="570" y1="430" x2="570" y2="50"/>
+                    <line x1="640" y1="430" x2="640" y2="50"/>
+                </g>
+                <text x="390" y="460" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (Q)</text>
+                <text x="30" y="240" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 240)">Price / Cost ($)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="700,430 685,420 685,440" fill="#0b2b4a"/>
+                <line x1="80" y1="430" x2="680" y2="80" stroke="#2563eb" stroke-width="3"/>
+                <text x="660" y="85" font-size="16" font-weight="700" fill="#2563eb">D</text>
+                <line x1="80" y1="430" x2="450" y2="80" stroke="#f59e0b" stroke-width="3" stroke-dasharray="8,4"/>
+                <text x="430" y="85" font-size="16" font-weight="700" fill="#f59e0b">MR</text>
+                <line x1="200" y1="50" x2="700" y2="350" stroke="#16a34a" stroke-width="3"/>
+                <text x="690" y="360" font-size="16" font-weight="700" fill="#16a34a">MC</text>
+                <circle cx="360" cy="230" r="7" fill="#dc2626"/>
+                <text x="370" y="225" font-size="12" font-weight="600" fill="#dc2626">E<sub>M</sub></text>
+                <circle cx="500" cy="270" r="7" fill="#0b2b4a"/>
+                <text x="510" y="265" font-size="12" font-weight="600" fill="#0b2b4a">E<sub>PC</sub></text>
+                <polygon points="360,230 500,270 360,270" fill="#ef4444" fill-opacity="0.4" stroke="#dc2626" stroke-width="2"/>
+                <text x="400" y="255" font-size="16" font-weight="700" fill="#991b1b">DWL</text>
+                <line x1="80" y1="175" x2="360" y2="175" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="60" y="180" font-size="13" font-weight="600" fill="#dc2626">P<sub>M</sub></text>
+                <line x1="360" y1="175" x2="360" y2="430" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="350" y="450" font-size="13" font-weight="600" fill="#dc2626">Q<sub>M</sub></text>
+                <line x1="500" y1="270" x2="500" y2="430" stroke="#0b2b4a" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="490" y="450" font-size="13" font-weight="600" fill="#0b2b4a">Q<sub>PC</sub></text>
+                <rect x="470" y="60" width="200" height="85" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="80" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="95" x2="495" y2="95" stroke="#2563eb" stroke-width="2"/>
+                <text x="505" y="99" font-size="11" fill="#1e293b">Demand (D)</text>
+                <line x1="480" y1="110" x2="495" y2="110" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="505" y="114" font-size="11" fill="#1e293b">MR</text>
+                <line x1="480" y1="125" x2="495" y2="125" stroke="#16a34a" stroke-width="2"/>
+                <text x="505" y="129" font-size="11" fill="#1e293b">MC</text>
+                <rect x="480" y="135" width="15" height="10" fill="#ef4444" fill-opacity="0.4" stroke="#dc2626" stroke-width="1"/>
+                <text x="502" y="144" font-size="11" fill="#1e293b">Deadweight Loss</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> The deadweight loss from monopoly is the triangle between the demand curve, the MC curve, and the range of output from Q<sub>M</sub> to Q<sub>PC</sub>. This represents lost surplus from trades that would have occurred in perfect competition but don't happen under monopoly.</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 7: LERNER INDEX -->
+    <div class="card">
+        <h3>🔹 The Lerner Index (Measuring Market Power)</h3>
+        <p><strong>Definition:</strong> The Lerner Index measures the extent of a firm's market power by calculating the price-marginal cost margin as a percentage of price.</p>
+
+        <div class="formula-box">Lerner Index = (P − MC) / P</div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Lerner Index</th><th>Meaning</th></tr>
+                <tr><td>Higher Lerner Index</td><td>More market power</td></tr>
+                <tr><td>Lower Lerner Index</td><td>Less market power</td></tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Example:</strong> If P = 11 and MC = 2:
+            <ul>
+                <li>Lerner Index = (11 − 2) / 11 = 9/11 ≈ <strong>0.82</strong></li>
+                <li>Interpretation: 82% of the price represents a markup over marginal cost</li>
+                <li>The firm has substantial market power</li>
+            </ul>
+        </div>
+
+        <div class="formula-box">Lerner Index = 1 / |ε|</div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then...</th></tr>
+                <tr><td>Demand is inelastic (|ε| is small)</td><td>Lerner Index is high → More market power</td></tr>
+                <tr><td>Demand is elastic (|ε| is large)</td><td>Lerner Index is low → Less market power</td></tr>
+            </table>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> A monopolist will always operate where demand is <strong>elastic</strong> (|ε| > 1) because that's where MR is positive and the positive effect of the price reduction outweighs the negative effect.</div>
+    </div>
+
+    <!-- CONCEPT 8: PRICE DISCRIMINATION -->
+    <div class="card">
+        <h3>🔹 Price Discrimination</h3>
+        <p><strong>Definition:</strong> Price discrimination is the practice of selling the <strong>same good at different prices</strong> to different customers, even when production costs are the same.</p>
+
+        <h4>Conditions for Price Discrimination</h4>
+        <ul>
+            <li><strong>Market Power:</strong> The firm must have some control over price</li>
+            <li><strong>Different Consumer Groups:</strong> Consumers must have different willingness to pay</li>
+            <li><strong>No Arbitrage:</strong> Consumers who buy at a low price can't resell to those paying a high price</li>
+        </ul>
+
+        <h4>Three Types of Price Discrimination</h4>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>1. First-Degree (Perfect) Price Discrimination</h4>
+            <ul>
+                <li><strong>What it is:</strong> Charging each customer exactly their maximum willingness to pay</li>
+                <li><strong>Result:</strong> The monopolist captures ALL consumer surplus</li>
+                <li><strong>Efficiency:</strong> Output reaches the competitive level → <strong>No deadweight loss!</strong></li>
+                <li><strong>Real-world:</strong> Rare in practice, but Big Data/Amazon might approximate it</li>
+            </ul>
+            <div class="exam-trap">⚠️ <strong>Key Insight:</strong> The producer has an incentive to sell to every consumer as long as their WTP > MC</div>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>2. Second-Degree Price Discrimination</h4>
+            <ul>
+                <li><strong>What it is:</strong> Price varies with quantity purchased or quality level</li>
+                <li><strong>Key Feature:</strong> Consumers reveal their WTP through their choices (self-revelation)</li>
+                <li><strong>Examples:</strong> Quantity discounts (buy 2, get 1 free); Business class vs. economy class; Train tickets (peak vs. off-peak); All-you-can-eat vs. à la carte</li>
+            </ul>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+            <h4>3. Third-Degree Price Discrimination</h4>
+            <ul>
+                <li><strong>What it is:</strong> Charging different prices to different identifiable groups</li>
+                <li><strong>Key Feature:</strong> Statistical discrimination based on observable characteristics</li>
+                <li><strong>Examples:</strong> Student discounts, Senior citizen discounts, Geographic pricing, Gender-based pricing</li>
+                <li><strong>Rule:</strong> Groups with less elastic demand get charged higher prices</li>
+            </ul>
+            <div class="formula-box">Profit maximization requires MR<sub>1</sub> = MR<sub>2</sub> = MC</div>
+        </div>
+
+        <h4>Welfare Effects of Price Discrimination</h4>
+        <ul>
+            <li>✅ <strong>Can increase welfare:</strong> Some consumers who couldn't afford the good at the single monopoly price can now purchase it</li>
+            <li>❌ <strong>Transfers surplus:</strong> From consumers to producers (especially in first-degree)</li>
+            <li>⚖️ <strong>Overall effect:</strong> Can reduce or eliminate deadweight loss in some cases!</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> Pharmaceutical companies charging lower prices for HIV drugs in poor countries (while charging high prices in rich countries) increases access and saves lives! <strong>Note:</strong> Parallel imports must be prohibited to make this work.
+        </div>
+    </div>
+
+    <!-- CONCEPT 9: NATURAL MONOPOLY REGULATION -->
+    <div class="card">
+        <h3>🔹 Natural Monopoly Regulation</h3>
+        <p><strong>The Regulatory Trade-off:</strong> Natural monopolies create a dilemma: it's more efficient to have one firm produce, but that firm will exploit its market power.</p>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>Option 1: Marginal Cost Pricing (First Best)</h4>
+            <p>Set P = MC</p>
+            <ul>
+                <li>✅ Eliminates deadweight loss → Efficient!</li>
+                <li>❌ Firm makes losses (because MC < AC)</li>
+                <li>→ Requires subsidies or nationalization</li>
+            </ul>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>Option 2: Average Cost Pricing (Second Best)</h4>
+            <p>Set P = AC</p>
+            <ul>
+                <li>✅ Firm breaks even (no losses)</li>
+                <li>❌ Some deadweight loss remains</li>
+                <li>❌ Some consumers are excluded</li>
+            </ul>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+            <h4>Option 3: Administered Pricing</h4>
+            <p>Set price between MC and AC (MC < P < AC)</p>
+            <ul>
+                <li>✅ Smaller losses than marginal cost pricing</li>
+                <li>❌ Still requires compensation</li>
+            </ul>
+        </div>
+
+        <h4>Real-World Solutions</h4>
+        <ul>
+            <li><strong>Nationalization:</strong> Government runs the natural monopoly (e.g., SBB/CFF/FFS, postal service)</li>
+            <li><strong>Subsidies:</strong> Government compensates the firm for losses</li>
+            <li><strong>Do Nothing:</strong> If the market failure is deemed small compared to imperfections of public policies</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Nobel Prize Connection:</strong> Jean Tirole (2014 Nobel Prize) studied the economics of regulation, including these very issues. Jean-Jacques Laffont was also a pioneer in this field.
+        </div>
+    </div>
+
+    <!-- FORMULAS -->
+    <div class="card">
+        <h3>🧮 Key Formulas</h3>
+
+        <div class="formula-box">MR = a − 2bQ (linear demand)</div>
+        <div class="formula-box">MR = D(Q) + Q × D'(Q) (general)</div>
+        <div class="formula-box">Lerner Index = (P − MC)/P = 1/|ε|</div>
+        <div class="formula-box">Profit: π = TR − TC = (P − AC) × Q</div>
+        <div class="formula-box">MR = P × (1 − 1/|ε|)</div>
+        <div class="formula-box">DWL = ½ × (Q<sub>PC</sub> − Q<sub>M</sub>) × (P<sub>M</sub> − MC)</div>
+    </div>
+
+    <!-- EXAM SCENARIOS -->
+    <div class="card">
+        <h3>📝 Exam Scenarios & Problem-Solving</h3>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 1: Profit Maximization</h4>
+            <p><strong>Scenario:</strong> Q = 12 − P, FC = 16, VC = 2Q. Find profit-maximizing quantity.</p>
+            <p><strong>Solution:</strong> TR = 12Q − Q², MR = 12 − 2Q, MC = 2. Set MR = MC → Q = 5. P = 7. π = 35 − 26 = <strong>9</strong>.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 2: Comparing to Perfect Competition</h4>
+            <p><strong>Scenario:</strong> Q = 12 − P, TC = 16 + 2Q. Compare monopoly to competition.</p>
+            <p><strong>Solution:</strong> Monopoly: Q = 5, P = 7. Competition: P = MC = 2, Q = 10. DWL = ½ × (10 − 5) × (7 − 2) = <strong>12.5</strong>.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 3: Price Discrimination</h4>
+            <p><strong>Scenario:</strong> Students (100): WTP = 8; Professors (100): WTP = 16; MC = 4. Which pricing strategy maximizes profit?</p>
+            <p><strong>Solution:</strong> Uniform P=16 → Profit = 1,200. Uniform P=8 → Profit = 800. Price discrimination → Profit = 1,600. <strong>Price discrimination maximizes profit.</strong></p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 4: Lerner Index</h4>
+            <p><strong>Scenario:</strong> Q = 200 − 10P, TC = 100 + 0.8Q + Q²/100. Find optimal quantity, price, and Lerner Index.</p>
+            <p><strong>Solution:</strong> P = 20 − 0.1Q, MR = 20 − 0.2Q, MC = 0.8 + 0.02Q. Q = 87.27, P = 11.27. MC = 2.55. Lerner Index = (11.27 − 2.55)/11.27 = <strong>0.77</strong>.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0;">
+            <h4>Scenario 5: Natural Monopoly Regulation</h4>
+            <p><strong>Scenario:</strong> P = 10 − Q, TC = 10 + 2Q. Compare unregulated, marginal cost pricing, and average cost pricing.</p>
+            <p><strong>Solution:</strong> Unregulated: Q=4, P=6, Profit=6. Marginal Cost Pricing: Q=8, P=2, Loss=10. Average Cost Pricing: Q≈6.45, P≈3.55, Profit=0.</p>
+        </div>
+    </div>
+
+    <!-- HIGH-YIELD EXAM FOCUS -->
+    <div class="card">
+        <h3>⚡ High-Yield Exam Focus</h3>
+
+        <h4>Memorization Checklist</h4>
+        <div class="grid-2">
+            <ul>
+                <li>□ Monopoly</li>
+                <li>□ Market Power</li>
+                <li>□ Price Maker</li>
+                <li>□ Barriers to Entry</li>
+                <li>□ Natural Monopoly</li>
+                <li>□ Patent / Copyright</li>
+                <li>□ Marginal Revenue (MR)</li>
+                <li>□ Lerner Index</li>
+            </ul>
+            <ul>
+                <li>□ Price Discrimination</li>
+                <li>□ Deadweight Loss (DWL)</li>
+                <li>□ First-Degree PD</li>
+                <li>□ Second-Degree PD</li>
+                <li>□ Third-Degree PD</li>
+                <li>□ Markup (P − MC)</li>
+                <li>□ Regulation</li>
+            </ul>
+        </div>
+
+        <h4>Common Exam Traps</h4>
+        <ul>
+            <li><strong>Confusing MR and Price:</strong> "A monopolist maximizes profit where P = MC." FALSE. The rule is MR = MC, NOT P = MC.</li>
+            <li><strong>Thinking Monopolist Can Charge Any Price:</strong> FALSE. The monopolist can choose the price, but it must accept the quantity that consumers demand at that price.</li>
+            <li><strong>Forgetting the Price Cut Affects ALL Units:</strong> "MR = P because the firm earns P on the additional unit." FALSE. The firm must lower the price on all units sold.</li>
+            <li><strong>Thinking All Monopolies Are Bad:</strong> FALSE. Natural monopolies can be efficient, price discrimination can reduce deadweight loss, and patents encourage innovation.</li>
+            <li><strong>Confusing Price Discrimination Types:</strong> Student discounts are third-degree (based on observable characteristics), not second-degree.</li>
+        </ul>
+
+        <h4>The "If This, Then That" Logic</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then...</th></tr>
+                <tr><td>Market has only one seller</td><td>It's a monopoly</td></tr>
+                <tr><td>Firm is a price maker</td><td>It faces downward-sloping demand</td></tr>
+                <tr><td>Demand is downward-sloping</td><td>MR < P</td></tr>
+                <tr><td>MR = MC</td><td>Profit is maximized</td></tr>
+                <tr><td>P > MC</td><td>There is market power</td></tr>
+                <tr><td>|ε| is small</td><td>Lerner Index is large (more market power)</td></tr>
+                <tr><td>Monopoly reduces output</td><td>Deadweight loss exists</td></tr>
+                <tr><td>Monopolist price discriminates</td><td>It can increase profit</td></tr>
+                <tr><td>Natural monopoly</td><td>Regulation may be needed</td></tr>
+            </table>
+        </div>
+
+        <h4>Quick Reference: Monopoly vs Perfect Competition</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th></th><th>Perfect Competition</th><th>Monopoly</th></tr>
+                <tr><td>Sellers</td><td>Many</td><td>One</td></tr>
+                <tr><td>Demand Curve</td><td>Horizontal</td><td>Downward-sloping</td></tr>
+                <tr><td>Price</td><td>Taker</td><td>Maker</td></tr>
+                <tr><td>MR vs. P</td><td>MR = P</td><td>MR < P</td></tr>
+                <tr><td>Profit Max</td><td>P = MC</td><td>MR = MC</td></tr>
+                <tr><td>P vs. MC</td><td>P = MC</td><td>P > MC</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- PRACTICE QUESTIONS -->
+    <div class="card">
+        <h3>📝 Practice Questions</h3>
+
+        <div class="question-block" id="q1">
+            <div class="q-text">Q1: A monopolist maximizes profit where:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) P = MC</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="B"><span>B) MR = MC</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="C"><span>C) P = AC</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) MR = P</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>All firms maximize profit where MR = MC. In monopoly, since MR < P, this means P > MC.</div>
+        </div>
+
+        <div class="question-block" id="q2">
+            <div class="q-text">Q2: For a monopolist, MR is less than P because:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q2" value="A"><span>A) Demand is perfectly elastic</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="B"><span>B) To sell more, the firm must lower the price on all units</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) Marginal cost is increasing</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="D"><span>D) Average cost is decreasing</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>To sell more output, a monopolist must lower the price on ALL units sold, not just the additional unit. This is why MR < P.</div>
+        </div>
+
+        <div class="question-block" id="q3">
+            <div class="q-text">Q3: The Lerner Index measures:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A"><span>A) Total profit</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="B"><span>B) Market power as (P − MC)/P</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="C"><span>C) Deadweight loss</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="D"><span>D) Consumer surplus</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>The Lerner Index = (P − MC)/P = 1/|ε|. It measures the markup over marginal cost as a percentage of price.</div>
+        </div>
+
+        <div class="question-block" id="q4">
+            <div class="q-text">Q4: Student discounts are an example of:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q4" value="A"><span>A) First-degree price discrimination</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="B"><span>B) Second-degree price discrimination</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="C"><span>C) Third-degree price discrimination</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="D"><span>D) No price discrimination</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4', 'C')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: C</strong><br>Student discounts are third-degree price discrimination because they're based on observable group characteristics (student status).</div>
+        </div>
+
+        <div class="question-block" id="q5">
+            <div class="q-text">Q5: In a natural monopoly, breaking up the firm into multiple competitors would:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A"><span>A) Decrease average costs</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="B"><span>B) Increase average costs</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="C"><span>C) Have no effect on costs</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="D"><span>D) Eliminate deadweight loss</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>In a natural monopoly, one firm can produce at lower cost than multiple firms due to economies of scale. Breaking up the firm would increase average costs.</div>
+        </div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="card">
+        <h3>📖 Glossary</h3>
+        <div class="glossary-term"><dt>Monopoly</dt><dd>Market with one seller and no close substitutes.</dd></div>
+        <div class="glossary-term"><dt>Market Power</dt><dd>The ability of a firm to influence the market price.</dd></div>
+        <div class="glossary-term"><dt>Barriers to Entry</dt><dd>Factors that prevent new firms from entering a market.</dd></div>
+        <div class="glossary-term"><dt>Natural Monopoly</dt><dd>Market where one firm can produce at lower cost than multiple firms.</dd></div>
+        <div class="glossary-term"><dt>Patent</dt><dd>Government-granted permission to be the sole producer of an invention.</dd></div>
+        <div class="glossary-term"><dt>Marginal Revenue (MR)</dt><dd>Additional revenue from selling one more unit; MR < P for a monopolist.</dd></div>
+        <div class="glossary-term"><dt>Lerner Index</dt><dd>Measure of market power: (P − MC)/P = 1/|ε|.</dd></div>
+        <div class="glossary-term"><dt>Markup</dt><dd>The difference between price and marginal cost (P − MC).</dd></div>
+        <div class="glossary-term"><dt>Price Discrimination</dt><dd>Selling the same good at different prices to different customers.</dd></div>
+        <div class="glossary-term"><dt>First-Degree PD</dt><dd>Charging each customer their maximum willingness to pay.</dd></div>
+        <div class="glossary-term"><dt>Second-Degree PD</dt><dd>Charging different prices based on quantity or quality.</dd></div>
+        <div class="glossary-term"><dt>Third-Degree PD</dt><dd>Charging different prices to identifiable groups.</dd></div>
+        <div class="glossary-term"><dt>Deadweight Loss (DWL)</dt><dd>The net loss in total surplus from market inefficiency.</dd></div>
+        <div class="glossary-term"><dt>Regulation</dt><dd>Government intervention to correct market failures.</dd></div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+        function toggleAnswer(qId, correct) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

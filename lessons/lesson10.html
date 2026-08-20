@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 10: Externalities</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+        .card li { margin: 0.3rem 0; line-height: 1.6; }
+        .highlight-box { background: #eef4fa; padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #1f6e8c; margin: 1rem 0; }
+        .formula-box { background: #e7edf6; padding: 0.8rem 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 500; color: #003153; display: inline-block; margin: 0.4rem 0; border: 1px solid #bfd3e6; }
+        .exam-trap { background: #fef6ee; border-left: 4px solid #c77d4a; padding: 0.8rem 1.5rem; border-radius: 10px; margin: 0.6rem 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .glossary-term { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #e8edf3; }
+        .glossary-term dt { font-weight: 600; color: #0b2b4a; min-width: 160px; }
+        .glossary-term dd { color: #334155; }
+        .graph-container { width: 100%; max-width: 850px; margin: 1.5rem auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 0.5rem; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .graph-container svg { width: 100%; height: auto; display: block; }
+        .graph-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; text-align: center; padding: 0.8rem 0 0.3rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .graph-subtitle { font-size: 0.85rem; color: #64748b; text-align: center; padding-bottom: 0.5rem; }
+        .graph-insight { padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 6px; margin-top: 0.5rem; }
+        .graph-insight p { font-size: 0.85rem; color: #1e293b; margin: 0; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .glossary-term { flex-direction: column; gap: 0.2rem; } .glossary-term dt { min-width: unset; } .graph-container { margin: 0.5rem 0; } .graph-container svg text { font-size: 10px !important; } .graph-title { font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Lesson 10: Externalities</div>
+
+    <div class="page-header">
+        <h2>🌿 10. Externalities</h2>
+        <div class="subtitle">Market failures, Coase theorem, Pigouvian taxes · spillover effects</div>
+    </div>
+
+    <!-- LEARNING OBJECTIVES -->
+    <div class="card">
+        <h3>📌 Learning Objectives</h3>
+        <ul>
+            <li>Define externalities and distinguish positive from negative</li>
+            <li>Explain why externalities represent a market failure</li>
+            <li>Understand the Coase theorem and its limitations</li>
+            <li>Analyze Pigouvian taxes and subsidies as policy solutions</li>
+            <li>Apply real-world examples: LONZA, glyphosate, traffic congestion, carbon taxes</li>
+            <li>Calculate the social optimum using marginal social cost and marginal social benefit</li>
+        </ul>
+    </div>
+
+    <!-- TOPIC INTRODUCTION -->
+    <div class="card">
+        <h3>🔹 Topic Introduction</h3>
+        <p>Welcome to the world of market failures! So far in this course, we've been studying perfectly competitive markets and assuming they work efficiently. But in the real world, markets often <strong>fail</strong> to achieve the optimal outcome. One of the most important reasons is <strong>externalities</strong> – the spillover effects of economic activity on third parties.</p>
+
+        <div class="highlight-box">
+            <strong>What is an externality?</strong><br>
+            An externality occurs when the production or consumption of a good affects someone who is not directly involved in the transaction, and this effect is not reflected in the market price.
+        </div>
+
+        <p><strong>Why should you care?</strong> Externalities explain some of the biggest problems facing society today:</p>
+        <ul>
+            <li><strong>Climate change</strong> – burning fossil fuels releases CO₂, which affects everyone</li>
+            <li><strong>Traffic congestion</strong> – each driver ignores the delay they cause for others</li>
+            <li><strong>Pollution</strong> – factories don't pay for the health costs of their emissions</li>
+            <li><strong>Education</strong> – an educated population benefits everyone, not just the student</li>
+        </ul>
+        <p>Understanding externalities helps us design better policies – like carbon taxes, congestion charges, and subsidies for education.</p>
+    </div>
+
+    <!-- CONCEPT 1: WHAT IS AN EXTERNALITY -->
+    <div class="card">
+        <h3>🔹 What is an Externality?</h3>
+        <p><strong>Definition:</strong> An externality is an <strong>uncompensated impact</strong> of one person's actions on another person's well-being. It occurs when the market price of a good does not reflect all the costs or benefits associated with its production or consumption.</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Type</th><th>Definition</th><th>Example</th></tr>
+                <tr><td><strong>Negative Production Externality</strong></td><td>A firm's production imposes costs on others without paying</td><td>Factory polluting a river, LONZA chemical plant</td></tr>
+                <tr><td><strong>Negative Consumption Externality</strong></td><td>A person's consumption imposes costs on others</td><td>Smoking in public, driving during rush hour</td></tr>
+                <tr><td><strong>Positive Production Externality</strong></td><td>A firm's production benefits others without reward</td><td>R&D that creates knowledge others can use</td></tr>
+                <tr><td><strong>Positive Consumption Externality</strong></td><td>A person's consumption benefits others without reward</td><td>Flu vaccination, cycling to work</td></tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Real-World Example: LONZA Chemical Plant</strong><br>
+            LONZA produces chemicals in Switzerland. While the production creates jobs and valuable products, it also releases pollutants into the air and water. The local community bears the health and environmental costs, but LONZA doesn't pay for these damages. The market price of the chemicals doesn't reflect the pollution cost – this is a <strong>negative production externality</strong>.
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> Externalities are a type of <strong>market failure</strong> because the market price doesn't reflect the full social cost or benefit of a good. This leads to <strong>overproduction</strong> (negative externalities) or <strong>underproduction</strong> (positive externalities) from society's perspective.</div>
+    </div>
+
+    <!-- CONCEPT 2: NEGATIVE EXTERNALITY -->
+    <div class="card">
+        <h3>🔹 Negative Externalities (Cost Externalities)</h3>
+        <p><strong>Definition:</strong> A negative externality occurs when the production or consumption of a good imposes a cost on third parties. The <strong>social cost</strong> is greater than the <strong>private cost</strong>.</p>
+
+        <div class="formula-box">Marginal Social Cost (MSC) = Marginal Private Cost (MPC) + External Cost</div>
+
+        <p><strong>The Problem:</strong> When there's a negative externality:</p>
+        <ul>
+            <li>The firm only considers its private costs (MPC)</li>
+            <li>The firm ignores the external costs imposed on society</li>
+            <li>Result: The firm produces <strong>too much</strong> output at a price that's <strong>too low</strong></li>
+            <li>The market equilibrium quantity (Q<sub>market</sub>) is <strong>greater than</strong> the socially optimal quantity (Q<sub>optimal</sub>)</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Real-World Example: Traffic Congestion</strong><br>
+            When you decide to drive during rush hour, you consider your private cost – the time and gas money it costs you. But you ignore the <strong>congestion cost</strong> you impose on other drivers (the time you add to their trips). This is a negative consumption externality. Everyone makes the same decision, leading to <strong>too many cars on the road</strong> during peak times.
+        </div>
+
+        <h4>Policy Solutions for Negative Externalities</h4>
+        <ul>
+            <li><strong>Pigouvian Tax:</strong> A tax equal to the external cost. This internalizes the externality and shifts production to the socially optimal level.</li>
+            <li><strong>Regulation:</strong> Government mandates limits on pollution, emissions, or production levels.</li>
+            <li><strong>Property Rights:</strong> Clearly defining property rights can allow market-based solutions (Coase theorem).</li>
+            <li><strong>Cap and Trade:</strong> Setting a cap on total pollution and allowing firms to trade pollution permits.</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Real-World Example: Carbon Tax</strong><br>
+            Burning fossil fuels releases CO₂, which causes climate change – a classic negative externality. A <strong>carbon tax</strong> charges emitters for each ton of CO₂ released. This internalizes the climate cost, making fossil fuels more expensive and encouraging cleaner alternatives. Switzerland has implemented a CO₂ tax on heating fuels and has a separate levy on motor fuels.
+        </div>
+    </div>
+
+    <!-- GRAPH: NEGATIVE EXTERNALITY -->
+    <div class="card">
+        <h3>📈 Graph: Negative Externality</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 1: Negative Production Externality</div>
+            <div class="graph-subtitle">MSC = MPC + External Cost</div>
+            <svg viewBox="0 0 750 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="750" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="700" y2="400"/>
+                    <line x1="80" y1="100" x2="700" y2="100"/>
+                    <line x1="80" y1="150" x2="700" y2="150"/>
+                    <line x1="80" y1="200" x2="700" y2="200"/>
+                    <line x1="80" y1="250" x2="700" y2="250"/>
+                    <line x1="80" y1="300" x2="700" y2="300"/>
+                    <line x1="80" y1="350" x2="700" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="390" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (Q)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Price / Cost ($)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="700,400 685,390 685,410" fill="#0b2b4a"/>
+                <line x1="80" y1="400" x2="680" y2="100" stroke="#2563eb" stroke-width="3"/>
+                <text x="660" y="105" font-size="16" font-weight="700" fill="#2563eb">D = MPB = MSB</text>
+                <line x1="150" y1="50" x2="680" y2="380" stroke="#16a34a" stroke-width="3"/>
+                <text x="670" y="390" font-size="16" font-weight="700" fill="#16a34a">MPC</text>
+                <line x1="150" y1="120" x2="680" y2="420" stroke="#dc2626" stroke-width="3" stroke-dasharray="8,4"/>
+                <text x="670" y="425" font-size="16" font-weight="700" fill="#dc2626">MSC</text>
+                <text x="300" y="150" font-size="13" font-weight="600" fill="#dc2626">External Cost</text>
+                <line x1="300" y1="150" x2="300" y2="100" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="305" y="135" font-size="12" fill="#dc2626">↓</text>
+                <circle cx="360" cy="250" r="8" fill="#0b2b4a"/>
+                <text x="370" y="245" font-size="13" font-weight="600" fill="#0b2b4a">E<sub>Market</sub></text>
+                <circle cx="290" cy="200" r="8" fill="#dc2626"/>
+                <text x="300" y="195" font-size="13" font-weight="600" fill="#dc2626">E<sub>Optimal</sub></text>
+                <line x1="80" y1="250" x2="360" y2="250" stroke="#0b2b4a" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="60" y="255" font-size="12" fill="#0b2b4a">P<sub>M</sub></text>
+                <line x1="80" y1="200" x2="290" y2="200" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="60" y="205" font-size="12" fill="#dc2626">P<sub>Opt</sub></text>
+                <line x1="360" y1="250" x2="360" y2="400" stroke="#0b2b4a" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="350" y="420" font-size="12" fill="#0b2b4a">Q<sub>M</sub></text>
+                <line x1="290" y1="200" x2="290" y2="400" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="280" y="420" font-size="12" fill="#dc2626">Q<sub>Opt</sub></text>
+                <rect x="470" y="60" width="200" height="100" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="80" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="95" x2="495" y2="95" stroke="#2563eb" stroke-width="2"/>
+                <text x="505" y="99" font-size="11" fill="#1e293b">Demand (MSB)</text>
+                <line x1="480" y1="110" x2="495" y2="110" stroke="#16a34a" stroke-width="2"/>
+                <text x="505" y="114" font-size="11" fill="#1e293b">MPC</text>
+                <line x1="480" y1="125" x2="495" y2="125" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="505" y="129" font-size="11" fill="#1e293b">MSC</text>
+                <text x="480" y="145" font-size="11" fill="#dc2626">Overproduction</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> With a negative externality, the market equilibrium (Q<sub>M</sub>, P<sub>M</sub>) is inefficient. The socially optimal outcome (Q<sub>Opt</sub>, P<sub>Opt</sub>) occurs where MSB = MSC. The gap between MSC and MPC represents the external cost.</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 3: POSITIVE EXTERNALITY -->
+    <div class="card">
+        <h3>🔹 Positive Externalities (Benefit Externalities)</h3>
+        <p><strong>Definition:</strong> A positive externality occurs when the production or consumption of a good provides a benefit to third parties. The <strong>social benefit</strong> is greater than the <strong>private benefit</strong>.</p>
+
+        <div class="formula-box">Marginal Social Benefit (MSB) = Marginal Private Benefit (MPB) + External Benefit</div>
+
+        <p><strong>The Problem:</strong> When there's a positive externality:</p>
+        <ul>
+            <li>The individual only considers their private benefit (MPB)</li>
+            <li>The individual ignores the external benefits to society</li>
+            <li>Result: The individual consumes <strong>too little</strong> of the good</li>
+            <li>The market equilibrium quantity (Q<sub>market</sub>) is <strong>less than</strong> the socially optimal quantity (Q<sub>optimal</sub>)</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Real-World Example: Education</strong><br>
+            When you get an education, you benefit from higher earnings and better job opportunities (private benefit). But society also benefits: a more educated workforce is more productive, pays more taxes, and contributes to innovation. The private benefit is less than the social benefit, leading to <strong>underinvestment in education</strong>.
+        </div>
+
+        <h4>Policy Solutions for Positive Externalities</h4>
+        <ul>
+            <li><strong>Subsidies:</strong> Government payments to encourage consumption or production. This internalizes the positive externality and shifts consumption to the socially optimal level.</li>
+            <li><strong>Public Provision:</strong> The government directly provides the good (e.g., public education, vaccines).</li>
+            <li><strong>Vouchers:</strong> Government vouchers that individuals can use to purchase the good (e.g., education vouchers).</li>
+            <li><strong>Information Campaigns:</strong> Encouraging consumption through public awareness (e.g., vaccination campaigns).</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Real-World Example: Flu Vaccinations</strong><br>
+            When you get a flu shot, you protect yourself from the flu (private benefit). But you also protect others by reducing the spread of the virus (external benefit). The social benefit is higher than the private benefit, which justifies government subsidies for vaccinations.
+        </div>
+    </div>
+
+    <!-- GRAPH: POSITIVE EXTERNALITY -->
+    <div class="card">
+        <h3>📈 Graph: Positive Externality</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 2: Positive Consumption Externality</div>
+            <div class="graph-subtitle">MSB = MPB + External Benefit</div>
+            <svg viewBox="0 0 750 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="750" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="700" y2="400"/>
+                    <line x1="80" y1="100" x2="700" y2="100"/>
+                    <line x1="80" y1="150" x2="700" y2="150"/>
+                    <line x1="80" y1="200" x2="700" y2="200"/>
+                    <line x1="80" y1="250" x2="700" y2="250"/>
+                    <line x1="80" y1="300" x2="700" y2="300"/>
+                    <line x1="80" y1="350" x2="700" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="390" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (Q)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Price / Cost ($)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="700,400 685,390 685,410" fill="#0b2b4a"/>
+                <line x1="80" y1="400" x2="680" y2="100" stroke="#2563eb" stroke-width="3"/>
+                <text x="660" y="105" font-size="16" font-weight="700" fill="#2563eb">MPB</text>
+                <line x1="80" y1="350" x2="680" y2="60" stroke="#93c5fd" stroke-width="3" stroke-dasharray="8,4"/>
+                <text x="660" y="65" font-size="16" font-weight="700" fill="#93c5fd">MSB</text>
+                <line x1="150" y1="50" x2="680" y2="380" stroke="#16a34a" stroke-width="3"/>
+                <text x="670" y="390" font-size="16" font-weight="700" fill="#16a34a">S = MC</text>
+                <text x="300" y="130" font-size="13" font-weight="600" fill="#93c5fd">External Benefit</text>
+                <line x1="300" y1="130" x2="300" y2="180" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="305" y="155" font-size="12" fill="#93c5fd">↓</text>
+                <circle cx="360" cy="250" r="8" fill="#0b2b4a"/>
+                <text x="370" y="245" font-size="13" font-weight="600" fill="#0b2b4a">E<sub>Market</sub></text>
+                <circle cx="430" cy="200" r="8" fill="#dc2626"/>
+                <text x="440" y="195" font-size="13" font-weight="600" fill="#dc2626">E<sub>Optimal</sub></text>
+                <line x1="80" y1="250" x2="360" y2="250" stroke="#0b2b4a" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="60" y="255" font-size="12" fill="#0b2b4a">P<sub>M</sub></text>
+                <line x1="80" y1="200" x2="430" y2="200" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="60" y="205" font-size="12" fill="#dc2626">P<sub>Opt</sub></text>
+                <line x1="360" y1="250" x2="360" y2="400" stroke="#0b2b4a" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="350" y="420" font-size="12" fill="#0b2b4a">Q<sub>M</sub></text>
+                <line x1="430" y1="200" x2="430" y2="400" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="420" y="420" font-size="12" fill="#dc2626">Q<sub>Opt</sub></text>
+                <rect x="470" y="60" width="200" height="100" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="80" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="95" x2="495" y2="95" stroke="#2563eb" stroke-width="2"/>
+                <text x="505" y="99" font-size="11" fill="#1e293b">MPB</text>
+                <line x1="480" y1="110" x2="495" y2="110" stroke="#93c5fd" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="505" y="114" font-size="11" fill="#1e293b">MSB</text>
+                <line x1="480" y1="125" x2="495" y2="125" stroke="#16a34a" stroke-width="2"/>
+                <text x="505" y="129" font-size="11" fill="#1e293b">MC</text>
+                <text x="480" y="145" font-size="11" fill="#93c5fd">Underproduction</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> With a positive externality, the market equilibrium (Q<sub>M</sub>, P<sub>M</sub>) is inefficient. The socially optimal outcome (Q<sub>Opt</sub>, P<sub>Opt</sub>) occurs where MSB = MC. The gap between MSB and MPB represents the external benefit.</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 4: COASE THEOREM -->
+    <div class="card">
+        <h3>🔹 The Coase Theorem</h3>
+        <p><strong>Definition:</strong> The Coase theorem states that if property rights are <strong>well-defined</strong> and <strong>transaction costs are low</strong>, private bargaining will lead to the <strong>efficient outcome</strong> regardless of who holds the property rights.</p>
+
+        <div class="highlight-box">
+            <strong>Key Quote:</strong> "The Coase theorem suggests that externalities can be solved through private negotiation without government intervention, as long as property rights are clear and bargaining is easy."
+        </div>
+
+        <h4>The Story: Fred and Anne</h4>
+        <ul>
+            <li><strong>Fred</strong> grows apples and needs bees to pollinate his orchard.</li>
+            <li><strong>Anne</strong> keeps bees that produce honey.</li>
+            <li>Anne's bees pollinate Fred's orchard, benefiting Fred.</li>
+            <li>This is a <strong>positive externality</strong> (Anne's bees help Fred).</li>
+            <li><strong>Coase solution:</strong> Fred could pay Anne to keep more bees. Both benefit from the negotiation.</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Another Example: Factory Pollution</strong>
+            <ul>
+                <li><strong>Factory</strong> produces goods but emits pollution.</li>
+                <li><strong>Neighbors</strong> suffer from the pollution (negative externality).</li>
+                <li><strong>If property rights belong to neighbors:</strong> The factory must pay the neighbors to pollute. The factory will only pay if the value of production exceeds the cost of pollution.</li>
+                <li><strong>If property rights belong to the factory:</strong> The neighbors must pay the factory to reduce pollution. The neighbors will only pay if the pollution cost exceeds the factory's cost of reducing pollution.</li>
+                <li><strong>Result:</strong> The efficient outcome is reached either way!</li>
+            </ul>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Limitations of the Coase Theorem:</strong>
+            <ul>
+                <li><strong>High transaction costs:</strong> If many people are affected, bargaining is expensive and difficult.</li>
+                <li><strong>Free-rider problems:</strong> People might try to benefit from the negotiation without contributing.</li>
+                <li><strong>Information problems:</strong> Parties may not know the true costs and benefits.</li>
+                <li><strong>Strategic behavior:</strong> Parties may hold out for a better deal.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CONCEPT 5: PIGOUVIAN TAX -->
+    <div class="card">
+        <h3>🔹 Pigouvian Tax</h3>
+        <p><strong>Definition:</strong> A Pigouvian tax is a tax on a good or activity that generates <strong>negative externalities</strong>. The tax is set equal to the <strong>external cost</strong> per unit, which internalizes the externality and leads to the socially optimal outcome.</p>
+
+        <div class="formula-box">Pigouvian Tax = External Cost per Unit</div>
+
+        <div class="highlight-box">
+            <strong>Real-World Example: Carbon Tax</strong><br>
+            Burning fossil fuels releases CO₂, causing climate change. A carbon tax charges emitters for each ton of CO₂ released. This internalizes the climate cost, making fossil fuels more expensive and encouraging cleaner alternatives.
+        </div>
+
+        <h4>How a Pigouvian Tax Works</h4>
+        <ul>
+            <li>The tax adds to the firm's private cost, shifting the supply curve <strong>up</strong> (or left).</li>
+            <li>The new equilibrium quantity is the <strong>socially optimal quantity</strong>.</li>
+            <li>The tax revenue can be used to fund public goods or reduce other taxes.</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Example: Garbage Tax (Pay-per-Bag)</strong><br>
+            Many cities charge households for each bag of garbage they throw away. This tax internalizes the cost of waste disposal, encouraging households to produce less waste and recycle more.
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> A Pigouvian tax is different from other taxes because its purpose is to <strong>correct a market failure</strong>, not just to raise revenue. The optimal tax rate equals the external cost at the socially optimal quantity.</div>
+    </div>
+
+    <!-- CONCEPT 6: REAL-WORLD EXAMPLES -->
+    <div class="card">
+        <h3>🔹 Real-World Examples</h3>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>1. Traffic Congestion</h4>
+            <ul>
+                <li><strong>Problem:</strong> Each driver ignores the delay they cause for other drivers during rush hour.</li>
+                <li><strong>Negative externality:</strong> More cars on the road → longer travel times for everyone.</li>
+                <li><strong>Solution:</strong> Congestion pricing (e.g., London's congestion charge, Singapore's ERP system). Drivers pay a fee to enter busy areas during peak hours.</li>
+                <li><strong>Result:</strong> Fewer cars during peak times, faster travel, and revenue for public transportation.</li>
+            </ul>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>2. Oklahoma Earthquakes</h4>
+            <ul>
+                <li><strong>Problem:</strong> Wastewater injection from oil and gas drilling caused a dramatic increase in earthquakes in Oklahoma.</li>
+                <li><strong>Negative externality:</strong> The drilling companies didn't pay for the damage caused by earthquakes.</li>
+                <li><strong>Solution:</strong> Regulation limiting wastewater injection volumes.</li>
+                <li><strong>Result:</strong> Earthquake frequency decreased after regulations were implemented.</li>
+            </ul>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+            <h4>3. Coffee Market Numerical Example</h4>
+            <ul>
+                <li><strong>Demand:</strong> P = 10 − Q (represents willingness to pay)</li>
+                <li><strong>Supply:</strong> P = Q (represents marginal private cost)</li>
+                <li><strong>External cost:</strong> 2 per unit (e.g., pollution from coffee production)</li>
+                <li><strong>Market equilibrium:</strong> Q = 5, P = 5</li>
+                <li><strong>Social optimum:</strong> Q = 4, P = 6</li>
+                <li><strong>Optimal Pigouvian tax:</strong> 2 per unit</li>
+            </ul>
+            <p><strong>Calculation:</strong> Set demand = supply + tax: 10 − Q = Q + 2 → 8 = 2Q → Q = 4. Price = 6. Tax revenue = 2 × 4 = 8.</p>
+        </div>
+
+        <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem;">
+            <h4>4. Glyphosate and Health Concerns</h4>
+            <ul>
+                <li><strong>Problem:</strong> Glyphosate (a herbicide) may have negative health effects on farmers and nearby communities.</li>
+                <li><strong>Negative externality:</strong> The health costs are not reflected in the price of glyphosate.</li>
+                <li><strong>Debate:</strong> Should glyphosate be banned, taxed, or regulated?</li>
+                <li><strong>Policy options:</strong> Tax on glyphosate, restrictions on use, or subsidies for organic alternatives.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- FORMULAS -->
+    <div class="card">
+        <h3>🧮 Key Formulas</h3>
+
+        <div class="formula-box">MSC = MPC + External Cost</div>
+        <div class="formula-box">MSB = MPB + External Benefit</div>
+        <div class="formula-box">Pigouvian Tax = External Cost per Unit</div>
+        <div class="formula-box">Pigouvian Subsidy = External Benefit per Unit</div>
+        <div class="formula-box">Social Optimum: MSB = MSC</div>
+        <div class="formula-box">Deadweight Loss = ½ × (Q<sub>Market</sub> − Q<sub>Optimal</sub>) × (P<sub>External</sub>)</div>
+    </div>
+
+    <!-- EXAM SCENARIOS -->
+    <div class="card">
+        <h3>📝 Exam Scenarios & Problem-Solving</h3>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 1: Negative Externality Analysis</h4>
+            <p><strong>Scenario:</strong> A factory produces chemicals with MPC = 10 + Q, MSB = 60 − 0.5Q, and external cost = 2 per unit. Find the market equilibrium and social optimum.</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Market equilibrium: Set MSB = MPC → 60 − 0.5Q = 10 + Q → 50 = 1.5Q → Q<sub>M</sub> = 33.33</li>
+                <li>Social optimum: Set MSB = MSC → MSC = MPC + 2 = 12 + Q → 60 − 0.5Q = 12 + Q → 48 = 1.5Q → Q<sub>Opt</sub> = 32</li>
+                <li>DWL = ½ × (33.33 − 32) × 2 = 1.33</li>
+            </ul>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 2: Coase Theorem Application</h4>
+            <p><strong>Scenario:</strong> A farmer's bees pollinate a neighboring orchard. The orchard owner values pollination at $10,000/year. The bee-keeper can produce more honey with an additional hive costing $3,000/year. What happens?</p>
+            <p><strong>Solution:</strong> The orchard owner should pay the bee-keeper $3,000−$10,000 to add the hive. Both benefit. If property rights are well-defined and transaction costs are low, this solution will emerge through private bargaining.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 3: Pigouvian Tax</h4>
+            <p><strong>Scenario:</strong> Demand: Q = 100 − 2P, Supply: Q = 20 + 3P, external cost = 5 per unit. Find the optimal tax and new equilibrium.</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Market equilibrium: 100 − 2P = 20 + 3P → 80 = 5P → P<sub>M</sub> = 16, Q<sub>M</sub> = 68</li>
+                <li>Inverse demand: P = 50 − 0.5Q, Inverse supply: P = (Q − 20)/3</li>
+                <li>Social optimum: 50 − 0.5Q = (Q − 20)/3 + 5 → 50 − 0.5Q = (Q − 5)/3 → 150 − 1.5Q = Q − 5 → 155 = 2.5Q → Q<sub>Opt</sub> = 62</li>
+                <li>Optimal tax = 5, P<sub>D</sub> = 50 − 0.5(62) = 19, P<sub>S</sub> = 19 − 5 = 14</li>
+            </ul>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0;">
+            <h4>Scenario 4: Positive Externality</h4>
+            <p><strong>Scenario:</strong> Flu vaccinations have MPB = 50 − Q, MC = 10 + 0.5Q, external benefit = 10 per vaccination. Find the market equilibrium and social optimum.</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Market equilibrium: 50 − Q = 10 + 0.5Q → 40 = 1.5Q → Q<sub>M</sub> = 26.67</li>
+                <li>Social optimum: MSB = MPB + 10 = 60 − Q → 60 − Q = 10 + 0.5Q → 50 = 1.5Q → Q<sub>Opt</sub> = 33.33</li>
+                <li>Optimal subsidy = 10</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- HIGH-YIELD EXAM FOCUS -->
+    <div class="card">
+        <h3>⚡ High-Yield Exam Focus</h3>
+
+        <h4>Memorization Checklist</h4>
+        <div class="grid-2">
+            <ul>
+                <li>□ Externality</li>
+                <li>□ Negative Externality</li>
+                <li>□ Positive Externality</li>
+                <li>□ Marginal Social Cost (MSC)</li>
+                <li>□ Marginal Private Cost (MPC)</li>
+                <li>□ Marginal Social Benefit (MSB)</li>
+                <li>□ Marginal Private Benefit (MPB)</li>
+                <li>□ External Cost / Benefit</li>
+            </ul>
+            <ul>
+                <li>□ Coase Theorem</li>
+                <li>□ Pigouvian Tax</li>
+                <li>□ Pigouvian Subsidy</li>
+                <li>□ Market Failure</li>
+                <li>□ Overproduction / Underproduction</li>
+                <li>□ Social Optimum</li>
+                <li>□ Transaction Costs</li>
+                <li>□ Deadweight Loss</li>
+            </ul>
+        </div>
+
+        <h4>Common Exam Traps</h4>
+        <ul>
+            <li><strong>Confusing Private vs. Social Costs:</strong> Private costs are borne by the producer; social costs include external costs. MSC = MPC + external cost.</li>
+            <li><strong>Confusing Private vs. Social Benefits:</strong> Private benefits are enjoyed by the consumer; social benefits include external benefits. MSB = MPB + external benefit.</li>
+            <li><strong>Coase Theorem Limitations:</strong> The Coase theorem only works when property rights are clear and transaction costs are low. When many people are affected, the theorem breaks down.</li>
+            <li><strong>Pigouvian Tax vs. Regulation:</strong> A Pigouvian tax incentivizes firms to reduce pollution up to the point where the cost of reduction equals the tax. Regulation sets a fixed limit.</li>
+            <li><strong>Overproduction vs. Underproduction:</strong> Negative externalities → overproduction. Positive externalities → underproduction.</li>
+        </ul>
+
+        <h4>The "If This, Then That" Logic</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then...</th></tr>
+                <tr><td>Negative externality exists</td><td>MSC > MPC → Overproduction → DWL</td></tr>
+                <tr><td>Positive externality exists</td><td>MSB > MPB → Underproduction → DWL</td></tr>
+                <tr><td>Government imposes Pigouvian tax</td><td>Firms internalize the external cost → Social optimum achieved</td></tr>
+                <tr><td>Government provides Pigouvian subsidy</td><td>Consumers internalize the external benefit → Social optimum achieved</td></tr>
+                <tr><td>Property rights are clear & transaction costs are low</td><td>Coase theorem applies → Private bargaining leads to efficiency</td></tr>
+                <tr><td>Many people are affected by an externality</td><td>Coase theorem fails → Government intervention needed</td></tr>
+            </table>
+        </div>
+
+        <h4>Quick Reference: Externalities Summary</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Type</th><th>Example</th><th>Problem</th><th>Solution</th></tr>
+                <tr><td>Negative Production</td><td>Factory pollution</td><td>Overproduction</td><td>Pigouvian Tax</td></tr>
+                <tr><td>Negative Consumption</td><td>Traffic congestion</td><td>Overconsumption</td><td>Congestion charge</td></tr>
+                <tr><td>Positive Production</td><td>R&D knowledge</td><td>Underproduction</td><td>Subsidy</td></tr>
+                <tr><td>Positive Consumption</td><td>Vaccinations</td><td>Underconsumption</td><td>Subsidy / Public provision</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- PRACTICE QUESTIONS -->
+    <div class="card">
+        <h3>📝 Practice Questions</h3>
+
+        <div class="question-block" id="q1">
+            <div class="q-text">Q1: A negative externality leads to:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) Underproduction</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="B"><span>B) Overproduction</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="C"><span>C) Efficient production</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) No market failure</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>A negative externality leads to overproduction because the producer doesn't pay for the cost imposed on others. The market produces too much at too low a price.</div>
+        </div>
+
+        <div class="question-block" id="q2">
+            <div class="q-text">Q2: The Coase theorem states that:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q2" value="A"><span>A) Government intervention is always necessary</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="B"><span>B) Private bargaining can solve externalities if property rights are clear and transaction costs are low</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) Taxes always reduce deadweight loss</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="D"><span>D) Externalities cannot be solved</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>The Coase theorem states that if property rights are well-defined and transaction costs are low, private bargaining will lead to the efficient outcome regardless of who holds the property rights.</div>
+        </div>
+
+        <div class="question-block" id="q3">
+            <div class="q-text">Q3: A Pigouvian tax is set equal to:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A"><span>A) The marginal private cost</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="B"><span>B) The external cost per unit</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="C"><span>C) The marginal social cost</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="D"><span>D) The market price</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>A Pigouvian tax is set equal to the external cost per unit. This internalizes the negative externality and leads to the socially optimal outcome.</div>
+        </div>
+
+        <div class="question-block" id="q4">
+            <div class="q-text">Q4: A positive externality leads to:</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="A"><span>A) Underproduction</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="B"><span>B) Overproduction</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="C"><span>C) Efficient production</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="D"><span>D) No market failure</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4', 'A')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: A</strong><br>A positive externality leads to underproduction because the consumer doesn't receive the full benefit to society. The market produces too little at too high a price.</div>
+        </div>
+
+        <div class="question-block" id="q5">
+            <div class="q-text">Q5: Traffic congestion is an example of:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A"><span>A) Positive production externality</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="B"><span>B) Negative production externality</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="C"><span>C) Negative consumption externality</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="D"><span>D) Positive consumption externality</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5', 'C')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: C</strong><br>Traffic congestion is a negative consumption externality. Each driver ignores the delay they cause for others, leading to too many cars on the road during peak times.</div>
+        </div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="card">
+        <h3>📖 Glossary</h3>
+        <div class="glossary-term"><dt>Externality</dt><dd>An uncompensated impact of one person's actions on another's well-being.</dd></div>
+        <div class="glossary-term"><dt>Negative Externality</dt><dd>An externality that imposes a cost on others.</dd></div>
+        <div class="glossary-term"><dt>Positive Externality</dt><dd>An externality that provides a benefit to others.</dd></div>
+        <div class="glossary-term"><dt>Marginal Social Cost (MSC)</dt><dd>The total cost to society of producing one more unit = MPC + external cost.</dd></div>
+        <div class="glossary-term"><dt>Marginal Private Cost (MPC)</dt><dd>The cost to the producer of producing one more unit.</dd></div>
+        <div class="glossary-term"><dt>Marginal Social Benefit (MSB)</dt><dd>The total benefit to society of consuming one more unit = MPB + external benefit.</dd></div>
+        <div class="glossary-term"><dt>Marginal Private Benefit (MPB)</dt><dd>The benefit to the consumer of consuming one more unit.</dd></div>
+        <div class="glossary-term"><dt>Coase Theorem</dt><dd>Private bargaining leads to efficiency if property rights are clear and transaction costs are low.</dd></div>
+        <div class="glossary-term"><dt>Pigouvian Tax</dt><dd>A tax equal to the external cost of a negative externality.</dd></div>
+        <div class="glossary-term"><dt>Pigouvian Subsidy</dt><dd>A subsidy equal to the external benefit of a positive externality.</dd></div>
+        <div class="glossary-term"><dt>Market Failure</dt><dd>When markets fail to allocate resources efficiently.</dd></div>
+        <div class="glossary-term"><dt>Transaction Costs</dt><dd>The costs of making an economic exchange.</dd></div>
+        <div class="glossary-term"><dt>Social Optimum</dt><dd>The quantity where MSB = MSC.</dd></div>
+        <div class="glossary-term"><dt>Deadweight Loss</dt><dd>The loss in total surplus from market inefficiency.</dd></div>
+        <div class="glossary-term"><dt>Overproduction</dt><dd>Producing more than the socially optimal quantity.</dd></div>
+        <div class="glossary-term"><dt>Underproduction</dt><dd>Producing less than the socially optimal quantity.</dd></div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+        function toggleAnswer(qId, correct) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

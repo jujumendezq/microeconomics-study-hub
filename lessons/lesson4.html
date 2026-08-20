@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 4: Welfare & Government Interventions</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+        .card li { margin: 0.3rem 0; line-height: 1.6; }
+        .highlight-box { background: #eef4fa; padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #1f6e8c; margin: 1rem 0; }
+        .formula-box { background: #e7edf6; padding: 0.8rem 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 500; color: #003153; display: inline-block; margin: 0.4rem 0; border: 1px solid #bfd3e6; }
+        .exam-trap { background: #fef6ee; border-left: 4px solid #c77d4a; padding: 0.8rem 1.5rem; border-radius: 10px; margin: 0.6rem 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .glossary-term { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #e8edf3; }
+        .glossary-term dt { font-weight: 600; color: #0b2b4a; min-width: 160px; }
+        .glossary-term dd { color: #334155; }
+        .graph-container { width: 100%; max-width: 850px; margin: 1.5rem auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 0.5rem; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .graph-container svg { width: 100%; height: auto; display: block; }
+        .graph-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; text-align: center; padding: 0.8rem 0 0.3rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .graph-subtitle { font-size: 0.85rem; color: #64748b; text-align: center; padding-bottom: 0.5rem; }
+        .graph-insight { padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 6px; margin-top: 0.5rem; }
+        .graph-insight p { font-size: 0.85rem; color: #1e293b; margin: 0; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .glossary-term { flex-direction: column; gap: 0.2rem; } .glossary-term dt { min-width: unset; } .graph-container { margin: 0.5rem 0; } .graph-container svg text { font-size: 10px !important; } .graph-title { font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Lesson 4: Welfare & Government</div>
+
+    <div class="page-header">
+        <h2>🏛️ 4. Welfare & Government Interventions</h2>
+        <div class="subtitle">Taxes, subsidies, and the efficiency-equity trade-off</div>
+    </div>
+
+    <!-- LEARNING OBJECTIVES -->
+    <div class="card">
+        <h3>📌 Learning Objectives</h3>
+        <ul>
+            <li>Analyze the impact of indirect taxes on market equilibrium</li>
+            <li>Explain the concept of tax incidence and who bears the burden of a tax</li>
+            <li>Use the elasticity rule to determine tax incidence (the more inelastic side bears more burden)</li>
+            <li>Calculate changes in consumer surplus, producer surplus, and government revenue from a tax</li>
+            <li>Identify the deadweight loss from a tax and explain why it occurs</li>
+            <li>Analyze subsidies as "negative taxes" and determine who benefits from them</li>
+            <li>Apply these concepts to real-world policies (e.g., tobacco taxes, surge pricing, rent control alternatives)</li>
+            <li>Understand why governments might intervene in efficient markets (equity vs. efficiency)</li>
+        </ul>
+    </div>
+
+    <!-- TOPIC INTRODUCTION -->
+    <div class="card">
+        <h3>🔹 Topic Introduction</h3>
+        <p>In the previous chapter, we learned how to measure economic welfare using consumer and producer surplus. We discovered that perfectly competitive markets <strong>maximize total surplus</strong>—they're efficient. But here's the million-dollar question: <strong>If markets are already efficient, why do governments ever intervene?</strong></p>
+
+        <p>The answer lies in the distinction between <strong>efficiency</strong> (making the pie as big as possible) and <strong>equity</strong> (dividing the pie fairly). Governments often intervene because they care about fairness, protecting vulnerable groups, or correcting perceived "unfair" prices—even if it means making the pie smaller.</p>
+
+        <div class="highlight-box">
+            <strong>In this chapter, we'll analyze two major types of government interventions:</strong>
+            <ul>
+                <li><strong>Taxes</strong> (indirect taxes on goods and services)</li>
+                <li><strong>Subsidies</strong> (government payments to encourage production or consumption)</li>
+            </ul>
+            <p>We'll use our surplus toolkit to measure who really bears the burden of a tax, how taxes create deadweight loss, why subsidies are like "negative taxes," and how elasticity determines who wins and who loses from government policy.</p>
+        </div>
+
+        <p><strong>Why should you care?</strong> This framework is essential for understanding real-world policy debates: Should we tax cigarettes? Should we subsidize renewable energy? Should we impose rent controls? After this chapter, you'll have the tools to analyze these questions like an economist.</p>
+    </div>
+
+    <!-- CONCEPT 1: INDIRECT TAXES -->
+    <div class="card">
+        <h3>🔹 Indirect Taxes</h3>
+        <p><strong>Definition:</strong> An indirect tax is a tax levied on the units of goods or services traded, <strong>independent of consumer income or revenue</strong>. Unlike income tax (a direct tax), an indirect tax is paid per unit of the good purchased or sold.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Examples:</strong>
+            <ul>
+                <li><strong>Sales tax/VAT:</strong> Paid by consumers on every purchase</li>
+                <li><strong>Excise tax:</strong> Tax on specific goods like cigarettes, alcohol, gasoline</li>
+                <li><strong>Customs duties:</strong> Tax on imported goods (paid by the importer)</li>
+                <li><strong>Motorway tolls:</strong> Pay-per-use road fees</li>
+                <li><strong>TV/radio license fees:</strong> Fixed fee per household</li>
+            </ul>
+        </div>
+
+        <h4>Why Governments Impose Indirect Taxes</h4>
+        <ol>
+            <li><strong>Raise revenue:</strong> To fund public goods and services</li>
+            <li><strong>Discourage consumption:</strong> "Sin taxes" on tobacco, alcohol, or pollution to reduce harmful behavior</li>
+        </ol>
+
+        <h4>Statutory vs. Economic Incidence</h4>
+        <p><strong>Key Insight:</strong> The person who <strong>physically pays</strong> the tax to the government is NOT necessarily the person who <strong>economically bears</strong> the burden.</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Concept</th><th>Definition</th><th>Example</th></tr>
+                <tr>
+                    <td><strong>Statutory Incidence</strong></td>
+                    <td>Who writes the check to the government?</td>
+                    <td>The seller pays the tax to the government</td>
+                </tr>
+                <tr>
+                    <td><strong>Economic Incidence</strong></td>
+                    <td>Who actually bears the burden (pays more or receives less)?</td>
+                    <td>Consumers pay higher prices; producers receive lower prices</td>
+                </tr>
+            </table>
+        </div>
+
+        <h4>The Tax Wedge</h4>
+        <p>A tax creates a gap (wedge) between:</p>
+        <ul>
+            <li><strong>Price paid by buyers (P<sub>B</sub>):</strong> What consumers pay</li>
+            <li><strong>Price received by sellers (P<sub>S</sub>):</strong> What producers receive</li>
+        </ul>
+        <div class="formula-box">Tax = P<sub>B</sub> − P<sub>S</sub></div>
+
+        <h4>Two Ways to Represent a Tax</h4>
+        <div class="grid-2">
+            <div>
+                <h4>Seller-Paid Tax (Supply Shifts Up)</h4>
+                <ul>
+                    <li>The tax is added to sellers' costs</li>
+                    <li>From buyers' perspective, the supply curve shifts UP by the tax amount</li>
+                    <li>The new "perceived supply" is higher</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Buyer-Paid Tax (Demand Shifts Down)</h4>
+                <ul>
+                    <li>Buyers must pay the tax in addition to the price</li>
+                    <li>From sellers' perspective, the demand curve shifts DOWN by the tax amount</li>
+                    <li>The new "perceived demand" is lower</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Critical Insight:</strong> The final outcome—the new equilibrium quantity, the price buyers pay, and the price sellers receive—is <strong>identical</strong> regardless of who legally pays the tax to the government. Only the statutory incidence differs; the <strong>economic incidence is the same</strong>.
+        </div>
+    </div>
+
+    <!-- CONCEPT 2: TAX INCIDENCE -->
+    <div class="card">
+        <h3>🔹 Tax Incidence</h3>
+        <p><strong>Definition:</strong> Tax incidence refers to who actually bears the economic burden of a tax—the reduction in welfare (surplus) experienced by buyers and sellers as a result of the tax.</p>
+
+        <div class="highlight-box" style="border-left-color: #c77d4a; background: #fef6ee;">
+            <strong style="font-size: 1.2rem;">📌 The Golden Rule of Tax Incidence</strong>
+            <p style="font-size: 1.1rem; margin-top: 0.3rem;"><strong>The burden of a tax falls most heavily on the side of the market that is MORE INELASTIC.</strong></p>
+        </div>
+
+        <h4>Why This Rule Works</h4>
+        <ul>
+            <li><strong>Elastic =</strong> Responsive to price changes. Can easily change behavior (buy less, sell less, etc.)</li>
+            <li><strong>Inelastic =</strong> Unresponsive to price changes. Cannot easily change behavior</li>
+            <li>The side that cannot "escape" the price change must bear the burden</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Think about it:</strong>
+            <ul>
+                <li>If you're a consumer and the price goes up, can you stop buying? If the good is a necessity (like insulin), no—you'll pay whatever it costs. The tax burden falls on <strong>you</strong>.</li>
+                <li>If you're a producer and the price you receive goes down, can you stop producing? If you have specialized equipment that can only produce one thing, no—you'll accept the lower price. The tax burden falls on <strong>you</strong>.</li>
+            </ul>
+        </div>
+
+        <h4>Case 1: Inelastic Demand (Demand steeper than Supply)</h4>
+        <p><strong>Observation:</strong></p>
+        <ul>
+            <li>Buyers face a <strong>large</strong> price increase (P<sub>B</sub> − P<sub>0</sub>)</li>
+            <li>Sellers face a <strong>small</strong> price decrease (P<sub>0</sub> − P<sub>S</sub>)</li>
+            <li><strong>Conclusion:</strong> Buyers bear most of the tax burden</li>
+        </ul>
+        <p><strong>Real-World Example:</strong> Cigarettes. Demand is inelastic because smokers are addicted. Even if producers pay the tax to the government, the burden falls mainly on consumers (smokers) who continue buying despite higher prices.</p>
+
+        <h4>Case 2: Inelastic Supply (Supply steeper than Demand)</h4>
+        <p><strong>Observation:</strong></p>
+        <ul>
+            <li>Buyers face a <strong>small</strong> price increase (P<sub>B</sub> − P<sub>0</sub>)</li>
+            <li>Sellers face a <strong>large</strong> price decrease (P<sub>0</sub> − P<sub>S</sub>)</li>
+            <li><strong>Conclusion:</strong> Sellers bear most of the tax burden</li>
+        </ul>
+        <p><strong>Real-World Example:</strong> Land in a fixed location (Manhattan). Landowners can't move the land, so any tax on land falls on them.</p>
+
+        <h4>Extreme Cases of Tax Incidence</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Situation</th><th>Who Bears Burden?</th><th>Why?</th></tr>
+                <tr><td>Perfectly Inelastic Demand</td><td>Consumers (100%)</td><td>Can't reduce quantity bought</td></tr>
+                <tr><td>Perfectly Inelastic Supply</td><td>Producers (100%)</td><td>Can't reduce quantity sold</td></tr>
+                <tr><td>Perfectly Elastic Demand</td><td>Producers (100%)</td><td>Consumers won't pay more</td></tr>
+                <tr><td>Perfectly Elastic Supply</td><td>Consumers (100%)</td><td>Producers won't accept less</td></tr>
+            </table>
+        </div>
+        <div class="exam-trap">⚠️ <strong>Memory trick:</strong> "The inelastic side gets crushed" — The side with less ability to adjust quantity bears the burden.</div>
+    </div>
+
+    <!-- GRAPH: TAX WELFARE ANALYSIS -->
+    <div class="card">
+        <h3>📈 Graph: Welfare Analysis of a Tax</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 1: Welfare Analysis of a Tax</div>
+            <div class="graph-subtitle">Consumer Surplus, Producer Surplus, Tax Revenue, and Deadweight Loss</div>
+            <svg viewBox="0 0 750 480" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="750" height="480" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="430"/>
+                    <line x1="80" y1="430" x2="700" y2="430"/>
+                    <line x1="80" y1="100" x2="700" y2="100"/>
+                    <line x1="80" y1="150" x2="700" y2="150"/>
+                    <line x1="80" y1="200" x2="700" y2="200"/>
+                    <line x1="80" y1="250" x2="700" y2="250"/>
+                    <line x1="80" y1="300" x2="700" y2="300"/>
+                    <line x1="80" y1="350" x2="700" y2="350"/>
+                    <line x1="80" y1="400" x2="700" y2="400"/>
+                    <line x1="150" y1="430" x2="150" y2="50"/>
+                    <line x1="220" y1="430" x2="220" y2="50"/>
+                    <line x1="290" y1="430" x2="290" y2="50"/>
+                    <line x1="360" y1="430" x2="360" y2="50"/>
+                    <line x1="430" y1="430" x2="430" y2="50"/>
+                    <line x1="500" y1="430" x2="500" y2="50"/>
+                    <line x1="570" y1="430" x2="570" y2="50"/>
+                    <line x1="640" y1="430" x2="640" y2="50"/>
+                </g>
+                <text x="390" y="460" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (Q)</text>
+                <text x="30" y="240" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 240)">Price (P)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="700,430 685,420 685,440" fill="#0b2b4a"/>
+                <line x1="100" y1="120" x2="700" y2="350" stroke="#dc2626" stroke-width="3" stroke-dasharray="8,4"/>
+                <text x="680" y="360" font-size="14" font-weight="700" fill="#dc2626">S₁</text>
+                <line x1="80" y1="430" x2="680" y2="80" stroke="#2563eb" stroke-width="3"/>
+                <text x="660" y="85" font-size="14" font-weight="700" fill="#2563eb">D</text>
+                <line x1="80" y1="80" x2="700" y2="310" stroke="#16a34a" stroke-width="3"/>
+                <text x="690" y="320" font-size="14" font-weight="700" fill="#16a34a">S₀</text>
+                <polygon points="80,430 80,190 290,190" fill="#93c5fd" fill-opacity="0.4" stroke="#3b82f6" stroke-width="1.5"/>
+                <text x="130" y="320" font-size="18" font-weight="700" fill="#1e40af">A</text>
+                <polygon points="80,190 290,190 290,310 80,310" fill="#fbbf24" fill-opacity="0.5" stroke="#d97706" stroke-width="1.5"/>
+                <text x="150" y="250" font-size="15" font-weight="700" fill="#92400e">B + C</text>
+                <text x="145" y="270" font-size="11" fill="#92400e">(Tax Revenue)</text>
+                <polygon points="290,190 430,260 290,310" fill="#ef4444" fill-opacity="0.4" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="330" y="255" font-size="16" font-weight="700" fill="#991b1b">DWL</text>
+                <polygon points="80,310 290,310 130,120" fill="#86efac" fill-opacity="0.4" stroke="#22c55e" stroke-width="1.5"/>
+                <text x="130" y="210" font-size="18" font-weight="700" fill="#166534">D</text>
+                <line x1="80" y1="190" x2="290" y2="190" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="60" y="195" font-size="13" font-weight="600" fill="#dc2626">P<sub>B</sub></text>
+                <line x1="80" y1="310" x2="290" y2="310" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="60" y="315" font-size="13" font-weight="600" fill="#dc2626">P<sub>S</sub></text>
+                <line x1="80" y1="260" x2="430" y2="260" stroke="#0b2b4a" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="55" y="265" font-size="13" font-weight="600" fill="#0b2b4a">P₀</text>
+                <line x1="290" y1="190" x2="290" y2="430" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="280" y="450" font-size="13" font-weight="600" fill="#dc2626">Q₁</text>
+                <line x1="430" y1="260" x2="430" y2="430" stroke="#0b2b4a" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="420" y="450" font-size="13" font-weight="600" fill="#0b2b4a">Q₀</text>
+                <rect x="470" y="370" width="200" height="100" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="390" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <rect x="480" y="398" width="15" height="10" fill="#93c5fd" fill-opacity="0.5" stroke="#3b82f6" stroke-width="1"/>
+                <text x="502" y="407" font-size="10" fill="#1e293b">A = Consumer Surplus</text>
+                <rect x="480" y="413" width="15" height="10" fill="#fbbf24" fill-opacity="0.5" stroke="#d97706" stroke-width="1"/>
+                <text x="502" y="422" font-size="10" fill="#1e293b">B+C = Tax Revenue</text>
+                <rect x="480" y="428" width="15" height="10" fill="#ef4444" fill-opacity="0.4" stroke="#dc2626" stroke-width="1"/>
+                <text x="502" y="437" font-size="10" fill="#1e293b">DWL = Deadweight Loss</text>
+                <rect x="480" y="443" width="15" height="10" fill="#86efac" fill-opacity="0.4" stroke="#22c55e" stroke-width="1"/>
+                <text x="502" y="452" font-size="10" fill="#1e293b">D = Producer Surplus</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> Tax creates a wedge between P<sub>B</sub> (price buyers pay) and P<sub>S</sub> (price sellers receive). Quantity falls from Q₀ to Q₁. Tax revenue (B+C) is a transfer; Deadweight Loss (DWL) is the true loss to society.</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 3: DEADWEIGHT LOSS -->
+    <div class="card">
+        <h3>🔹 Deadweight Loss (DWL)</h3>
+        <p><strong>Definition:</strong> Deadweight Loss is the <strong>net loss in total surplus</strong> resulting from a tax (or any other market intervention). It represents the value of mutually beneficial trades that do not occur because of the intervention.</p>
+
+        <h4>Why Does Deadweight Loss Occur?</h4>
+        <p><strong>The Key Insight:</strong> A tax creates a wedge between what buyers pay and what sellers receive. This wedge eliminates trades where:</p>
+        <ul>
+            <li>Buyer's willingness to pay is greater than seller's cost</li>
+            <li>BUT buyer's willingness to pay is less than seller's cost + tax</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Example:</strong>
+            <ul>
+                <li>Willingness to pay = $100</li>
+                <li>Seller's cost = $60</li>
+                <li>Tax = $30</li>
+                <li>Buyer pays $90, seller receives $60 → <strong>Trade happens!</strong> (Net benefit = $10)</li>
+                <li>BUT if tax = $50: Buyer pays $110, seller receives $60 → <strong>No trade!</strong> (Even though WTP > MC)</li>
+            </ul>
+        </div>
+
+        <p><strong>Important Note:</strong> DWL is <strong>not</strong> just the tax revenue going to the government. The revenue (B + C) is a <strong>transfer</strong>, not a loss. The DWL (E + F) is surplus that <strong>disappears entirely</strong> from society.</p>
+
+        <div class="formula-box">DWL = E + F = ½ × (Q₀ − Q₁) × (P<sub>B</sub> − P<sub>S</sub>)</div>
+        <div class="formula-box">DWL = ½ × (Change in Quantity) × Tax per unit</div>
+
+        <h4>What Determines the Size of Deadweight Loss?</h4>
+        <ul>
+            <li><strong>Size of the tax:</strong> Larger taxes → larger DWL (increases with the square of the tax rate)</li>
+            <li><strong>Elasticities:</strong> More elastic supply and demand → larger DWL (more trades are discouraged)</li>
+            <li><strong>Size of the market:</strong> Larger markets → larger DWL</li>
+        </ul>
+
+        <div class="exam-trap">⚠️ <strong>Key insight:</strong> Whenever you see a policy that moves the market away from equilibrium, you should ask: "What's the deadweight loss?"</div>
+    </div>
+
+    <!-- CONCEPT 4: SUBSIDIES -->
+    <div class="card">
+        <h3>🔹 Subsidies as Negative Taxes</h3>
+        <p><strong>Definition:</strong> A subsidy is a government payment to either buyers or sellers to encourage the consumption or production of a good. It can be analyzed as a <strong>negative tax</strong>.</p>
+
+        <div class="grid-2">
+            <div>
+                <h4>Tax</h4>
+                <ul>
+                    <li>P<sub>B</sub> > P<sub>S</sub></li>
+                    <li>Quantity <strong>decreases</strong></li>
+                    <li>Government <strong>collects</strong> revenue</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Subsidy</h4>
+                <ul>
+                    <li>P<sub>S</sub> > P<sub>B</sub></li>
+                    <li>Quantity <strong>increases</strong></li>
+                    <li>Government <strong>incurs</strong> cost</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="formula-box">Subsidy = P<sub>S</sub> − P<sub>B</sub></div>
+        <div class="formula-box">Government Cost = Subsidy per unit × Q₁</div>
+
+        <h4>Subsidy Incidence</h4>
+        <div class="highlight-box" style="border-left-color: #c77d4a; background: #fef6ee;">
+            <strong>📌 The Golden Rule for Subsidies:</strong>
+            <p style="font-size: 1.1rem; margin-top: 0.3rem;"><strong>The benefit of a subsidy is captured mostly by the side of the market that is MORE INELASTIC.</strong></p>
+        </div>
+
+        <p><strong>Examples:</strong></p>
+        <ul>
+            <li>If demand is inelastic and supply is elastic → Consumers benefit more (they get lower prices)</li>
+            <li>If supply is inelastic and demand is elastic → Producers benefit more (they get higher prices)</li>
+        </ul>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> Unlike taxes (which create DWL), subsidies create a cost to taxpayers that must be weighed against the benefits. In a perfectly competitive market, a subsidy also creates inefficiency (DWL) because it encourages trades where WTP < MC.</div>
+    </div>
+
+    <!-- CONCEPT 5: WHY GOVERNMENTS INTERVENE -->
+    <div class="card">
+        <h3>🔹 Why Governments Intervene in Efficient Markets</h3>
+        <p>If perfectly competitive markets are efficient (maximize total surplus), why do governments intervene with taxes, subsidies, price controls, and other policies?</p>
+
+        <h4>The Main Reasons</h4>
+        <ol>
+            <li><strong>Equity/Fairness Considerations:</strong> The market might be efficient but produce an unfair distribution. Example: Low-income households struggling with high housing costs → Rent control.</li>
+            <li><strong>Protecting Vulnerable Groups:</strong> Some goods are necessities (housing, food, healthcare). The market price might be "too high" for vulnerable populations.</li>
+            <li><strong>Correcting Market Failures:</strong> Externalities (pollution → tax pollution; education → subsidize education), public goods, imperfect information.</li>
+            <li><strong>Political Considerations:</strong> Governments may favor one side of the market. Interest groups may lobby for policies that benefit them.</li>
+            <li><strong>"Unsustainable" Prices:</strong> Very high interest rates in financial markets, very high drug prices for life-saving medicines.</li>
+        </ol>
+
+        <h4>The Efficiency-Equity Trade-off</h4>
+        <p><strong>Key Insight:</strong> Government interventions in efficient markets usually create deadweight loss (reduce efficiency) but may improve equity (fairness).</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Concept</th><th>Definition</th><th>Example</th></tr>
+                <tr><td><strong>Efficiency</strong></td><td>Size of the pie (maximizing total surplus)</td><td>Free market equilibrium</td></tr>
+                <tr><td><strong>Equity</strong></td><td>How the pie is divided (fairness)</td><td>Redistributive policies</td></tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Examples:</strong>
+            <ul>
+                <li><strong>Rent control:</strong> Makes housing more affordable (equity) but creates shortages (inefficiency)</li>
+                <li><strong>Minimum wage:</strong> Raises wages for workers (equity) but creates unemployment (inefficiency)</li>
+                <li><strong>Taxes on luxury goods:</strong> Redistribute income (equity) but create deadweight loss (inefficiency)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- FORMULAS -->
+    <div class="card">
+        <h3>🧮 Key Formulas</h3>
+
+        <div class="formula-box">Tax = P<sub>B</sub> − P<sub>S</sub></div>
+        <div class="formula-box">Government Revenue = Tax × Q₁</div>
+        <div class="formula-box">ΔCS = −[(P<sub>B</sub> − P<sub>0</sub>) × Q₁ + ½ × (Q₀ − Q₁) × (P<sub>B</sub> − P<sub>0</sub>)]</div>
+        <div class="formula-box">ΔPS = −[(P<sub>0</sub> − P<sub>S</sub>) × Q₁ + ½ × (Q₀ − Q₁) × (P<sub>0</sub> − P<sub>S</sub>)]</div>
+        <div class="formula-box">DWL = ½ × (Q₀ − Q₁) × (P<sub>B</sub> − P<sub>S</sub>)</div>
+        <div class="formula-box">Government Cost (Subsidy) = Subsidy per unit × Q₁</div>
+
+        <div class="highlight-box">
+            <strong>Step-by-Step Example:</strong><br>
+            Demand: Q<sub>D</sub> = 50 − 4P, Supply: Q<sub>S</sub> = 2P − 16, Tax = $2<br><br>
+            <strong>Initial equilibrium:</strong> 50 − 4P = 2P − 16 → P₀ = 11, Q₀ = 6<br><br>
+            <strong>With tax:</strong> P<sub>B</sub> = P<sub>S</sub> + 2<br>
+            50 − 4(P<sub>S</sub> + 2) = 2P<sub>S</sub> − 16 → P<sub>S</sub> = 9.67, P<sub>B</sub> = 11.67, Q₁ = 3.34<br><br>
+            <strong>Government Revenue:</strong> $2 × 3.34 = $6.68<br>
+            <strong>DWL:</strong> ½ × (6 − 3.34) × 2 = $2.66
+        </div>
+    </div>
+
+    <!-- EXAM SCENARIOS -->
+    <div class="card">
+        <h3>📝 Exam Scenarios & Problem-Solving</h3>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 1: Tax Incidence with Inelastic Demand</h4>
+            <p><strong>Scenario:</strong> The government imposes a $5 tax on cigarettes. The demand for cigarettes is relatively inelastic (consumers are addicted), while the supply is relatively elastic. Who bears most of the tax burden?</p>
+            <p><strong>Solution:</strong> Consumers bear most of the tax burden. The demand curve is steep (inelastic), so when the tax shifts the supply curve up, the price buyers pay increases significantly, while the price sellers receive decreases only slightly. This is why cigarette taxes are an effective way to raise revenue—smokers continue buying despite higher prices.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 2: Complete Welfare Analysis</h4>
+            <p><strong>Scenario:</strong> Consider a market with Q<sub>D</sub> = 50 − 4P and Q<sub>S</sub> = 2P − 16. The government imposes a $6 per unit tax. With T = 6, what happens?</p>
+            <p><strong>Solution:</strong> The tax of $6 per unit is so high that it exceeds the surplus from trade. The market shuts down completely (Q₁ = 0). Government Revenue = $6 × 0 = $0. Deadweight Loss = Initial Total Surplus (all trades are lost). Initial CS = ½ × 6 × (12.5 − 11) = 4.5. Initial PS = ½ × 6 × (11 − 8) = 9. Total Surplus = 13.5. With Q₁ = 0, total surplus after tax = 0. DWL = 13.5.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 3: Tax Incidence and Elasticity</h4>
+            <p><strong>Scenario:</strong> In two different markets, a tax of $5 is imposed. In Market A, demand is highly elastic and supply is highly inelastic. In Market B, demand is highly inelastic and supply is highly elastic. In which market do consumers bear more of the tax burden?</p>
+            <p><strong>Solution:</strong> Market B (consumers bear more). The burden falls more heavily on the side that is less elastic (more inelastic). In Market B, demand is inelastic → consumers bear more. In Market A, supply is inelastic → producers bear more.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0;">
+            <h4>Scenario 4: Subsidy Analysis</h4>
+            <p><strong>Scenario:</strong> The government wants to encourage the consumption of electric vehicles and decides to give a subsidy of $4,000 per vehicle to buyers. How does this affect the market? Who benefits most?</p>
+            <p><strong>Solution:</strong> The subsidy shifts the supply curve down (or demand up), increasing the quantity traded from Q₀ to Q₁. Buyers pay less (P<sub>B</sub>) and sellers receive more (P<sub>S</sub>). If demand is inelastic, consumers benefit most—the price they pay decreases significantly. The cost to the government is the subsidy amount ($4,000) multiplied by the new quantity traded (Q₁).</p>
+        </div>
+    </div>
+
+    <!-- HIGH-YIELD EXAM FOCUS -->
+    <div class="card">
+        <h3>⚡ High-Yield Exam Focus</h3>
+
+        <h4>Memorization Checklist</h4>
+        <div class="grid-2">
+            <ul>
+                <li>□ Indirect Tax</li>
+                <li>□ Tax Wedge</li>
+                <li>□ Tax Incidence</li>
+                <li>□ Statutory vs. Economic Incidence</li>
+                <li>□ Price Paid by Buyers (P<sub>B</sub>)</li>
+                <li>□ Price Received by Sellers (P<sub>S</sub>)</li>
+                <li>□ Government Revenue</li>
+            </ul>
+            <ul>
+                <li>□ Deadweight Loss (DWL)</li>
+                <li>□ Subsidy (Negative Tax)</li>
+                <li>□ Efficiency vs. Equity</li>
+                <li>□ Transfer</li>
+                <li>□ Elasticity Rule</li>
+                <li>□ Engel's Laws</li>
+            </ul>
+        </div>
+
+        <h4>Common Exam Traps</h4>
+        <ul>
+            <li><strong>Confusing who pays with who bears burden:</strong> Statutory vs. economic incidence. A tax on sellers can still be mostly borne by consumers if demand is inelastic.</li>
+            <li><strong>Forgetting tax incidence is symmetric:</strong> Whether buyers or sellers pay the tax, the outcome is the same—same P<sub>B</sub>, P<sub>S</sub>, and Q₁.</li>
+            <li><strong>Forgetting the two parts of surplus changes:</strong> Consumer surplus loss = higher price on remaining units + lost consumption from foregone trades.</li>
+            <li><strong>Confusing DWL with tax revenue:</strong> Tax revenue (B + C) is a transfer; DWL (E + F) is the true loss to society.</li>
+            <li><strong>Using Q₀ instead of Q₁:</strong> Government revenue uses Q₁ (quantity after tax), not Q₀.</li>
+            <li><strong>Forgetting subsidies have a cost:</strong> The government must pay for subsidies—taxpayers bear the cost.</li>
+            <li><strong>Confusing price controls with taxes/subsidies:</strong> Price controls limit the price itself; taxes/subsidies create a wedge.</li>
+        </ul>
+
+        <h4>The "If This, Then That" Logic</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then...</th></tr>
+                <tr><td>Demand is more inelastic than supply</td><td>Consumers bear more of the tax burden</td></tr>
+                <tr><td>Supply is more inelastic than demand</td><td>Producers bear more of the tax burden</td></tr>
+                <tr><td>Demand is perfectly inelastic</td><td>Consumers bear 100% of the tax</td></tr>
+                <tr><td>Supply is perfectly inelastic</td><td>Producers bear 100% of the tax</td></tr>
+                <tr><td>Demand is perfectly elastic</td><td>Producers bear 100% of the tax</td></tr>
+                <tr><td>Supply is perfectly elastic</td><td>Consumers bear 100% of the tax</td></tr>
+                <tr><td>Government imposes a tax</td><td>Quantity decreases → Wedge between P<sub>B</sub> and P<sub>S</sub> → DWL</td></tr>
+                <tr><td>Government introduces a subsidy</td><td>Quantity increases → P<sub>S</sub> > P<sub>B</sub> → Government cost</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- PRACTICE QUESTIONS -->
+    <div class="card">
+        <h3>📝 Practice Questions</h3>
+
+        <div class="question-block" id="q1">
+            <div class="q-text">Q1: Which side of the market bears more of a tax burden when demand is inelastic?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) Producers bear more burden</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="B"><span>B) Consumers bear more burden</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="C"><span>C) Both bear equally</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) It depends on who pays the tax</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>The more inelastic side bears more burden. When demand is inelastic, consumers cannot easily reduce quantity demanded when prices rise, so they bear more of the tax burden.</div>
+        </div>
+
+        <div class="question-block" id="q2">
+            <div class="q-text">Q2: A tax is imposed on a good. Buyers pay $12 and sellers receive $8. What is the tax per unit?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="A"><span>A) $4</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="B"><span>B) $8</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) $12</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="D"><span>D) $20</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2', 'A')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: A</strong><br>Tax = P<sub>B</sub> − P<sub>S</sub> = $12 − $8 = <strong>$4</strong></div>
+        </div>
+
+        <div class="question-block" id="q3">
+            <div class="q-text">Q3: In a tax graph, which areas represent deadweight loss?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A"><span>A) The rectangle between P<sub>B</sub> and P<sub>S</sub></span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="B"><span>B) The triangles between demand and supply from Q₁ to Q₀</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="C"><span>C) The area below demand and above P<sub>B</sub></span></label>
+                <label class="option-label"><input type="radio" name="q3" value="D"><span>D) The area above supply and below P<sub>S</sub></span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>Deadweight loss is represented by the triangles between the demand and supply curves from the new quantity (Q₁) to the original quantity (Q₀). These are the trades that don't happen because of the tax.</div>
+        </div>
+
+        <div class="question-block" id="q4">
+            <div class="q-text">Q4: If supply is perfectly inelastic, who bears 100% of a tax burden?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q4" value="A"><span>A) Consumers</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="B"><span>B) Producers</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="C"><span>C) Both equally</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="D"><span>D) The government</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>When supply is perfectly inelastic (vertical supply curve), producers cannot reduce quantity supplied. The price they receive falls by the full tax amount, so they bear 100% of the burden.</div>
+        </div>
+
+        <div class="question-block" id="q5">
+            <div class="q-text">Q5: Given Q<sub>D</sub> = 100 − 2P and Q<sub>S</sub> = 20 + 2P, with a $4 tax, what is the deadweight loss?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A"><span>A) $4</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="B"><span>B) $8</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="C"><span>C) $16</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="D"><span>D) $32</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>Initial: 100 − 2P = 20 + 2P → P₀ = 20, Q₀ = 60<br>With tax: P<sub>B</sub> = P<sub>S</sub> + 4<br>100 − 2(P<sub>S</sub> + 4) = 20 + 2P<sub>S</sub> → P<sub>S</sub> = 18, P<sub>B</sub> = 22, Q₁ = 56<br>DWL = ½ × (60 − 56) × 4 = <strong>$8</strong></div>
+        </div>
+
+        <div class="question-block" id="q6">
+            <div class="q-text">Q6: A subsidy is introduced on a good. What happens to the quantity traded?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q6" value="A"><span>A) Quantity decreases</span></label>
+                <label class="option-label"><input type="radio" name="q6" value="B"><span>B) Quantity stays the same</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q6" value="C"><span>C) Quantity increases</span></label>
+                <label class="option-label"><input type="radio" name="q6" value="D"><span>D) It depends on who receives the subsidy</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q6', 'C')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: C</strong><br>A subsidy is a negative tax. It creates a wedge where sellers receive more than buyers pay, encouraging more trades. Quantity <strong>increases</strong> beyond the equilibrium level.</div>
+        </div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="card">
+        <h3>📖 Glossary</h3>
+        <div class="glossary-term"><dt>Indirect Tax</dt><dd>A tax on units of goods or services, not dependent on income.</dd></div>
+        <div class="glossary-term"><dt>Tax Wedge</dt><dd>The gap between what buyers pay (P<sub>B</sub>) and what sellers receive (P<sub>S</sub>).</dd></div>
+        <div class="glossary-term"><dt>Tax Incidence</dt><dd>Who actually bears the economic burden of a tax.</dd></div>
+        <div class="glossary-term"><dt>Statutory Incidence</dt><dd>Who legally pays the tax to the government.</dd></div>
+        <div class="glossary-term"><dt>Economic Incidence</dt><dd>Who experiences the reduction in surplus from the tax.</dd></div>
+        <div class="glossary-term"><dt>Deadweight Loss (DWL)</dt><dd>The net loss in total surplus from a market intervention.</dd></div>
+        <div class="glossary-term"><dt>Subsidy</dt><dd>Government payment to encourage production or consumption; a negative tax.</dd></div>
+        <div class="glossary-term"><dt>Efficiency</dt><dd>Maximizing total surplus; making the pie as big as possible.</dd></div>
+        <div class="glossary-term"><dt>Equity</dt><dd>Fairness in the distribution of resources; how the pie is divided.</dd></div>
+        <div class="glossary-term"><dt>Transfer</dt><dd>A payment from one group to another with no net loss to society.</dd></div>
+        <div class="glossary-term"><dt>Elasticity Rule</dt><dd>The more inelastic side bears more burden (taxes) or captures more benefit (subsidies).</dd></div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+        function toggleAnswer(qId, correct) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 1: Methodology</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            padding: 2rem 2.5rem;
+            line-height: 1.6;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .page-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b2b4a;
+        }
+
+        .page-header .subtitle {
+            color: #64748b;
+            font-size: 1rem;
+            margin-top: 0.2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e8edf3;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0b2b4a;
+            margin-bottom: 0.8rem;
+        }
+
+        .card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e4b6e;
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        .card ul,
+        .card ol {
+            padding-left: 1.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .card li {
+            margin: 0.3rem 0;
+            line-height: 1.6;
+        }
+
+        .highlight-box {
+            background: #eef4fa;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid #1f6e8c;
+            margin: 1rem 0;
+        }
+
+        .formula-box {
+            background: #e7edf6;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #003153;
+            display: inline-block;
+            margin: 0.4rem 0;
+            border: 1px solid #bfd3e6;
+        }
+
+        .exam-trap {
+            background: #fef6ee;
+            border-left: 4px solid #c77d4a;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            margin: 0.6rem 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .table-wrap table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .table-wrap th,
+        .table-wrap td {
+            border: 1px solid #dce2ec;
+            padding: 0.6rem 0.8rem;
+            text-align: left;
+        }
+
+        .table-wrap th {
+            background: #eef4fa;
+            font-weight: 600;
+        }
+
+        .breadcrumb {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: #0b2b4a;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .question-block {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .question-block .q-text {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            color: #0b2b4a;
+        }
+
+        .question-block .options {
+            list-style: none;
+            padding: 0;
+            margin: 0.4rem 0 0.8rem 0;
+        }
+
+        .question-block .option-label {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.4rem 0.8rem;
+            margin: 0.2rem 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            user-select: none;
+        }
+
+        .question-block .option-label:hover {
+            background: #eef2f6;
+        }
+
+        .question-block .option-label input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            flex-shrink: 0;
+            accent-color: #0b2b4a;
+        }
+
+        .question-block .option-label span {
+            font-size: 0.95rem;
+            color: #1e293b;
+            cursor: pointer;
+        }
+
+        .question-block .option-label.selected {
+            background: #dbeafe;
+            border-color: #3b82f6;
+        }
+
+        .question-block .option-label.correct-answer {
+            background: #dcfce7;
+            border-color: #22c55e;
+        }
+
+        .question-block .option-label.correct-answer span::after {
+            content: " ✓";
+            color: #22c55e;
+            font-weight: 700;
+        }
+
+        .question-block .option-label.wrong-answer {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        .question-block .option-label.wrong-answer span::after {
+            content: " ✗";
+            color: #ef4444;
+            font-weight: 700;
+        }
+
+        .question-block .option-label.disabled {
+            cursor: default;
+            opacity: 0.7;
+        }
+
+        .question-block .option-label.disabled:hover {
+            background: transparent;
+        }
+
+        .question-block .option-label.disabled input[type="radio"] {
+            cursor: default;
+        }
+
+        .question-block .answer-area {
+            margin-top: 0.8rem;
+            padding: 0.8rem 1rem;
+            background: #f1f5f9;
+            border-radius: 8px;
+            display: none;
+            border-left: 3px solid #22c55e;
+        }
+
+        .question-block .answer-area.show {
+            display: block;
+        }
+
+        .question-block .answer-area strong {
+            color: #15803d;
+        }
+
+        .btn-show-answer {
+            background: #0b2b4a;
+            color: white;
+            border: none;
+            padding: 0.4rem 1.2rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-show-answer:hover {
+            background: #1a4a6a;
+        }
+
+        .btn-show-answer.active {
+            background: #15803d;
+        }
+
+        .btn-show-answer.active:hover {
+            background: #166534;
+        }
+
+        .glossary-term {
+            display: flex;
+            gap: 0.8rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #e8edf3;
+        }
+
+        .glossary-term dt {
+            font-weight: 600;
+            color: #0b2b4a;
+            min-width: 160px;
+        }
+
+        .glossary-term dd {
+            color: #334155;
+        }
+
+        .graph-container {
+            width: 100%;
+            max-width: 850px;
+            margin: 1.5rem auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .graph-container svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .graph-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0b2b4a;
+            text-align: center;
+            padding: 0.8rem 0 0.3rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 0.5rem;
+        }
+
+        .graph-subtitle {
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: center;
+            padding-bottom: 0.5rem;
+        }
+
+        .graph-insight {
+            padding: 0.5rem 1rem;
+            background: #f1f5f9;
+            border-radius: 6px;
+            margin-top: 0.5rem;
+        }
+
+        .graph-insight p {
+            font-size: 0.85rem;
+            color: #1e293b;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .glossary-term {
+                flex-direction: column;
+                gap: 0.2rem;
+            }
+            .glossary-term dt {
+                min-width: unset;
+            }
+            .graph-container {
+                margin: 0.5rem 0;
+            }
+            .graph-container svg text {
+                font-size: 10px !important;
+            }
+            .graph-title {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb">
+        <a href="../index.html">📘 Home</a> / Lesson 1: Methodology
+    </div>
+
+    <div class="page-header">
+        <h2>🧠 1. Methodology: Thinking Like an Economist</h2>
+        <div class="subtitle">Economic models, assumptions, scientific method · the grammar of economics</div>
+    </div>
+
+    <!-- LEARNING OBJECTIVES -->
+    <div class="card">
+        <h3>📌 Learning Objectives</h3>
+        <ul>
+            <li>Define economics in narrow and broad terms</li>
+            <li>Distinguish microeconomics and macroeconomics</li>
+            <li>Explain economic models and why they are useful despite being "wrong"</li>
+            <li>Master opportunity cost and marginal thinking</li>
+            <li>Distinguish correlation from causality — and why it matters</li>
+            <li>Identify market failures and when government intervention may help</li>
+            <li>Apply economic thinking to real-world problems</li>
+        </ul>
+    </div>
+
+    <!-- PART 1: THE BIG PICTURE -->
+    <div class="card">
+        <h3>🔹 The Big Picture: Why This Chapter Matters</h3>
+        <p>Welcome to the world of economics! Before we jump into supply, demand, and markets, we need to understand how economists think. This chapter is the foundation for everything else we'll learn this semester.</p>
+        <p>Think of it this way: If you're going to learn a new language, you first need to learn the grammar rules and vocabulary. In economics, this chapter provides exactly that—the "grammar" and "vocabulary" that economists use to understand the world.</p>
+        <div class="highlight-box">
+            <strong>Why should you care?</strong> Because economics isn't just about money or markets—it's a way of thinking that can be applied to almost any human problem. Want to understand why traffic jams happen? Why people smoke despite knowing it's bad for them? Why some countries are rich and others poor? Economics gives you the tools to figure out these puzzles.
+        </div>
+        <p>By the end of this chapter, you'll understand:</p>
+        <ul>
+            <li>What economics actually is (and isn't)</li>
+            <li>Why economists use models and what they're good for</li>
+            <li>The crucial difference between correlation and causality (this will save you from making logical errors!)</li>
+            <li>The fundamental principles that ALL economists agree on</li>
+            <li>How to think like an economist in everyday situations</li>
+        </ul>
+    </div>
+
+    <!-- CONCEPT 1: WHAT IS ECONOMICS -->
+    <div class="card">
+        <h3>🔹 Concept 1: What is Economics?</h3>
+        <p><strong>Economics</strong> is the study of how individuals, firms, and societies make choices when faced with <strong>scarcity</strong>.</p>
+
+        <h4>Two Ways to Define Economics</h4>
+        <p><strong>Narrow Definition (Economics as a Discipline):</strong></p>
+        <p>Economics focuses on decisions about money, markets, production, consumption, and resource allocation. It studies how people make choices about buying, selling, working, investing, and saving.</p>
+
+        <p><strong>Broad Definition (Economics as a Method):</strong></p>
+        <p>Economics is a way of thinking—a rigorous method of reasoning that can be applied to ANY human behavior or societal issue, not just "economic" ones. You can use economic thinking to study crime, education, health, marriage, religion, discrimination, sports, and even love!</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr>
+                    <th>Aspect</th>
+                    <th>Narrow View</th>
+                    <th>Broad View</th>
+                </tr>
+                <tr>
+                    <td>Focus</td>
+                    <td>Markets, prices, production</td>
+                    <td>All human decision-making</td>
+                </tr>
+                <tr>
+                    <td>Subjects</td>
+                    <td>Consumers, firms, governments</td>
+                    <td>Anyone who makes choices</td>
+                </tr>
+                <tr>
+                    <td>Topics</td>
+                    <td>Inflation, trade, employment</td>
+                    <td>Crime, marriage, education, health</td>
+                </tr>
+                <tr>
+                    <td>Method</td>
+                    <td>Formal economic models</td>
+                    <td>Economic reasoning applied anywhere</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>💡 Real-World Examples:</strong> Economists study not just stock markets and inflation, but also:
+            <ul>
+                <li><strong>Crime:</strong> Why do people commit crimes? They weigh the costs (prison) against the benefits (money).</li>
+                <li><strong>Education:</strong> Why do some students drop out of school? Opportunity cost—they could be earning money instead.</li>
+                <li><strong>Marriage:</strong> People compare the benefits of being married (companionship, shared expenses) against the alternatives (being single).</li>
+                <li><strong>Discrimination:</strong> Tastes and preferences influence hiring decisions.</li>
+            </ul>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Exam tip:</strong> Understanding the broad view helps you see economics everywhere—it's not just about money! The narrow view gives us the specific tools we'll use in this course. Together, they show that economics is both a subject AND a way of thinking.</div>
+    </div>
+
+    <!-- CONCEPT 2: KEY ECONOMIC ISSUES -->
+    <div class="card">
+        <h3>🔹 Concept 2: Key Economic Issues</h3>
+        <p>Before diving into economic theory, it's important to understand what real-world problems economists are trying to solve.</p>
+
+        <h4>1. Inflation</h4>
+        <p><strong>Definition:</strong> A general increase in the level of prices across the economy.</p>
+        <ul>
+            <li><strong>Impact:</strong> Reduces purchasing power—your money buys less</li>
+            <li><strong>Recent Causes:</strong> Post-COVID supply shocks (shortages of raw materials) and geopolitical events (Ukraine war affecting energy prices)</li>
+        </ul>
+
+        <h4>2. Income Inequality</h4>
+        <p><strong>Definition:</strong> The unequal distribution of income across individuals or groups.</p>
+        <ul>
+            <li><strong>Between countries:</strong> The gap in average income between rich and poor nations</li>
+            <li><strong>Within countries:</strong> The gap between rich and poor people in the same country</li>
+            <li><strong>Measurement:</strong> The Gini coefficient is a statistical measure of income inequality (0 = perfect equality, 1 = perfect inequality)</li>
+        </ul>
+
+        <h4>3. Climate Change</h4>
+        <p><strong>Definition:</strong> Long-term changes in global temperatures and weather patterns.</p>
+        <ul>
+            <li><strong>Economic Connection:</strong> Economic activity produces CO₂ emissions, which cause climate change; climate change then disrupts economic activity (a feedback loop)</li>
+            <li><strong>Historical Context:</strong> CO₂ concentrations have increased exponentially since the Industrial Revolution</li>
+        </ul>
+
+        <h4>4. Protectionism</h4>
+        <p><strong>Definition:</strong> Government actions that restrict international trade (tariffs, quotas, etc.).</p>
+        <ul>
+            <li><strong>Historical Trend:</strong> Protectionism declined massively after WWII through GATT and WTO agreements</li>
+            <li><strong>Recent Trend:</strong> A return to protectionism (e.g., Trump tariffs)</li>
+        </ul>
+    </div>
+
+    <!-- CONCEPT 3: MICRO VS MACRO -->
+    <div class="card">
+        <h3>🔹 Concept 3: Microeconomics vs Macroeconomics</h3>
+        <p><strong>Microeconomics</strong> studies the behavior of individual economic agents—consumers, firms, workers, investors—and how they interact in specific markets.</p>
+        <p><strong>Macroeconomics</strong> looks at the economy as a whole and studies aggregate variables like total production (GDP), inflation, unemployment, and economic growth.</p>
+
+        <div class="grid-2">
+            <div>
+                <h4>Microeconomics Questions:</h4>
+                <ul>
+                    <li>Why does the price of avocados go up in winter?</li>
+                    <li>How does a firm decide how many workers to hire?</li>
+                    <li>What happens to consumer demand when income increases?</li>
+                    <li>How does a specific market reach equilibrium?</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Macroeconomics Questions:</h4>
+                <ul>
+                    <li>Why is inflation rising?</li>
+                    <li>What causes unemployment?</li>
+                    <li>How fast is the economy growing?</li>
+                    <li>What is the total national debt?</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Think of it like a forest:</strong>
+            <ul>
+                <li><strong>Microeconomics</strong> looks at individual trees: How tall is this oak? How much sunlight does it need?</li>
+                <li><strong>Macroeconomics</strong> looks at the entire forest: How many trees are there? Is the forest growing or shrinking? What's the overall health of the ecosystem?</li>
+            </ul>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Exam tip:</strong> When asked whether something is micro or macro, ask yourself: "Is this about ONE person/firm/market or the WHOLE economy?"</div>
+    </div>
+
+    <!-- CONCEPT 4: POSITIVE VS NORMATIVE -->
+    <div class="card">
+        <h3>🔹 Concept 4: Positive vs Normative Analysis</h3>
+        <p><strong>Positive Analysis</strong> is about "what IS." It describes how the world works, makes predictions, and generates testable claims. It is objective and based on facts.</p>
+        <p><strong>Normative Analysis</strong> is about "what SHOULD BE." It makes value judgments and recommendations based on opinions, ethics, and beliefs. It is subjective.</p>
+
+        <div class="highlight-box">
+            <strong>Examples:</strong><br>
+            <strong>Positive:</strong> "A 10% increase in the minimum wage would reduce employment by 2% among low-skilled workers." (This can be tested with data)<br>
+            <strong>Normative:</strong> "We should not raise the minimum wage because it hurts workers." (This is a value judgment)
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <tr>
+                    <th>Positive Analysis</th>
+                    <th>Normative Analysis</th>
+                </tr>
+                <tr>
+                    <td>Describes cause and effect</td>
+                    <td>Expresses opinions and values</td>
+                </tr>
+                <tr>
+                    <td>Testable with evidence</td>
+                    <td>Not testable—can't be proven right or wrong</td>
+                </tr>
+                <tr>
+                    <td>"If X happens, then Y will happen"</td>
+                    <td>"We should/shouldn't..."</td>
+                </tr>
+                <tr>
+                    <td>Example: "Higher taxes reduce consumer spending"</td>
+                    <td>Example: "We should raise taxes on the rich"</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Exam trick:</strong> Watch for words like "should," "ought to," "best," "worst"—these usually signal normative statements. Words like "will," "causes," "leads to" usually signal positive statements.</div>
+    </div>
+
+    <!-- CONCEPT 5: ECONOMIC MODELS -->
+    <div class="card">
+        <h3>🔹 Concept 5: Economic Models</h3>
+        <p><strong>Economic models</strong> are simplified representations of reality that economists use to understand how the world works. They strip away unnecessary details to focus on the essential relationships between key variables.</p>
+
+        <div class="highlight-box">
+            <strong>Key Quote:</strong> "All models are wrong; some models are useful." (George Box)
+        </div>
+
+        <h4>What Models Do:</h4>
+        <ul>
+            <li><strong>Simplify reality</strong> — focus on key elements, ignore noise</li>
+            <li><strong>Isolate relationships</strong> — help identify cause and effect</li>
+            <li><strong>Make predictions</strong> — tell us what will happen under certain conditions</li>
+            <li><strong>Build counterfactuals</strong> — show what would have happened under different circumstances</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>💡 Think about a map:</strong>
+            <ul>
+                <li>A perfect 1:1 scale map would be the same size as the territory it's mapping—completely useless!</li>
+                <li>A good map simplifies: it shows roads but not every tree, or shows elevation but not every building.</li>
+                <li>Different maps serve different purposes (road map vs. topographic map vs. subway map).</li>
+            </ul>
+            <p>Economic models work the same way. They highlight the MOST IMPORTANT factors and ignore the rest.</p>
+        </div>
+
+        <h4>The Scientific Process in Economics:</h4>
+        <ol>
+            <li><strong>Observation:</strong> See something in the real world</li>
+            <li><strong>Generalization:</strong> Find regular patterns</li>
+            <li><strong>Model Building:</strong> Create a simplified representation</li>
+            <li><strong>Empirical Testing:</strong> Test model predictions against real data</li>
+        </ol>
+
+        <div class="exam-trap">⚠️ <strong>Exam trap:</strong> Don't reject a model because it's too simple! The point of models is SIMPLIFICATION, not perfect realism. Remember the map analogy!</div>
+    </div>
+
+    <!-- CONCEPT 6: CORRELATION VS CAUSALITY -->
+    <div class="card">
+        <h3>🔹 Concept 6: Correlation vs Causality</h3>
+        <p><strong>Correlation</strong> is when two variables move together—when one changes, the other tends to change as well.</p>
+        <p><strong>Causality</strong> is when one variable DIRECTLY CAUSES a change in another variable.</p>
+        <p><strong>CRUCIAL POINT:</strong> Correlation DOES NOT imply causation! Just because two things happen together doesn't mean one caused the other.</p>
+
+        <div class="highlight-box">
+            <strong>This is probably the SINGLE MOST IMPORTANT concept in economics (and science in general).</strong> Mistaking correlation for causality leads to terrible policies, bad decisions, and logical errors.
+        </div>
+
+        <h4>Examples of Spurious Correlations:</h4>
+        <div class="table-wrap">
+            <table>
+                <tr>
+                    <th>Correlation</th>
+                    <th>Reality</th>
+                </tr>
+                <tr>
+                    <td>Ice cream sales ↑, drownings ↑</td>
+                    <td>Hot weather causes both</td>
+                </tr>
+                <tr>
+                    <td>Number of pirates ↓, global temperature ↑</td>
+                    <td>Just coincidence</td>
+                </tr>
+                <tr>
+                    <td>Named cows ↑, milk production ↑</td>
+                    <td>Farmer care (third variable)</td>
+                </tr>
+                <tr>
+                    <td>Hospital stays ↑, deaths ↑</td>
+                    <td>Sick people in hospitals</td>
+                </tr>
+                <tr>
+                    <td>Police presence ↑, violent crime ↑</td>
+                    <td>More crime → more police (reverse causality)</td>
+                </tr>
+            </table>
+        </div>
+
+        <h4>Why Variables Can Be Correlated Without Causation:</h4>
+        <ul>
+            <li><strong>Reverse Causality:</strong> A causes B, not B causes A. Example: People in poverty have low education—but does low education cause poverty, or does poverty cause low education?</li>
+            <li><strong>Third Variable (Confounding):</strong> Something else causes both. Example: Ice cream sales and drownings (hot weather causes both).</li>
+            <li><strong>Coincidence:</strong> Sometimes things just happen together by chance. Example: The number of pirates and global temperature are correlated.</li>
+        </ul>
+
+        <div class="exam-trap">⚠️ <strong>Exam trap:</strong> When you see a statement like "X causes Y," ask yourself: Is this really causation, or just correlation? Could there be a third factor? Could the causation run the other way?</div>
+    </div>
+
+    <!-- CONCEPT 7: COUNTERFACTUALS -->
+    <div class="card">
+        <h3>🔹 Concept 7: Counterfactuals and Establishing Causality</h3>
+        <p>A <strong>counterfactual</strong> is the question: "What would have happened if the event being studied had NOT happened?"</p>
+
+        <h4>Methods for Finding Counterfactuals:</h4>
+
+        <h4>1. Controlled Experiments</h4>
+        <p>Create two groups that are identical in ALL characteristics:</p>
+        <ul>
+            <li><strong>Control Group:</strong> Not treated</li>
+            <li><strong>Treatment Group:</strong> Receives the treatment</li>
+            <li>The ONLY difference is the treatment itself</li>
+        </ul>
+        <p><strong>Example:</strong> The Canadian "Return to Work" bonus. Random allocation of bonus to some workers. 15% positive effect on returning to work in the treatment group. Effect disappeared in the long term.</p>
+
+        <h4>2. Natural Experiments</h4>
+        <p>Use real-world events that happen "by chance" to create treatment and control groups.</p>
+        <p><strong>Example:</strong> Minimum wage increase in New Jersey vs. Pennsylvania:</p>
+        <ul>
+            <li>New Jersey increased minimum wage (treatment)</li>
+            <li>Pennsylvania kept it constant (control)</li>
+            <li>Finding: Employment increased or stayed constant (supporting non-competitive market theory)</li>
+        </ul>
+
+        <h4>3. Statistical/Econometric Techniques</h4>
+        <ul>
+            <li>Instrumental variables</li>
+            <li>Difference-in-differences analysis</li>
+            <li>Stratification</li>
+            <li>Monte Carlo experiments</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Example:</strong> University Recordings Experiment. Students randomly given access to recordings or not. Identical groups except for recordings. Result: Recordings help strong students but hurt weak students.
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Exam trap:</strong> When you see an argument claiming that X causes Y, ask: "What is the counterfactual? What would have happened without X?"</div>
+    </div>
+
+    <!-- CONCEPT 8: OPTIMIZATION -->
+    <div class="card">
+        <h3>🔹 Concept 8: Fundamental Principles — Optimization</h3>
+        <p><strong>Optimization</strong> (or rational choice) means that people make decisions by selecting the best available option given their circumstances.</p>
+
+        <p>At its core, economics assumes that people are rational—they make choices that they believe will make them as well off as possible, given their constraints. This doesn't mean people are perfect calculators or never make mistakes—it means they try to do what's best for themselves with the information they have.</p>
+
+        <div class="highlight-box">
+            <strong>Example:</strong> When you choose to study economics instead of going to a party, you're making a rational choice based on your preferences (you want good grades) and constraints (there's only so much time).
+        </div>
+
+        <h4>Two Key Concepts Related to Rationality:</h4>
+        <ul>
+            <li><strong>Trade-offs:</strong> You can't have everything. Every choice means giving up something else.</li>
+            <li><strong>Scarcity:</strong> Resources (time, money, etc.) are limited, forcing you to choose.</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Real-World Application:</strong>
+            <ul>
+                <li>Why do university enrollments increase during economic crises? Opportunity cost of attending university is low (few jobs available).</li>
+                <li>Why do enrollments decrease during economic booms? Opportunity cost of attending university is high (good jobs available).</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CONCEPT 9: OPPORTUNITY COST -->
+    <div class="card">
+        <h3>🔹 Concept 9: Opportunity Cost</h3>
+        <p><strong>Opportunity Cost</strong> is the value of the best alternative that you give up when you make a choice. It's the true cost of any decision—not just the money you spend, but everything you sacrifice.</p>
+
+        <div class="highlight-box">
+            <strong>Here's the problem with normal thinking about costs:</strong> we tend to only count the explicit costs (money). But economics teaches us that the TRUE cost of something is everything you could have done instead.
+        </div>
+
+        <div class="formula-box">Economic Profit = Revenue − Economic Costs</div>
+        <div class="formula-box">Economic Costs = Accounting Costs + Opportunity Costs</div>
+
+        <h4>Step-by-Step Example: Entrepreneurship Decision</h4>
+        <p>An entrepreneur considers starting a business:</p>
+        <ul>
+            <li>Revenue forecast: $240,000/year</li>
+            <li>Accounting costs (rent, materials, wages): $125,000/year</li>
+            <li>Accounting profit = $240,000 − $125,000 = $115,000</li>
+            <li>BUT the entrepreneur currently earns $160,000/year at their job (opportunity cost of their time)</li>
+            <li>Opportunity cost = $160,000</li>
+            <li>Economic costs = $125,000 + $160,000 = $285,000</li>
+            <li>Economic profit = $240,000 − $285,000 = <strong>−$45,000</strong></li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Conclusion:</strong> The business LOOKS profitable ($115,000 accounting profit) but is actually a bad decision ($45,000 economic loss) because you'd be better off keeping your job!
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Exam trap:</strong> Watch for questions that ask about the "true cost" of something—they're almost certainly testing opportunity cost. Remember: the true cost includes BOTH explicit (money) AND implicit (opportunity) costs. There's no such thing as a "free lunch." Even if something is free in money terms, it still has an opportunity cost (your time, for example).</div>
+    </div>
+
+    <!-- CONCEPT 10: MARGINAL THINKING -->
+    <div class="card">
+        <h3>🔹 Concept 10: Thinking at the Margin</h3>
+        <p><strong>Thinking at the margin</strong> means making decisions by comparing the additional (marginal) benefits and additional (marginal) costs of a choice, rather than considering total benefits and total costs.</p>
+
+        <div class="formula-box">If Marginal Benefit > Marginal Cost → DO IT</div>
+        <div class="formula-box">If Marginal Benefit < Marginal Cost → DON'T DO IT</div>
+        <div class="formula-box">If Marginal Benefit = Marginal Cost → YOU'RE INDIFFERENT</div>
+
+        <div class="highlight-box">
+            <strong>Example: Should you drink another glass of water?</strong>
+            <ul>
+                <li>Total benefit from drinking ALL the water isn't what matters</li>
+                <li>What matters is: Is the benefit of THIS glass worth the cost?</li>
+                <li><strong>Marginal Benefit:</strong> The additional benefit from consuming one more unit</li>
+                <li><strong>Marginal Cost:</strong> The additional cost from consuming one more unit</li>
+            </ul>
+        </div>
+
+        <h4>Real-World Examples of Behavioral Responses to Incentives:</h4>
+
+        <div class="grid-2">
+            <div>
+                <h4>1. Seatbelts</h4>
+                <p>When seatbelts became mandatory, deaths per accident fell, BUT people drove more recklessly because they felt safer.</p>
+                <p><strong>Result:</strong> More accidents (but fewer deaths per accident). The marginal benefit of driving fast decreased (less dangerous).</p>
+            </div>
+            <div>
+                <h4>2. Childcare Fines</h4>
+                <p>A daycare center introduced a small fine for parents who picked up their children late.</p>
+                <p><strong>Result:</strong> Instead of decreasing late pickups, the NUMBER OF LATE PICKUPS INCREASED! Parents now saw lateness as something they could "buy" (a service) rather than a moral obligation.</p>
+            </div>
+            <div>
+                <h4>3. Congestion</h4>
+                <p>Building more roads should reduce traffic, right? Actually, it often INCREASES traffic!</p>
+                <p><strong>Result:</strong> People respond to lower congestion by driving more (and taking alternative routes less). This is called "induced demand."</p>
+            </div>
+            <div>
+                <h4>4. COVID Vaccines</h4>
+                <p>Upon introduction of vaccines, people became less careful—less mask-wearing, less social distancing.</p>
+                <p><strong>Result:</strong> Increase in cases.</p>
+            </div>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Exam trick:</strong> When you see "marginal" in a question, think "additional" or "one more." Margins are about the NEXT unit, not the total.</div>
+    </div>
+
+    <!-- CONCEPT 11: EQUILIBRIUM -->
+    <div class="card">
+        <h3>🔹 Concept 11: Equilibrium</h3>
+        <p><strong>Equilibrium</strong> is a situation in which nobody would benefit by unilaterally changing their own behavior, given the behavior of others.</p>
+
+        <div class="highlight-box">
+            <strong>In markets, equilibrium occurs when:</strong>
+            <ul>
+                <li>Buyers are buying as much as they want at the current price</li>
+                <li>Sellers are selling as much as they want at the current price</li>
+                <li>There's no pressure for price to change</li>
+            </ul>
+        </div>
+
+        <p><strong>Think of it like a game of tug-of-war where both sides are equally matched—there's no movement.</strong></p>
+
+        <ul>
+            <li>Equilibrium occurs where quantity demanded equals quantity supplied</li>
+            <li>The equilibrium price is the price where this happens</li>
+            <li>Markets naturally tend toward equilibrium through price adjustments</li>
+            <li>Under the Right Conditions: Markets achieve an optimal outcome—you can't do better for aggregate welfare. This is known as "Pareto efficiency."</li>
+        </ul>
+    </div>
+
+    <!-- CONCEPT 12: MARKET FAILURE -->
+    <div class="card">
+        <h3>🔹 Concept 12: Market Failure</h3>
+        <p><strong>Market Failure</strong> occurs when markets fail to achieve an optimal outcome (maximize aggregate welfare) on their own. When markets fail, government intervention may improve outcomes.</p>
+
+        <div class="highlight-box">
+            <strong>Example: Pollution</strong>
+            <ul>
+                <li>A factory produces goods (beneficial) but also pollution (harmful)</li>
+                <li>The factory doesn't pay for the damage from pollution</li>
+                <li>Market price of the goods doesn't include the pollution cost</li>
+                <li><strong>Result:</strong> Too much pollution and too much production</li>
+            </ul>
+        </div>
+
+        <h4>Sources of Market Failure:</h4>
+        <ul>
+            <li><strong>Externalities:</strong> Costs or benefits that affect people not involved in the transaction</li>
+            <li><strong>Market Power:</strong> When one firm dominates a market (monopoly)</li>
+            <li><strong>Public Goods:</strong> Goods that are non-excludable and non-rivalrous (national defense, street lighting)</li>
+            <li><strong>Imperfect/Asymmetric Information:</strong> When one party knows more than the other (used car markets, health insurance)</li>
+            <li><strong>Incomplete Markets:</strong> Markets that simply don't exist for some things</li>
+        </ul>
+
+        <div class="exam-trap">⚠️ <strong>Key insight:</strong> Markets are powerful but not perfect. They fail in predictable ways, and governments can sometimes improve outcomes.</div>
+    </div>
+
+    <!-- DIAGRAMS -->
+    <div class="card">
+        <h3>📈 Diagrams & Visual Explanations</h3>
+
+        <div class="graph-container">
+            <div class="graph-title">Figure 1: Correlation vs. Causation</div>
+            <div class="graph-subtitle">Ice Cream Sales vs. Drowning Deaths (Spurious Correlation)</div>
+            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="700" height="400" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="350"/>
+                    <line x1="80" y1="350" x2="680" y2="350"/>
+                    <line x1="80" y1="100" x2="680" y2="100"/>
+                    <line x1="80" y1="150" x2="680" y2="150"/>
+                    <line x1="80" y1="200" x2="680" y2="200"/>
+                    <line x1="80" y1="250" x2="680" y2="250"/>
+                    <line x1="80" y1="300" x2="680" y2="300"/>
+                    <line x1="150" y1="350" x2="150" y2="50"/>
+                    <line x1="220" y1="350" x2="220" y2="50"/>
+                    <line x1="290" y1="350" x2="290" y2="50"/>
+                    <line x1="360" y1="350" x2="360" y2="50"/>
+                    <line x1="430" y1="350" x2="430" y2="50"/>
+                    <line x1="500" y1="350" x2="500" y2="50"/>
+                    <line x1="570" y1="350" x2="570" y2="50"/>
+                    <line x1="640" y1="350" x2="640" y2="50"/>
+                </g>
+                <text x="380" y="380" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Ice Cream Sales</text>
+                <text x="30" y="200" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 200)">Drowning Deaths</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="680,350 665,340 665,360" fill="#0b2b4a"/>
+                <circle cx="150" cy="280" r="6" fill="#2563eb"/>
+                <circle cx="220" cy="240" r="6" fill="#2563eb"/>
+                <circle cx="290" cy="200" r="6" fill="#2563eb"/>
+                <circle cx="360" cy="180" r="6" fill="#2563eb"/>
+                <circle cx="430" cy="150" r="6" fill="#2563eb"/>
+                <circle cx="500" cy="120" r="6" fill="#2563eb"/>
+                <circle cx="570" cy="90" r="6" fill="#2563eb"/>
+                <text x="350" y="140" font-size="13" font-weight="600" fill="#dc2626">Positive Correlation</text>
+                <text x="350" y="160" font-size="12" fill="#64748b">(NOT causation!)</text>
+                <rect x="470" y="260" width="190" height="70" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="280" font-size="12" font-weight="700" fill="#0b2b4a">Key Insight</text>
+                <text x="480" y="298" font-size="11" fill="#1e293b">Ice cream doesn't cause</text>
+                <text x="480" y="314" font-size="11" fill="#1e293b">drowning. Hot weather</text>
+                <text x="480" y="330" font-size="11" fill="#1e293b">causes both!</text>
+            </svg>
+            <div class="graph-insight">
+                <p><strong>Key Insight:</strong> Ice cream sales and drownings both increase in summer because hot weather causes both. This is a <strong>spurious correlation</strong>—the two variables are correlated but NOT causally related.</p>
+            </div>
+        </div>
+
+        <div class="graph-container">
+            <div class="graph-title">Figure 2: The Circular Flow Diagram</div>
+            <div class="graph-subtitle">How resources, goods, and money flow between households and firms</div>
+            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="700" height="400" fill="#f8fafc" rx="8"/>
+                <rect x="120" y="120" width="180" height="80" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                <text x="210" y="155" text-anchor="middle" font-size="16" font-weight="700" fill="#1e40af">HOUSEHOLDS</text>
+                <text x="210" y="180" text-anchor="middle" font-size="11" fill="#64748b">(Consumers)</text>
+                <rect x="400" y="120" width="180" height="80" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+                <text x="490" y="155" text-anchor="middle" font-size="16" font-weight="700" fill="#166534">FIRMS</text>
+                <text x="490" y="180" text-anchor="middle" font-size="11" fill="#64748b">(Producers)</text>
+                <path d="M 300 160 L 400 160" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowBlue)"/>
+                <path d="M 400 200 L 300 200" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowRed)"/>
+                <path d="M 210 200 L 210 280 Q 210 300 350 300 L 490 300 L 490 200" stroke="#2563eb" stroke-width="2" fill="none" marker-end="url(#arrowBlue)"/>
+                <path d="M 490 280 L 490 120" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowBlue)"/>
+                <path d="M 210 120 L 210 80 Q 210 60 350 60 L 490 60 L 490 120" stroke="#dc2626" stroke-width="2" fill="none" marker-end="url(#arrowRed)"/>
+                <defs>
+                    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/></marker>
+                    <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#dc2626"/></marker>
+                </defs>
+                <text x="350" y="155" text-anchor="middle" font-size="11" fill="#2563eb">Goods &amp; Services</text>
+                <text x="350" y="215" text-anchor="middle" font-size="11" fill="#dc2626">Money ($)</text>
+                <text x="350" y="80" text-anchor="middle" font-size="11" fill="#dc2626">Money ($)</text>
+                <text x="320" y="335" text-anchor="middle" font-size="11" fill="#2563eb">Labor, Land, Capital</text>
+                <text x="320" y="352" text-anchor="middle" font-size="10" fill="#64748b">(Factors of Production)</text>
+                <rect x="470" y="300" width="190" height="70" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="320" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <text x="480" y="340" font-size="11" fill="#2563eb">Blue = Goods/Resources</text>
+                <text x="480" y="358" font-size="11" fill="#dc2626">Red = Money Flow</text>
+            </svg>
+            <div class="graph-insight">
+                <p><strong>Key Insight:</strong> The circular flow shows that production and consumption are connected. Resources and goods flow one way (from households to firms and back), while money flows the opposite direction.</p>
+            </div>
+        </div>
+
+        <div class="graph-container">
+            <div class="graph-title">Figure 3: Production Possibility Frontier (PPF)</div>
+            <div class="graph-subtitle">Maximum possible combinations of two goods given available resources</div>
+            <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="700" height="400" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="350"/>
+                    <line x1="80" y1="350" x2="680" y2="350"/>
+                    <line x1="80" y1="100" x2="680" y2="100"/>
+                    <line x1="80" y1="150" x2="680" y2="150"/>
+                    <line x1="80" y1="200" x2="680" y2="200"/>
+                    <line x1="80" y1="250" x2="680" y2="250"/>
+                    <line x1="80" y1="300" x2="680" y2="300"/>
+                    <line x1="150" y1="350" x2="150" y2="50"/>
+                    <line x1="220" y1="350" x2="220" y2="50"/>
+                    <line x1="290" y1="350" x2="290" y2="50"/>
+                    <line x1="360" y1="350" x2="360" y2="50"/>
+                    <line x1="430" y1="350" x2="430" y2="50"/>
+                    <line x1="500" y1="350" x2="500" y2="50"/>
+                    <line x1="570" y1="350" x2="570" y2="50"/>
+                    <line x1="640" y1="350" x2="640" y2="50"/>
+                </g>
+                <text x="380" y="380" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Good A (e.g., Guns)</text>
+                <text x="30" y="200" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 200)">Good B (e.g., Butter)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="680,350 665,340 665,360" fill="#0b2b4a"/>
+                <path d="M 80 320 Q 200 200 600 80" stroke="#2563eb" stroke-width="3" fill="none"/>
+                <text x="580" y="80" font-size="14" font-weight="700" fill="#2563eb">PPF</text>
+                <circle cx="360" cy="200" r="7" fill="#22c55e"/>
+                <text x="370" y="195" font-size="11" fill="#22c55e">Efficient</text>
+                <circle cx="200" cy="280" r="7" fill="#f59e0b"/>
+                <text x="210" y="275" font-size="11" fill="#f59e0b">Inefficient</text>
+                <circle cx="500" cy="100" r="7" fill="#dc2626"/>
+                <text x="510" y="95" font-size="11" fill="#dc2626">Impossible</text>
+                <rect x="470" y="260" width="190" height="70" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="280" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <text x="480" y="300" font-size="11" fill="#22c55e">On PPF = Efficient</text>
+                <text x="480" y="318" font-size="11" fill="#f59e0b">Inside PPF = Inefficient</text>
+                <text x="480" y="336" font-size="11" fill="#dc2626">Outside PPF = Impossible</text>
+            </svg>
+            <div class="graph-insight">
+                <p><strong>Key Insight:</strong> The PPF shows trade-offs—moving along the curve means producing less of one good to produce more of another. The slope shows the <strong>opportunity cost</strong> of producing one more unit of Good A.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALL FORMULAS -->
+    <div class="card">
+        <h3>🧮 All Formulas (Explained Step-by-Step)</h3>
+
+        <h4>Formula 1: Economic Profit</h4>
+        <div class="formula-box">Economic Profit = Total Revenue − Economic Costs</div>
+        <div class="formula-box">Economic Costs = Accounting Costs + Opportunity Costs</div>
+
+        <div class="table-wrap">
+            <table>
+                <tr>
+                    <th>Variable</th>
+                    <th>Definition</th>
+                </tr>
+                <tr><td>Economic Profit</td><td>Profit after considering ALL costs (explicit and implicit)</td></tr>
+                <tr><td>Total Revenue</td><td>Money received from sales</td></tr>
+                <tr><td>Economic Costs</td><td>All costs including opportunity costs</td></tr>
+                <tr><td>Accounting Costs</td><td>Direct, explicit costs (rent, materials, wages, etc.)</td></tr>
+                <tr><td>Opportunity Costs</td><td>Value of the best forgone alternative</td></tr>
+            </table>
+        </div>
+
+        <h4>Step-by-Step Example: Should Sarah start a coffee shop?</h4>
+        <ol>
+            <li><strong>Accounting costs:</strong> Rent $2,000 + Materials $3,000 + Wages $4,000 = $9,000/month</li>
+            <li><strong>Estimated revenue:</strong> $15,000/month</li>
+            <li><strong>Accounting profit:</strong> $15,000 − $9,000 = $6,000/month</li>
+            <li><strong>Opportunity cost:</strong> Sarah currently earns $5,000/month working elsewhere</li>
+            <li><strong>Economic costs:</strong> $9,000 + $5,000 = $14,000/month</li>
+            <li><strong>Economic profit:</strong> $15,000 − $14,000 = <strong>$1,000/month</strong></li>
+        </ol>
+        <div class="highlight-box"><strong>Result:</strong> Sarah should open the coffee shop! The business is economically profitable ($1,000 > $0).</div>
+
+        <div class="exam-trap">⚠️ <strong>Exam trap:</strong> Exams might provide accounting profit and ask for economic profit. Remember to ADD the opportunity cost!</div>
+
+        <h4>Formula 2: Marginal Decision Rule</h4>
+        <div class="formula-box">If Marginal Benefit > Marginal Cost → DO IT</div>
+        <div class="formula-box">If Marginal Benefit < Marginal Cost → DON'T DO IT</div>
+        <div class="formula-box">If Marginal Benefit = Marginal Cost → YOU'RE INDIFFERENT</div>
+
+        <h4>Step-by-Step Example: How many hours should you study?</h4>
+        <ul>
+            <li><strong>After 2 hours:</strong> MB of 1 more hour = 5 points, MC = 1 hour of sleep → 5 > 1 → Study!</li>
+            <li><strong>After 3 hours:</strong> MB of 1 more hour = 3 points, MC = 1 hour of sleep → 3 > 1 → Study!</li>
+            <li><strong>After 4 hours:</strong> MB of 1 more hour = 1 point, MC = 1 hour of sleep → 1 = 1 → Indifferent (stop)</li>
+            <li><strong>After 5 hours:</strong> MB of 1 more hour = 0 points, MC = 1 hour of sleep → 0 < 1 → STOP!</li>
+        </ul>
+        <div class="highlight-box"><strong>Result:</strong> The optimal study time is when marginal benefit = marginal cost (4 hours).</div>
+
+        <div class="exam-trap">⚠️ <strong>Exam trap:</strong> Many students confuse "marginal" with "average" or "total." Remember: MARGINAL = ADDITIONAL or ONE MORE.</div>
+    </div>
+
+    <!-- EXAM SCENARIOS -->
+    <div class="card">
+        <h3>📝 Exam Scenarios & Problem-Solving</h3>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 1: Opportunity Cost</h4>
+            <p><strong>Scenario:</strong> Maria has a full-time job paying $50,000 per year. She's considering going back to university for a Master's degree. Tuition and fees will be $30,000 per year, and books and supplies will cost $5,000. The program takes 2 years.</p>
+            <p><strong>Step-by-Step Analysis:</strong></p>
+            <ul>
+                <li><strong>Direct Costs (Accounting):</strong> Tuition: $30,000 × 2 = $60,000; Books: $5,000 × 2 = $10,000 → Total explicit costs = $70,000</li>
+                <li><strong>Opportunity Costs:</strong> Lost salary: $50,000 × 2 = $100,000</li>
+                <li><strong>Total Economic Cost:</strong> $70,000 + $100,000 = <strong>$170,000</strong></li>
+            </ul>
+            <div class="highlight-box"><strong>Answer:</strong> The true cost of Maria's degree is $170,000, not just the $70,000 she'll pay in tuition and fees.</div>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 2: Positive vs Normative Analysis</h4>
+            <p><strong>Scenario:</strong> Consider these statements about the minimum wage:</p>
+            <ol>
+                <li>"Increasing the minimum wage to $15 will reduce employment among teenagers by 3%."</li>
+                <li>"The minimum wage should be increased to $15 to help low-income workers."</li>
+                <li>"States with higher minimum wages have higher unemployment rates."</li>
+            </ol>
+            <ul>
+                <li><strong>Statement 1:</strong> POSITIVE (descriptive, testable, factual)</li>
+                <li><strong>Statement 2:</strong> NORMATIVE (prescriptive, value judgment, uses "should")</li>
+                <li><strong>Statement 3:</strong> POSITIVE (descriptive, testable)</li>
+            </ul>
+            <div class="highlight-box"><strong>Answer:</strong> Statements 1 and 3 are positive—they describe how the world IS. Statement 2 is normative—it prescribes how the world SHOULD BE.</div>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 3: Correlation vs Causality</h4>
+            <p><strong>Scenario:</strong> A study finds that people who own pets live longer, on average, than people who don't own pets. A journalist concludes: "Owning a pet extends your lifespan. Everyone should get a pet!"</p>
+            <p><strong>Possible Explanations:</strong></p>
+            <ul>
+                <li>Pets cause people to be healthier (less stress, more exercise) → Could be causation</li>
+                <li>Healthier people are more likely to get pets → Reverse causality</li>
+                <li>People who can afford pets also have better healthcare, better diets, etc. → Third variable (income/wealth)</li>
+            </ul>
+            <div class="highlight-box"><strong>Answer:</strong> The journalist is making a logical error by assuming correlation = causation. The correlation could be driven by reverse causality or a third variable.</div>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 4: Reasoning at the Margin</h4>
+            <p><strong>Scenario:</strong> A theme park charges a flat fee for admission. For each ride, the park charges $5. You've already spent the admission fee and ridden 5 rides. The 6th ride requires another $5 and 10 minutes of waiting.</p>
+            <p><strong>What MATTERS (Marginal Analysis):</strong></p>
+            <ul>
+                <li>Additional cost: $5 (ride fee) + 10 minutes of time</li>
+                <li>Additional benefit: The enjoyment of the 6th ride</li>
+            </ul>
+            <p><strong>What DOESN'T MATTER:</strong></p>
+            <ul>
+                <li>The admission fee (it's paid regardless—a "sunk cost")</li>
+                <li>The enjoyment from the first 5 rides (already obtained)</li>
+            </ul>
+            <div class="highlight-box"><strong>Answer:</strong> You should decide based on: "Is the enjoyment of ONE MORE ride worth the $5 and 10 minutes?"</div>
+            <div class="exam-trap">⚠️ <strong>Exam trap:</strong> Watch for "sunk costs" (costs already incurred, can't be recovered). These should NOT influence decisions—only future marginal costs matter.</div>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0;">
+            <h4>Scenario 5: Counterfactuals and Natural Experiments</h4>
+            <p><strong>Scenario:</strong> Two states in the US, New Jersey and Pennsylvania, are very similar in economic structure and population. In 1992, New Jersey increased its minimum wage in the fast-food sector from $4.25 to $5.05. Pennsylvania kept its minimum wage at $4.25. Economists Card and Krueger studied what happened to employment in the fast-food sector in both states.</p>
+            <ul>
+                <li><strong>New Jersey:</strong> Treatment group (increased minimum wage)</li>
+                <li><strong>Pennsylvania:</strong> Control group (kept minimum wage constant)</li>
+                <li><strong>The Counterfactual:</strong> What would have happened in New Jersey if the wage hadn't increased? Answer: The experience of Pennsylvania</li>
+                <li><strong>The Findings:</strong> Employment in New Jersey increased or stayed constant</li>
+            </ul>
+            <div class="highlight-box"><strong>Answer:</strong> The natural experiment allowed economists to establish causality: the minimum wage increase DID NOT reduce employment in this case.</div>
+        </div>
+    </div>
+
+    <!-- HIGH-YIELD EXAM FOCUS -->
+    <div class="card">
+        <h3>⚡ High-Yield Exam Focus (The "Night-Before" Summary)</h3>
+
+        <h4>Memorization Checklist</h4>
+        <div class="grid-2">
+            <ul>
+                <li>□ Economics: Study of choice under scarcity</li>
+                <li>□ Microeconomics: Individual agents and specific markets</li>
+                <li>□ Macroeconomics: Economy as a whole, aggregate variables</li>
+                <li>□ Positive Analysis: What IS (descriptive, testable)</li>
+                <li>□ Normative Analysis: What SHOULD BE (prescriptive, value judgments)</li>
+                <li>□ Model: Simplified representation of reality</li>
+                <li>□ Correlation: Two variables move together</li>
+                <li>□ Causality: One variable directly causes change in another</li>
+            </ul>
+            <ul>
+                <li>□ Opportunity Cost: Value of the best forgone alternative</li>
+                <li>□ Economic Profit: Revenue - (Accounting + Opportunity Costs)</li>
+                <li>□ Marginal: Additional/one more unit</li>
+                <li>□ Rationality: People choose the best available option given constraints</li>
+                <li>□ Equilibrium: No one can improve by changing behavior unilaterally</li>
+                <li>□ Market Failure: Markets fail to achieve optimal outcomes</li>
+                <li>□ Externalities: Costs/benefits affecting people not involved</li>
+                <li>□ Gini Coefficient: Measure of income inequality</li>
+            </ul>
+        </div>
+
+        <h4>Common Exam Traps</h4>
+        <ul>
+            <li><strong>Confusing Correlation with Causation:</strong> "A and B happen together, so A causes B" — FALSE. They might be correlated, but causation requires more evidence.</li>
+            <li><strong>Confusing Positive and Normative Analysis:</strong> Thinking value judgments are facts. "Should" = normative; "will" = positive.</li>
+            <li><strong>Ignoring Opportunity Cost:</strong> Only counting explicit (money) costs. The TRUE cost includes implicit costs (time, forgone alternatives).</li>
+            <li><strong>Confusing Micro and Macro:</strong> Micro = individual; Macro = aggregate/economy.</li>
+            <li><strong>Forgetting Marginal Analysis:</strong> Making decisions based on totals or averages. Rational decisions compare ADDITIONAL (marginal) costs and benefits.</li>
+            <li><strong>Thinking Models Must Be 100% Realistic:</strong> The point of models is SIMPLIFICATION, not perfect realism.</li>
+            <li><strong>Counting Sunk Costs:</strong> Past expenses influence current decisions. Sunk costs can't be recovered; only future marginal costs matter.</li>
+        </ul>
+
+        <h4>Must-Know Calculations</h4>
+        <ul>
+            <li><strong>Economic Profit:</strong> Revenue - (Accounting Costs + Opportunity Costs)</li>
+            <li><strong>Marginal Decision Rule:</strong> MB > MC → DO IT; MB < MC → DON'T</li>
+        </ul>
+
+        <h4>The "If This, Then That" Logic Flow</h4>
+        <div class="table-wrap">
+            <table>
+                <tr>
+                    <th>If...</th>
+                    <th>Then...</th>
+                </tr>
+                <tr><td>Statement uses "should," "ought to," or "must"</td><td>It's NORMATIVE</td></tr>
+                <tr><td>Statement describes or predicts</td><td>It's POSITIVE</td></tr>
+                <tr><td>Two things happen together</td><td>That's CORRELATION</td></tr>
+                <tr><td>One thing DIRECTLY affects another</td><td>That's CAUSATION (needs evidence!)</td></tr>
+                <tr><td>About individual, firm, or specific market</td><td>MICRO</td></tr>
+                <tr><td>About the whole economy, aggregates, or overall trends</td><td>MACRO</td></tr>
+                <tr><td>Asked to decide on one more unit</td><td>Compare MB and MC, ignore sunk costs</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- PRACTICE QUESTIONS -->
+    <div class="card">
+        <h3>📝 Practice Questions</h3>
+
+        <div class="question-block" id="q1">
+            <div class="q-text">Q1: Which of the following is a normative statement?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) The unemployment rate is 4.5%.</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="B"><span>B) Increasing the minimum wage will reduce employment by 2%.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="C"><span>C) The government should increase spending on education.</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) Higher taxes reduce consumer spending.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1', 'C')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                "Should" indicates a value judgment, making this normative. A, B, and D are positive statements that can be tested with data.
+            </div>
+        </div>
+
+        <div class="question-block" id="q2">
+            <div class="q-text">Q2: Maria gives up a $50,000/year job to start a business. Her accounting costs are $80,000/year and revenue is $120,000/year. What is her economic profit?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q2" value="A"><span>A) $40,000</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="B"><span>B) -$10,000</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) $10,000</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="D"><span>D) -$40,000</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                Accounting profit = $120,000 − $80,000 = $40,000<br>
+                Opportunity cost = $50,000 (forgone salary)<br>
+                Economic profit = $40,000 − $50,000 = <strong>−$10,000</strong>
+            </div>
+        </div>
+
+        <div class="question-block" id="q3">
+            <div class="q-text">Q3: A study finds that people who own pets live longer. A journalist concludes: "Owning a pet extends your lifespan." What is the error?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A"><span>A) The sample size is too small.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="B"><span>B) Correlation does not imply causation.</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="C"><span>C) The study used the wrong statistical method.</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="D"><span>D) There is no error — pets do extend lifespan.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3', 'B')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                This is the classic correlation vs causation error. The correlation could be explained by:<br>
+                • Healthier people being more able to care for pets (reverse causality)<br>
+                • Wealthier people being able to afford pets AND healthcare (third variable)
+            </div>
+        </div>
+
+        <div class="question-block" id="q4">
+            <div class="q-text">Q4: Which of the following is a microeconomics question?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="A"><span>A) Why does the price of avocados rise in winter?</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="B"><span>B) Why is inflation rising?</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="C"><span>C) What is the national unemployment rate?</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="D"><span>D) How fast is the economy growing?</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4', 'A')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                Microeconomics focuses on individual markets and agents. Avocado prices are a specific market question. B, C, and D are macroeconomics questions about the whole economy.
+            </div>
+        </div>
+
+        <div class="question-block" id="q5">
+            <div class="q-text">Q5: What is the opportunity cost of attending a concert if the ticket costs $50 and you could have worked 4 hours at $15/hour during that time?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A"><span>A) $50</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="B"><span>B) $60</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="C"><span>C) $110</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="D"><span>D) $15</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5', 'C')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                Opportunity cost = Explicit cost ($50 ticket) + Implicit cost (4 hours × $15/hour = $60) = <strong>$110</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="card">
+        <h3>📖 Glossary</h3>
+        <div class="glossary-term">
+            <dt>Economics</dt>
+            <dd>The study of how individuals, firms, and societies make choices when faced with scarcity.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Microeconomics</dt>
+            <dd>Study of individual economic agents and their interactions in specific markets.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Macroeconomics</dt>
+            <dd>Study of the economy as a whole, using aggregate measures like GDP, inflation, and unemployment.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Positive Analysis</dt>
+            <dd>Objective, testable analysis of "what is" (e.g., "A 10% wage increase will reduce employment by 2%").</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Normative Analysis</dt>
+            <dd>Subjective, value-based analysis of "what should be" (e.g., "We should raise the minimum wage").</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Economic Model</dt>
+            <dd>Simplified representation of reality used to understand relationships and make predictions.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Correlation</dt>
+            <dd>A statistical relationship where two variables move together.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Causality</dt>
+            <dd>A relationship where one variable directly causes a change in another.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Counterfactual</dt>
+            <dd>What would have happened in the absence of an event.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Natural Experiment</dt>
+            <dd>Real-world event that mimics a controlled experiment.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Opportunity Cost</dt>
+            <dd>The value of the best alternative forgone when making a choice.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Economic Profit</dt>
+            <dd>Revenue minus economic costs (accounting + opportunity costs).</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Accounting Cost</dt>
+            <dd>Explicit, direct monetary costs (wages, rent, materials).</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Marginal Benefit</dt>
+            <dd>Additional benefit from consuming/producing one more unit.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Marginal Cost</dt>
+            <dd>Additional cost from consuming/producing one more unit.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Rationality</dt>
+            <dd>The assumption that people make choices to maximize their well-being.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Trade-off</dt>
+            <dd>Giving up one thing to get another.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Scarcity</dt>
+            <dd>The fundamental economic problem: limited resources, unlimited wants.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Equilibrium</dt>
+            <dd>A situation where no one can improve by changing behavior unilaterally.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Market Failure</dt>
+            <dd>When markets don't achieve optimal outcomes on their own.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Externalities</dt>
+            <dd>Costs or benefits affecting people not directly involved in a transaction.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Public Goods</dt>
+            <dd>Goods that are non-excludable and non-rivalrous.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Sunk Cost</dt>
+            <dd>Costs already incurred that can't be recovered.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Incentive</dt>
+            <dd>Something that motivates a particular action or behavior.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Inflation</dt>
+            <dd>A general increase in the level of prices.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Gini Coefficient</dt>
+            <dd>Statistical measure of income inequality (0 = perfect equality, 1 = perfect inequality).</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Protectionism</dt>
+            <dd>Government actions that restrict international trade.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Tariff</dt>
+            <dd>A tax on imported goods.</dd>
+        </div>
+        <div class="glossary-term">
+            <dt>Monopoly</dt>
+            <dd>A single seller in a market.</dd>
+        </div>
+    </div>
+
+    <script>
+        // Handle radio button selection styling
+        document.querySelectorAll('.question-block').forEach(block => {
+            const radios = block.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const labels = block.querySelectorAll('.option-label');
+                    labels.forEach(label => label.classList.remove('selected'));
+                    if (this.checked) {
+                        this.closest('.option-label').classList.add('selected');
+                    }
+                });
+            });
+        });
+
+        function toggleAnswer(questionId, correctAnswer) {
+            const questionBlock = document.getElementById(questionId);
+            if (!questionBlock) return;
+
+            const answerArea = questionBlock.querySelector('.answer-area');
+            const btn = questionBlock.querySelector('.btn-show-answer');
+            const labels = questionBlock.querySelectorAll('.option-label');
+            const radios = questionBlock.querySelectorAll('input[type="radio"]');
+
+            if (answerArea.classList.contains('show')) {
+                // Hide answer
+                answerArea.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+
+                labels.forEach(label => {
+                    label.classList.remove('correct-answer', 'wrong-answer', 'disabled');
+                });
+                radios.forEach(radio => {
+                    radio.disabled = false;
+                });
+
+            } else {
+                // Show answer
+                answerArea.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+
+                radios.forEach(radio => {
+                    radio.disabled = true;
+                });
+
+                labels.forEach(label => {
+                    const radio = label.querySelector('input[type="radio"]');
+                    const isCorrect = label.dataset.correct === 'true';
+
+                    if (isCorrect) {
+                        label.classList.add('correct-answer');
+                    }
+
+                    if (radio && radio.checked && !isCorrect) {
+                        label.classList.add('wrong-answer');
+                    }
+
+                    label.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

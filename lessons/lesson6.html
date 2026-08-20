@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 6: Technology & Cost</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+        .card li { margin: 0.3rem 0; line-height: 1.6; }
+        .highlight-box { background: #eef4fa; padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #1f6e8c; margin: 1rem 0; }
+        .formula-box { background: #e7edf6; padding: 0.8rem 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 500; color: #003153; display: inline-block; margin: 0.4rem 0; border: 1px solid #bfd3e6; }
+        .exam-trap { background: #fef6ee; border-left: 4px solid #c77d4a; padding: 0.8rem 1.5rem; border-radius: 10px; margin: 0.6rem 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .glossary-term { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #e8edf3; }
+        .glossary-term dt { font-weight: 600; color: #0b2b4a; min-width: 160px; }
+        .glossary-term dd { color: #334155; }
+        .graph-container { width: 100%; max-width: 850px; margin: 1.5rem auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 0.5rem; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .graph-container svg { width: 100%; height: auto; display: block; }
+        .graph-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; text-align: center; padding: 0.8rem 0 0.3rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .graph-subtitle { font-size: 0.85rem; color: #64748b; text-align: center; padding-bottom: 0.5rem; }
+        .graph-insight { padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 6px; margin-top: 0.5rem; }
+        .graph-insight p { font-size: 0.85rem; color: #1e293b; margin: 0; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .glossary-term { flex-direction: column; gap: 0.2rem; } .glossary-term dt { min-width: unset; } .graph-container { margin: 0.5rem 0; } .graph-container svg text { font-size: 10px !important; } .graph-title { font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Lesson 6: Technology & Cost</div>
+
+    <div class="page-header">
+        <h2>⚙️ 6. Technology & Cost of Production</h2>
+        <div class="subtitle">Production functions, returns to scale, and the economics of innovation</div>
+    </div>
+
+    <!-- LEARNING OBJECTIVES -->
+    <div class="card">
+        <h3>📌 Learning Objectives</h3>
+        <ul>
+            <li>Define a firm according to the classical (technology) approach</li>
+            <li>Explain what a production function represents and how it summarizes technology</li>
+            <li>Distinguish between short-term and long-term production decisions</li>
+            <li>Explain the Law of Diminishing Marginal Product and why it matters</li>
+            <li>Calculate and classify Returns to Scale (Constant, Increasing, Decreasing)</li>
+            <li>Identify efficient vs. inefficient production points on a graph</li>
+            <li>Analyze the impact of innovation/technological progress on production</li>
+            <li>Define and differentiate between: Total Cost (TC), Fixed Cost (FC), Variable Cost (VC), Average Cost (AC), Average Variable Cost (AVC), and Marginal Cost (MC)</li>
+            <li>Explain the relationship between technology and cost functions</li>
+            <li>Understand how costs depend on the time horizon</li>
+        </ul>
+    </div>
+
+    <!-- TOPIC INTRODUCTION -->
+    <div class="card">
+        <h3>🔹 Topic Introduction</h3>
+        <p>This chapter is about how firms turn inputs (labor, capital, machinery) into outputs (goods and services). Think of it as the "recipe book" for a business. Understanding production functions is crucial because it explains:</p>
+        <ul>
+            <li>Why companies can't just keep hiring more workers forever and expect the same growth</li>
+            <li>Why some industries are dominated by a few large firms (like Boeing or Facebook)</li>
+            <li>Why innovation is the engine of long-term economic growth</li>
+            <li>How businesses decide how much to produce and at what cost</li>
+            <li>How different types of costs (fixed, variable, average, marginal) shape firm decisions</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Why should you care?</strong> Whether you're running a lemonade stand or analyzing a multinational corporation, production functions tell you the fundamental limits and possibilities of turning resources into value. This knowledge helps explain real-world phenomena like why the Soviet Union's growth eventually stalled, why Apple keeps innovating, why your favorite products get cheaper and better over time, and why social media companies can expand globally with minimal extra cost.
+        </div>
+    </div>
+
+    <!-- CONCEPT 1: WHAT IS A FIRM -->
+    <div class="card">
+        <h3>🔹 What is a Firm?</h3>
+
+        <h4>Three Approaches to Defining a Firm</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Approach</th><th>Definition</th><th>Example</th></tr>
+                <tr><td>Legal Approach</td><td>Defined by legal structure</td><td>Individual enterprises (private bankers), Limited companies (UBS)</td></tr>
+                <tr><td>Property Rights Approach (Coase)</td><td>Firms minimize transaction costs by centralizing and coordinating activities</td><td>Instead of each worker contracting separately, the firm coordinates production</td></tr>
+                <tr><td>Technology Approach (Classical)</td><td>A firm transforms inputs into outputs</td><td>Labor + Capital + Land → Goods/Services</td></tr>
+            </table>
+        </div>
+
+        <h4>The Technology Approach (Focus of this Chapter)</h4>
+        <p><strong>Simple Version:</strong> A firm is a "black box" that takes inputs (factors of production) and transforms them into outputs (goods and services).</p>
+
+        <div class="highlight-box">
+            <strong>The Bakery Example:</strong>
+            <ul>
+                <li><strong>Inputs:</strong> Flour, eggs, sugar (natural resources), ovens (capital), bakers (labor), kitchen (land)</li>
+                <li><strong>Technology (Recipe):</strong> The specific method of combining inputs</li>
+                <li><strong>Output:</strong> Cakes</li>
+            </ul>
+        </div>
+
+        <p><strong>Why This Matters:</strong> The technology approach helps us understand production possibilities, focuses on efficiency—getting the most output from given inputs, and forms the foundation for understanding costs and supply decisions.</p>
+    </div>
+
+    <!-- CONCEPT 2: THE PRODUCTION FUNCTION -->
+    <div class="card">
+        <h3>🔹 The Production Function</h3>
+        <p><strong>Definition:</strong> The production function describes the <strong>maximum output</strong> a firm can produce given a specific set of inputs and the available technology.</p>
+        <p><strong>Simple Version:</strong> It's the "recipe" that shows how many units of output (Q) you get from using certain amounts of labor (L), capital (K), land (T), energy (E), and natural resources (M).</p>
+
+        <div class="formula-box">q = f(K, L, T, E, M)</div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Variable</th><th>Definition</th></tr>
+                <tr><td>q</td><td>Quantity of output</td></tr>
+                <tr><td>K</td><td>Physical capital (machines, buildings, equipment)</td></tr>
+                <tr><td>L</td><td>Labor (number of workers, hours worked)</td></tr>
+                <tr><td>T</td><td>Land</td></tr>
+                <tr><td>E</td><td>Energy</td></tr>
+                <tr><td>M</td><td>Natural resources</td></tr>
+            </table>
+        </div>
+
+        <p><strong>Simplification:</strong> In this course, we often focus on the two main factors:</p>
+        <div class="formula-box">q = f(K, L)</div>
+        <ul>
+            <li><strong>K = Capital</strong> (fixed in the short run, variable in the long run)</li>
+            <li><strong>L = Labor</strong> (typically variable in the short run)</li>
+        </ul>
+
+        <h4>The "Black Box" Concept</h4>
+        <ul>
+            <li>The function f is a "black box"—we don't need to know exactly how inputs transform into outputs</li>
+            <li>It summarizes the best possible way of combining inputs to produce output</li>
+            <li>It represents the <strong>technological frontier</strong>—the maximum output possible</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Real-World Example: Making a Cake</strong>
+            <ul>
+                <li><strong>Labor:</strong> Time spent preparing the cake</li>
+                <li><strong>Capital:</strong> Blender and other utensils</li>
+                <li><strong>Land:</strong> Your kitchen</li>
+                <li><strong>Natural Resources:</strong> Flour, eggs, ingredients</li>
+                <li><strong>Intermediates:</strong> Edible decorations</li>
+                <li><strong>Technology (Recipe):</strong> The method of combining ingredients</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CONCEPT 3: SHORT-RUN VS LONG-RUN -->
+    <div class="card">
+        <h3>🔹 Short-Term vs. Long-Term Production</h3>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Feature</th><th>Short-Term</th><th>Long-Term</th></tr>
+                <tr><td>Definition</td><td>A period where at least one input is fixed</td><td>A period where all inputs can be adjusted</td></tr>
+                <tr><td>Typical Fixed Input</td><td>Capital (K) - factories, equipment</td><td>None - everything is variable</td></tr>
+                <tr><td>Typical Variable Input</td><td>Labor (L) - can hire/fire workers</td><td>All inputs can change</td></tr>
+                <tr><td>Nature of Decisions</td><td>Day-to-day operational decisions</td><td>Strategic planning decisions</td></tr>
+                <tr><td>Irreversibility</td><td>Long-term decisions are irreversible in short term</td><td>Decisions can be fully implemented</td></tr>
+            </table>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Important Caveat:</strong> Most of the time, we assume L is flexible and K is fixed in the short run. However, in some cases, it's the other way around! Example: Countries where firing workers is almost impossible (e.g., with strong labor protections). In this case, labor is fixed in the short run, while capital might be adjustable.</div>
+
+        <p><strong>Why This Distinction Matters:</strong></p>
+        <ul>
+            <li>In the short run, firms face constraints—they can't instantly build new factories</li>
+            <li>In the long run, firms can redesign their entire operation</li>
+            <li>This distinction explains why marginal product eventually diminishes</li>
+            <li>Cost functions differ between short and long run</li>
+        </ul>
+    </div>
+
+    <!-- CONCEPT 4: MARGINAL VS AVERAGE PRODUCT -->
+    <div class="card">
+        <h3>🔹 Marginal vs. Average Product</h3>
+
+        <h4>Marginal Product of Labor (MPL)</h4>
+        <p><strong>Definition:</strong> The additional output produced by one additional unit of labor.</p>
+        <div class="formula-box">MPL = Δq / ΔL</div>
+        <p><strong>Example:</strong> If hiring one more worker increases output from 100 to 108 units, the MPL = 8 units.</p>
+
+        <h4>Marginal Revenue (Value) of Labor</h4>
+        <p><strong>Definition:</strong> The additional revenue generated by one additional unit of labor.</p>
+        <div class="formula-box">Marginal Revenue of Labor = p × MPL</div>
+        <p>where p = selling price per unit</p>
+
+        <h4>Average Product of Labor (APL)</h4>
+        <p><strong>Definition:</strong> How many units each worker produces on average.</p>
+        <div class="formula-box">APL = q / L</div>
+        <p><strong>Example:</strong> If 5 workers produce 100 units, APL = 100/5 = 20 units per worker.</p>
+
+        <h4>Average Revenue (Value) per Worker</h4>
+        <div class="formula-box">Average Revenue per Worker = p × q / L</div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Concept</th><th>Formula</th><th>What It Tells Us</th></tr>
+                <tr><td>Marginal Product</td><td>Δq/ΔL</td><td>Output of the last worker</td></tr>
+                <tr><td>Average Product</td><td>q/L</td><td>Output of a typical worker</td></tr>
+                <tr><td>Marginal Revenue</td><td>p × Δq/ΔL</td><td>Revenue from the last worker</td></tr>
+                <tr><td>Average Revenue</td><td>p × q/L</td><td>Revenue from a typical worker</td></tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Key Insight:</strong> Laymen think about averages. <strong>Economists think at the margin.</strong>
+        </div>
+    </div>
+
+    <!-- CONCEPT 5: LAW OF DIMINISHING MARGINAL PRODUCT -->
+    <div class="card">
+        <h3>🔹 The Law of Diminishing Marginal Product</h3>
+        <p><strong>Definition:</strong> The Law of Diminishing Marginal Product states that as a firm increases one input (while holding others fixed), the additional output from each extra unit of that input will <strong>eventually decrease</strong>.</p>
+        <p><strong>Simple Version:</strong> The more workers you add to a fixed kitchen, the less each new worker contributes to output.</p>
+
+        <h4>Why This Happens</h4>
+        <ul>
+            <li>You have a fixed amount of capital (machines, space, equipment)</li>
+            <li>Each new worker adds some output</li>
+            <li>But as more workers are crowded into the same space, they get in each other's way</li>
+            <li>Workers may have to share equipment, wait for machines, or bump into each other</li>
+            <li>Each additional worker therefore adds less than the previous worker</li>
+        </ul>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Property</th><th>What It Means</th><th>Math Notation</th></tr>
+                <tr><td>Positive Relationship</td><td>More labor → More output</td><td>dq/dL > 0</td></tr>
+                <tr><td>Diminishing Returns</td><td>The increase in output gets smaller</td><td>d²q/dL² < 0</td></tr>
+                <tr><td>Concave Shape</td><td>Curve gets flatter as L increases</td><td>Graph is concave</td></tr>
+            </table>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>What If Marginal Product Becomes Negative?</strong> Theoretically possible: Too many workers get in each other's way and total output falls. Realistically: A rational firm stops hiring before this point. Graphically: The firm never operates on the downward-sloping portion of the production function.</div>
+    </div>
+
+    <!-- GRAPH: PRODUCTION FUNCTION -->
+    <div class="card">
+        <h3>📈 Graph: Short-Run Production Function</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 1: Short-Run Production Function</div>
+            <div class="graph-subtitle">Showing diminishing marginal product</div>
+            <svg viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="700" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="680" y2="400"/>
+                    <line x1="80" y1="100" x2="680" y2="100"/>
+                    <line x1="80" y1="150" x2="680" y2="150"/>
+                    <line x1="80" y1="200" x2="680" y2="200"/>
+                    <line x1="80" y1="250" x2="680" y2="250"/>
+                    <line x1="80" y1="300" x2="680" y2="300"/>
+                    <line x1="80" y1="350" x2="680" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="380" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Labor (L)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Output (q)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="680,400 665,390 665,410" fill="#0b2b4a"/>
+                <path d="M 80,380 Q 200,280 360,180 Q 500,120 640,80" stroke="#2563eb" stroke-width="3" fill="none"/>
+                <text x="620" y="85" font-size="16" font-weight="700" fill="#2563eb">q = f(L)</text>
+                <rect x="120" y="250" width="180" height="60" rx="5" fill="#fca5a5" fill-opacity="0.3" stroke="#dc2626" stroke-width="1"/>
+                <text x="170" y="275" font-size="12" font-weight="700" fill="#991b1b">Feasible</text>
+                <text x="170" y="292" font-size="12" font-weight="700" fill="#991b1b">but Inefficient</text>
+                <rect x="480" y="60" width="180" height="60" rx="5" fill="#ef4444" fill-opacity="0.15" stroke="#dc2626" stroke-width="1" stroke-dasharray="4,4"/>
+                <text x="520" y="85" font-size="12" font-weight="700" fill="#991b1b">Impossible</text>
+                <text x="520" y="102" font-size="12" font-weight="700" fill="#991b1b">Region</text>
+                <rect x="470" y="280" width="190" height="70" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="300" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <text x="480" y="318" font-size="11" fill="#22c55e">On curve = Efficient</text>
+                <text x="480" y="336" font-size="11" fill="#f59e0b">Inside = Inefficient</text>
+                <text x="480" y="354" font-size="11" fill="#dc2626">Outside = Impossible</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> The production function is <strong>concave</strong>—it gets flatter as labor increases. This reflects the Law of Diminishing Marginal Product. Points on the curve are efficient; points below are inefficient; points above are impossible with current technology.</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 6: RETURNS TO SCALE -->
+    <div class="card">
+        <h3>🔹 Returns to Scale (Long-Term Production)</h3>
+        <p><strong>Definition:</strong> Returns to Scale describes what happens to output when <strong>all inputs are increased by the same proportion</strong> (e.g., doubling both Labor AND Capital).</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Type</th><th>Effect on Output</th><th>Mathematical Condition</th><th>Real-World Example</th></tr>
+                <tr><td>Constant Returns to Scale (CRS)</td><td>Output doubles when inputs double</td><td>Δq = 2</td><td>Small bakery doubling both workers and ovens</td></tr>
+                <tr><td>Increasing Returns to Scale (IRS)</td><td>Output more than doubles</td><td>Δq > 2</td><td>Boeing, Facebook, TikTok (network effects)</td></tr>
+                <tr><td>Decreasing Returns to Scale (DRS)</td><td>Output less than doubles</td><td>Δq < 2</td><td>Farming (limited quality land), CEO talent</td></tr>
+            </table>
+        </div>
+
+        <h4>Why Do Returns to Scale Differ?</h4>
+        <ul>
+            <li><strong>Increasing Returns (IRS):</strong> Specialization, network effects, indivisibilities, spreading fixed costs. Example: 52% of US private-sector employees work in firms with at least 500 employees.</li>
+            <li><strong>Decreasing Returns (DRS):</strong> Limited quality of inputs, management difficulties, un-replicable factors. Example: Agriculture—the best land is used first, expansion uses poorer land.</li>
+            <li><strong>Constant Returns (CRS):</strong> Proportional scaling. Example: A small consulting firm doubling employees and office space.</li>
+        </ul>
+
+        <h4>Variable Returns to Scale</h4>
+        <p>Production functions can also exhibit variable returns to scale: IRS at small volumes (gains from specialization) and DRS at larger volumes (management difficulties). This creates the <strong>U-shaped average cost curve</strong>!</p>
+
+        <div class="highlight-box">
+            <strong>The Cobb-Douglas Shortcut</strong><br>
+            For a production function of the form: q = A × K<sup>α</sup> × L<sup>β</sup><br>
+            Just sum the exponents (α + β):
+            <ul>
+                <li><strong>α + β > 1</strong> → Increasing Returns to Scale (IRS)</li>
+                <li><strong>α + β = 1</strong> → Constant Returns to Scale (CRS)</li>
+                <li><strong>α + β < 1</strong> → Decreasing Returns to Scale (DRS)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CONCEPT 7: INNOVATION -->
+    <div class="card">
+        <h3>🔹 Technological Progress (Innovation)</h3>
+        <p><strong>Definition:</strong> Innovation/Technological Progress means:</p>
+        <ul>
+            <li><strong>Doing more with the same:</strong> Producing more output with the same amounts of inputs, OR</li>
+            <li><strong>Doing the same with less:</strong> Producing the same output with smaller amounts of inputs</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>The Ultimate Growth Engine</strong><br>
+            <strong>The Problem:</strong> Without innovation, growth from accumulating one input eventually stops (diminishing returns).<br>
+            <strong>The Solution:</strong> Innovation overcomes diminishing returns by making inputs more productive.
+        </div>
+
+        <h4>Moore's Law: Real-World Innovation Example</h4>
+        <p><strong>Gordon Moore's Law:</strong> The number of transistors squeezed into integrated circuits doubles approximately every year (revised to every two years).</p>
+        <ul>
+            <li><strong>Impact:</strong> Computers get exponentially more powerful, prices drop dramatically, same cost → massively more performance</li>
+            <li>This is innovation in action!</li>
+        </ul>
+
+        <h4>Historical Case Study: The Soviet Union (1928-1940)</h4>
+        <ul>
+            <li><strong>The Phenomenon:</strong> Manufacturing output increased by more than 170%.</li>
+            <li><strong>Three Main Ingredients:</strong> Big push in industry — heavy state-financed investment; Abundance of rural labor — moving workers from farms to cities; Collective farming — highly productive agricultural system</li>
+            <li><strong>The Illusion of Growth:</strong> The Soviet Union appeared to grow faster than democracies. But growth came from accumulating more resources, not innovation. Marginal product of labor was close to zero in agriculture. Growth eventually stalled when diminishing returns hit.</li>
+        </ul>
+
+        <div class="exam-trap">⚠️ <strong>The Lesson:</strong> Growth achieved by accumulating more resources is <strong>not sustainable without innovation.</strong></div>
+
+        <h4>The Rock Climbing Metaphor (Yosemite's "The Nose")</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Feature</th><th>1958</th><th>2017 (Alex Honnold)</th></tr>
+                <tr><td>Time</td><td>47 days</td><td>3 hours 56 minutes</td></tr>
+                <tr><td>Equipment</td><td>Heavy ropes, pitons, artificial aiders</td><td>No ropes (Free Solo)</td></tr>
+                <tr><td>Key Factor</td><td>Brute force, trial and error</td><td>Knowledge transmission</td></tr>
+            </table>
+        </div>
+        <p><strong>The Main Takeaway:</strong> Honnold's incredible performance wasn't just about better equipment or individual talent—it was about <strong>accumulated knowledge</strong>. Climbing techniques evolved and were shared over 60 years.</p>
+
+        <h4>Two Main Elements of Innovation</h4>
+        <ul>
+            <li><strong>Knowledge transmission</strong> — innovation comes from sharing ideas</li>
+            <li><strong>Group size and information costs</strong> — larger groups sharing ideas → faster knowledge growth</li>
+        </ul>
+        <div class="exam-trap">⚠️ <strong>Policy Implication:</strong> Keeping knowledge discoveries secret (IP protection) might be <strong>harmful</strong> to innovation!</div>
+    </div>
+
+    <!-- GRAPH: INNOVATION -->
+    <div class="card">
+        <h3>📈 Graph: Innovation Shifts the Production Function</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 2: Impact of Technological Progress</div>
+            <div class="graph-subtitle">Innovation shifts the entire production function upward</div>
+            <svg viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="700" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="680" y2="400"/>
+                    <line x1="80" y1="100" x2="680" y2="100"/>
+                    <line x1="80" y1="150" x2="680" y2="150"/>
+                    <line x1="80" y1="200" x2="680" y2="200"/>
+                    <line x1="80" y1="250" x2="680" y2="250"/>
+                    <line x1="80" y1="300" x2="680" y2="300"/>
+                    <line x1="80" y1="350" x2="680" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="380" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Labor (L)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Output (q)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="680,400 665,390 665,410" fill="#0b2b4a"/>
+                <path d="M 80,380 Q 200,300 360,220 Q 500,160 640,130" stroke="#86efac" stroke-width="3" fill="none"/>
+                <text x="620" y="135" font-size="14" font-weight="700" fill="#16a34a">New PF</text>
+                <text x="620" y="150" font-size="11" fill="#16a34a">(After Innovation)</text>
+                <path d="M 80,380 Q 200,320 360,250 Q 500,200 640,180" stroke="#2563eb" stroke-width="3" fill="none" stroke-dasharray="6,4"/>
+                <text x="620" y="185" font-size="14" font-weight="700" fill="#2563eb">Old PF</text>
+                <text x="620" y="200" font-size="11" fill="#2563eb">(Before Innovation)</text>
+                <line x1="360" y1="400" x2="360" y2="50" stroke="#0b2b4a" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="355" y="420" font-size="12" font-weight="600" fill="#0b2b4a">L₁</text>
+                <circle cx="360" cy="250" r="6" fill="#2563eb"/>
+                <text x="368" y="245" font-size="10" fill="#2563eb">q₁</text>
+                <circle cx="360" cy="220" r="6" fill="#16a34a"/>
+                <text x="368" y="215" font-size="10" fill="#16a34a">q₂</text>
+                <text x="370" y="190" font-size="12" fill="#0b2b4a">↑ Shift Up</text>
+                <text x="370" y="205" font-size="11" fill="#0b2b4a">(Same L, More q)</text>
+                <rect x="470" y="280" width="190" height="70" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="300" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="315" x2="495" y2="315" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="505" y="319" font-size="11" fill="#1e293b">Old PF</text>
+                <line x1="480" y1="330" x2="495" y2="330" stroke="#16a34a" stroke-width="2"/>
+                <text x="505" y="334" font-size="11" fill="#1e293b">New PF</text>
+                <circle cx="487" cy="348" r="4" fill="#0b2b4a"/>
+                <text x="505" y="352" font-size="11" fill="#1e293b">Same L, More q</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> Innovation shifts the production function <strong>upward</strong> and makes it <strong>steeper</strong>. The same amount of labor (L₁) now produces more output (q₂ > q₁). Marginal product of labor also increases.</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 8: PRODUCTION COSTS -->
+    <div class="card">
+        <h3>🔹 Production Costs</h3>
+        <p><strong>The Link Between Technology and Costs</strong></p>
+        <ul>
+            <li>The production function (technology) and cost function are <strong>two sides of the same coin</strong></li>
+            <li><strong>Technology</strong> determines physical relationships (inputs → outputs)</li>
+            <li><strong>Costs</strong> determine monetary relationships (inputs → costs)</li>
+            <li><strong>Better technology → lower costs → lower prices → higher supply</strong></li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>The Basic Principle: "Producing more costs more"</strong>
+            <ul>
+                <li>To produce more, you need more inputs</li>
+                <li>More inputs mean higher costs</li>
+                <li>But: The unit cost (cost per unit) can go UP OR DOWN depending on:</li>
+                <li>— Fixed costs being spread over more units</li>
+                <li>— Diminishing returns increasing costs</li>
+                <li>— Economies of scale</li>
+            </ul>
+        </div>
+
+        <h4>The Two Kinds of Unit Cost</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Concept</th><th>Definition</th><th>Formula</th><th>What It Tells Us</th></tr>
+                <tr><td>Average Cost (AC)</td><td>Cost per unit on average</td><td>AC = TC/q</td><td>Cost of a typical unit</td></tr>
+                <tr><td>Marginal Cost (MC)</td><td>Cost of one additional unit</td><td>MC = ΔTC/Δq</td><td>Cost of the last unit</td></tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Key Insight:</strong> Laymen think about averages. <strong>Economists think at the margin.</strong>
+        </div>
+    </div>
+
+    <!-- CONCEPT 9: TAXONOMY OF COSTS -->
+    <div class="card">
+        <h3>🔹 The Taxonomy of Costs</h3>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Cost Type</th><th>Symbol</th><th>Formula</th><th>Definition</th><th>How It Changes</th></tr>
+                <tr><td>Fixed Cost</td><td>FC</td><td>TC when q=0</td><td>Costs that don't change with q</td><td>Constant (invariant)</td></tr>
+                <tr><td>Variable Cost</td><td>VC</td><td>VC(q)</td><td>Costs that change with q</td><td>Varies with q</td></tr>
+                <tr><td>Total Cost</td><td>TC</td><td>FC + VC(q)</td><td>All production costs</td><td>Increases with q</td></tr>
+                <tr><td>Average Cost</td><td>AC</td><td>TC/q</td><td>Cost per unit on average</td><td>U-shaped</td></tr>
+                <tr><td>Average Variable Cost</td><td>AVC</td><td>VC/q</td><td>Variable cost per unit</td><td>Often U-shaped</td></tr>
+                <tr><td>Marginal Cost</td><td>MC</td><td>ΔTC/Δq</td><td>Cost of one more unit</td><td>U-shaped</td></tr>
+            </table>
+        </div>
+
+        <h4>Fixed Costs (FC)</h4>
+        <p><strong>Definition:</strong> The portion of total costs that is invariant in the level of production (q).</p>
+        <ul>
+            <li>Must be paid even if q = 0</li>
+            <li>Associated with setting up production facilities</li>
+            <li><strong>Examples:</strong> Rent, equipment purchases, insurance, salaries of permanent staff</li>
+            <li><strong>Formula:</strong> FC = TC when q = 0</li>
+        </ul>
+
+        <h4>Variable Costs (VC)</h4>
+        <p><strong>Definition:</strong> The portion of total costs that varies when the level of output (q) varies.</p>
+        <ul>
+            <li>Changes with output level</li>
+            <li><strong>Examples:</strong> Raw materials, hourly wages, electricity</li>
+            <li><strong>Formula:</strong> VC = VC(q) — depends on q</li>
+        </ul>
+
+        <h4>Total Costs (TC)</h4>
+        <div class="formula-box">TC(q) = FC + VC(q)</div>
+
+        <h4>Average Cost (AC)</h4>
+        <div class="formula-box">AC = TC / q</div>
+
+        <h4>Average Variable Cost (AVC)</h4>
+        <div class="formula-box">AVC = VC / q</div>
+
+        <h4>Marginal Cost (MC)</h4>
+        <div class="formula-box">MC = ΔTC / Δq</div>
+
+        <div class="exam-trap">⚠️ <strong>Key Point:</strong> MC is the key concept for the firm's choice of output (as we'll see in the next chapter on supply).</div>
+    </div>
+
+    <!-- CONCEPT 10: SHAPE OF COST CURVES -->
+    <div class="card">
+        <h3>🔹 The Shape of Cost Curves</h3>
+
+        <h4>The U-Shaped Average Cost (AC)</h4>
+        <p><strong>Why is AC "U-shaped"?</strong></p>
+        <ul>
+            <li><strong>Declining portion:</strong> Fixed costs are "spread over" more units → AC falls</li>
+            <li><strong>Rising portion:</strong> Diminishing returns → more inputs needed for each additional unit → AC rises</li>
+        </ul>
+
+        <h4>The U-Shaped Marginal Cost (MC)</h4>
+        <ul>
+            <li><strong>Initial decline:</strong> Specialization and learning by doing → MC falls</li>
+            <li><strong>Eventual rise:</strong> Diminishing returns → each extra unit costs more → MC rises</li>
+        </ul>
+
+        <h4>The Relationship Between AC and MC</h4>
+        <div class="highlight-box" style="border-left-color: #c77d4a; background: #fef6ee;">
+            <strong>📌 The Golden Rule:</strong>
+            <ul>
+                <li><strong>When MC < AC, AC is falling</strong></li>
+                <li><strong>When MC > AC, AC is rising</strong></li>
+                <li><strong>When MC = AC, AC is at its minimum</strong></li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Why?</strong> Think of MC as the "new score" and AC as the "average score." If the new score is below the average, the average falls. If the new score is above the average, the average rises.
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Condition</th><th>Effect on AC</th></tr>
+                <tr><td>MC < AC</td><td>AC is falling</td></tr>
+                <tr><td>MC > AC</td><td>AC is rising</td></tr>
+                <tr><td>MC = AC</td><td>AC is at minimum</td></tr>
+            </table>
+        </div>
+
+        <h4>Numerical Example</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>q</th><th>FC</th><th>VC</th><th>TC</th><th>AC</th><th>MC</th></tr>
+                <tr><td>0</td><td>100</td><td>0</td><td>100</td><td>-</td><td>-</td></tr>
+                <tr><td>1</td><td>100</td><td>10</td><td>110</td><td>110</td><td>10</td></tr>
+                <tr><td>2</td><td>100</td><td>18</td><td>118</td><td>59</td><td>8</td></tr>
+                <tr><td>3</td><td>100</td><td>32</td><td>132</td><td>44</td><td>14</td></tr>
+                <tr><td>4</td><td>100</td><td>80</td><td>180</td><td>45</td><td>48</td></tr>
+                <tr><td>5</td><td>100</td><td>170</td><td>270</td><td>54</td><td>90</td></tr>
+            </table>
+        </div>
+        <p><strong>Observations:</strong> AC falls (110 → 44) then rises (44 → 54). MC falls (10 → 8) then rises (8 → 90). MC crosses AC at AC's minimum (q = 3-4 range).</p>
+    </div>
+
+    <!-- GRAPH: COST CURVES -->
+    <div class="card">
+        <h3>📈 Graph: Cost Curves</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 3: Total, Average, and Marginal Cost</div>
+            <div class="graph-subtitle">Showing the U-shaped AC and MC curves and their relationship</div>
+            <svg viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="700" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="680" y2="400"/>
+                    <line x1="80" y1="100" x2="680" y2="100"/>
+                    <line x1="80" y1="150" x2="680" y2="150"/>
+                    <line x1="80" y1="200" x2="680" y2="200"/>
+                    <line x1="80" y1="250" x2="680" y2="250"/>
+                    <line x1="80" y1="300" x2="680" y2="300"/>
+                    <line x1="80" y1="350" x2="680" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="380" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (q)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Cost ($)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="680,400 665,390 665,410" fill="#0b2b4a"/>
+                <path d="M 80,380 Q 300,320 500,200 Q 600,100 680,80" stroke="#8b5cf6" stroke-width="3" fill="none"/>
+                <text x="660" y="85" font-size="14" font-weight="700" fill="#8b5cf6">TC</text>
+                <path d="M 80,280 Q 200,120 360,140 Q 500,200 640,340" stroke="#f59e0b" stroke-width="3" fill="none"/>
+                <text x="330" y="130" font-size="14" font-weight="700" fill="#f59e0b">MC</text>
+                <path d="M 80,350 Q 200,190 360,200 Q 500,250 640,350" stroke="#dc2626" stroke-width="3" fill="none"/>
+                <text x="330" y="190" font-size="14" font-weight="700" fill="#dc2626">AC</text>
+                <circle cx="360" cy="200" r="6" fill="#0b2b4a"/>
+                <text x="368" y="195" font-size="11" font-weight="600" fill="#0b2b4a">Minimum AC</text>
+                <text x="368" y="210" font-size="10" fill="#0b2b4a">(MC = AC)</text>
+                <rect x="470" y="280" width="190" height="100" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="300" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="315" x2="495" y2="315" stroke="#8b5cf6" stroke-width="2"/>
+                <text x="505" y="319" font-size="11" fill="#1e293b">TC (Total Cost)</text>
+                <line x1="480" y1="330" x2="495" y2="330" stroke="#f59e0b" stroke-width="2"/>
+                <text x="505" y="334" font-size="11" fill="#1e293b">MC (Marginal Cost)</text>
+                <line x1="480" y1="345" x2="495" y2="345" stroke="#dc2626" stroke-width="2"/>
+                <text x="505" y="349" font-size="11" fill="#1e293b">AC (Average Cost)</text>
+                <circle cx="487" cy="365" r="3" fill="#0b2b4a"/>
+                <text x="505" y="369" font-size="11" fill="#1e293b">MC crosses AC at AC's min</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> MC intersects AC at AC's minimum. When MC < AC, AC is falling. When MC > AC, AC is rising. This is the fundamental relationship between marginal and average values.</p></div>
+        </div>
+    </div>
+
+    <!-- FORMULAS -->
+    <div class="card">
+        <h3>🧮 Key Formulas</h3>
+
+        <div class="formula-box">q = A × K<sup>α</sup> × L<sup>β</sup> (Cobb-Douglas)</div>
+        <div class="formula-box">α + β = Returns to Scale ( >1 = IRS, =1 = CRS, <1 = DRS )</div>
+        <div class="formula-box">MPL = Δq / ΔL (Marginal Product of Labor)</div>
+        <div class="formula-box">APL = q / L (Average Product of Labor)</div>
+        <div class="formula-box">TC = FC + VC(q) (Total Cost)</div>
+        <div class="formula-box">AC = TC / q (Average Cost)</div>
+        <div class="formula-box">AVC = VC / q (Average Variable Cost)</div>
+        <div class="formula-box">MC = ΔTC / Δq (Marginal Cost)</div>
+
+        <div class="highlight-box">
+            <strong>Step-by-Step Example: Returns to Scale</strong><br>
+            q = K<sup>0.5</sup> × L<sup>0.5</sup>. Initial: K = 36, L = 100 → q = 6 × 10 = 60.<br>
+            Double inputs: K = 72, L = 200 → q = 8.49 × 14.14 ≈ 120.<br>
+            Output doubled (60 → 120). α + β = 0.5 + 0.5 = 1 → <strong>Constant Returns to Scale</strong>.
+        </div>
+    </div>
+
+    <!-- EXAM SCENARIOS -->
+    <div class="card">
+        <h3>📝 Exam Scenarios & Problem-Solving</h3>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 1: Returns to Scale</h4>
+            <p><strong>Scenario:</strong> q = K<sup>0.5</sup> × L<sup>0.5</sup>. Calculate output when K = 100 and L = 64. If both inputs are doubled, what happens? What type of returns to scale?</p>
+            <p><strong>Solution:</strong> q = 100<sup>0.5</sup> × 64<sup>0.5</sup> = 10 × 8 = 80. Double inputs → q = 200<sup>0.5</sup> × 128<sup>0.5</sup> ≈ 14.14 × 11.31 ≈ 160. Output doubled → Constant Returns to Scale (α + β = 1).</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 2: Social Media Returns to Scale</h4>
+            <p><strong>Scenario:</strong> Social media like TikTok can be easily expanded to more places without much additional cost. This is an example of:</p>
+            <p><strong>Solution:</strong> Increasing Returns to Scale. Adding users (inputs) leads to more than proportional output growth because network effects mean each new user adds value beyond their own contribution.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 3: AC and MC Relationship</h4>
+            <p><strong>Scenario:</strong> Which statement is correct about AC and MC?</p>
+            <p><strong>Solution:</strong> When AC = MC, the AC curve has a zero slope (it's at its minimum point).</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0;">
+            <h4>Scenario 4: Innovation and Cost Reduction</h4>
+            <p><strong>Scenario:</strong> q = 10 × K<sup>0.5</sup> × L<sup>0.5</sup>. K = 100, L = 64. What is current output? If innovation improves technology to A = 20, what happens?</p>
+            <p><strong>Solution:</strong> q = 10 × 10 × 8 = 800. New q = 20 × 10 × 8 = 1,600. Output doubles with the same inputs. Cost curves shift downward (lower AC and MC at every q).</p>
+        </div>
+    </div>
+
+    <!-- HIGH-YIELD EXAM FOCUS -->
+    <div class="card">
+        <h3>⚡ High-Yield Exam Focus</h3>
+
+        <h4>Memorization Checklist</h4>
+        <div class="grid-2">
+            <ul>
+                <li>□ Production Function</li>
+                <li>□ Short Run / Long Run</li>
+                <li>□ Marginal Product</li>
+                <li>□ Diminishing Marginal Product</li>
+                <li>□ Returns to Scale</li>
+                <li>□ Increasing Returns to Scale (IRS)</li>
+                <li>□ Constant Returns to Scale (CRS)</li>
+                <li>□ Decreasing Returns to Scale (DRS)</li>
+            </ul>
+            <ul>
+                <li>□ Innovation / Technological Progress</li>
+                <li>□ Total Cost (TC)</li>
+                <li>□ Fixed Cost (FC)</li>
+                <li>□ Variable Cost (VC)</li>
+                <li>□ Average Cost (AC)</li>
+                <li>□ Average Variable Cost (AVC)</li>
+                <li>□ Marginal Cost (MC)</li>
+                <li>□ Cobb-Douglas Production Function</li>
+            </ul>
+        </div>
+
+        <h4>Common Exam Traps</h4>
+        <ul>
+            <li><strong>Confusing Short-Run and Long-Run Concepts:</strong> Diminishing returns is a <strong>short-run</strong> concept (one input fixed). Returns to scale is about changing <strong>ALL</strong> inputs.</li>
+            <li><strong>Confusing Marginal and Average:</strong> MC = cost of LAST unit, AC = average of ALL units.</li>
+            <li><strong>Misinterpreting Shifts vs. Movements:</strong> Innovation SHIFTS the production function UP. Hiring more workers is a MOVEMENT ALONG the curve.</li>
+            <li><strong>Getting Returns to Scale Backwards:</strong> Output doubles when inputs double = CONSTANT Returns. Output more than doubles = INCREASING Returns.</li>
+            <li><strong>Forgetting Fixed Costs in Cost Calculations:</strong> Total cost at q=0 equals FIXED COSTS.</li>
+        </ul>
+
+        <h4>The "If This, Then That" Logic</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then...</th></tr>
+                <tr><td>α + β > 1</td><td>Increasing Returns to Scale</td></tr>
+                <tr><td>α + β = 1</td><td>Constant Returns to Scale</td></tr>
+                <tr><td>α + β < 1</td><td>Decreasing Returns to Scale</td></tr>
+                <tr><td>MC < AC</td><td>AC is falling</td></tr>
+                <tr><td>MC > AC</td><td>AC is rising</td></tr>
+                <tr><td>MC = AC</td><td>AC is at minimum</td></tr>
+                <tr><td>Innovation occurs</td><td>Production function shifts UP → Cost curves shift DOWN</td></tr>
+            </table>
+        </div>
+
+        <h4>Quick Reference: Cost Curve Relationships</h4>
+        <ul>
+            <li><strong>TC</strong> is always increasing in q</li>
+            <li><strong>AC</strong> is U-shaped: falls then rises</li>
+            <li><strong>MC</strong> is U-shaped: falls then rises</li>
+            <li><strong>MC crosses AC at AC's minimum</strong></li>
+            <li><strong>MC < AC → AC falling</strong></li>
+            <li><strong>MC > AC → AC rising</strong></li>
+            <li><strong>MC = AC → AC at minimum</strong></li>
+        </ul>
+    </div>
+
+    <!-- PRACTICE QUESTIONS -->
+    <div class="card">
+        <h3>📝 Practice Questions</h3>
+
+        <div class="question-block" id="q1">
+            <div class="q-text">Q1: The Law of Diminishing Marginal Product states that:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) Total output decreases as more workers are hired</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="B"><span>B) The additional output from each extra worker eventually decreases</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="C"><span>C) Average product always increases</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) Returns to scale are always increasing</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>The Law of Diminishing Marginal Product states that as one input increases (holding others fixed), the additional output from each extra unit eventually decreases.</div>
+        </div>
+
+        <div class="question-block" id="q2">
+            <div class="q-text">Q2: If α + β = 1.3 in a Cobb-Douglas production function, what type of returns to scale does it exhibit?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q2" value="A"><span>A) Constant Returns to Scale</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="B"><span>B) Increasing Returns to Scale</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) Decreasing Returns to Scale</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="D"><span>D) Diminishing Returns</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>α + β > 1 → Increasing Returns to Scale. Output grows more than proportionally to inputs.</div>
+        </div>
+
+        <div class="question-block" id="q3">
+            <div class="q-text">Q3: When MC < AC, the AC curve is:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A"><span>A) Rising</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="B"><span>B) Falling</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="C"><span>C) Flat</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="D"><span>D) At its maximum</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>When MC < AC, the marginal cost is below the average, pulling the average down. So AC is falling.</div>
+        </div>
+
+        <div class="question-block" id="q4">
+            <div class="q-text">Q4: Which of the following is a fixed cost?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q4" value="A"><span>A) Raw materials</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="B"><span>B) Hourly wages</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="C"><span>C) Rent</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="D"><span>D) Electricity</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4', 'C')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: C</strong><br>Rent is a fixed cost because it doesn't change with the level of output. Raw materials, hourly wages, and electricity are variable costs.</div>
+        </div>
+
+        <div class="question-block" id="q5">
+            <div class="q-text">Q5: If innovation improves technology (A increases), what happens to the production function and cost curves?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A"><span>A) Production function shifts DOWN; Cost curves shift UP</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="B"><span>B) Production function shifts UP; Cost curves shift DOWN</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="C"><span>C) Production function shifts DOWN; Cost curves shift DOWN</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="D"><span>D) Production function shifts UP; Cost curves shift UP</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>Innovation shifts the production function UP (more output from same inputs) and shifts cost curves DOWN (lower costs at every output level).</div>
+        </div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="card">
+        <h3>📖 Glossary</h3>
+        <div class="glossary-term"><dt>Production Function</dt><dd>The relationship between inputs and the maximum output that can be produced given current technology.</dd></div>
+        <div class="glossary-term"><dt>Firm</dt><dd>An agent that produces goods/services; transforms inputs into outputs.</dd></div>
+        <div class="glossary-term"><dt>Diminishing Marginal Product</dt><dd>The tendency for the additional output from each extra unit of input to eventually decrease.</dd></div>
+        <div class="glossary-term"><dt>Short Run</dt><dd>A period in which at least one input is fixed.</dd></div>
+        <div class="glossary-term"><dt>Long Run</dt><dd>A period in which all inputs can be varied.</dd></div>
+        <div class="glossary-term"><dt>Returns to Scale</dt><dd>How output changes when ALL inputs are increased proportionally.</dd></div>
+        <div class="glossary-term"><dt>Innovation</dt><dd>An improvement that allows more output from the same inputs or the same output from fewer inputs.</dd></div>
+        <div class="glossary-term"><dt>Fixed Cost (FC)</dt><dd>Costs that must be paid regardless of output level.</dd></div>
+        <div class="glossary-term"><dt>Variable Cost (VC)</dt><dd>Costs that change with the level of output.</dd></div>
+        <div class="glossary-term"><dt>Total Cost (TC)</dt><dd>Sum of fixed and variable costs.</dd></div>
+        <div class="glossary-term"><dt>Average Cost (AC)</dt><dd>Total cost divided by quantity; cost per unit.</dd></div>
+        <div class="glossary-term"><dt>Average Variable Cost (AVC)</dt><dd>Variable cost divided by quantity.</dd></div>
+        <div class="glossary-term"><dt>Marginal Cost (MC)</dt><dd>Change in total cost from producing one additional unit.</dd></div>
+        <div class="glossary-term"><dt>Marginal Product of Labor (MPL)</dt><dd>Additional output from one more unit of labor.</dd></div>
+        <div class="glossary-term"><dt>Average Product of Labor (APL)</dt><dd>Total output divided by total labor.</dd></div>
+        <div class="glossary-term"><dt>Cobb-Douglas</dt><dd>A specific production function: q = A × K<sup>α</sup> × L<sup>β</sup>.</dd></div>
+        <div class="glossary-term"><dt>Network Effects</dt><dd>When the value of a product increases as more people use it.</dd></div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+        function toggleAnswer(qId, correct) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
