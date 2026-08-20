@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seminar 6: Externalities, Public Goods & Uncertainty</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+        .card li { margin: 0.3rem 0; line-height: 1.6; }
+        .highlight-box { background: #eef4fa; padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #1f6e8c; margin: 1rem 0; }
+        .formula-box { background: #e7edf6; padding: 0.8rem 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 500; color: #003153; display: inline-block; margin: 0.4rem 0; border: 1px solid #bfd3e6; }
+        .exam-trap { background: #fef6ee; border-left: 4px solid #c77d4a; padding: 0.8rem 1.5rem; border-radius: 10px; margin: 0.6rem 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .glossary-term { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #e8edf3; }
+        .glossary-term dt { font-weight: 600; color: #0b2b4a; min-width: 160px; }
+        .glossary-term dd { color: #334155; }
+        .graph-container { width: 100%; max-width: 850px; margin: 1.5rem auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 0.5rem; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .graph-container svg { width: 100%; height: auto; display: block; }
+        .graph-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; text-align: center; padding: 0.8rem 0 0.3rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .graph-subtitle { font-size: 0.85rem; color: #64748b; text-align: center; padding-bottom: 0.5rem; }
+        .graph-insight { padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 6px; margin-top: 0.5rem; }
+        .graph-insight p { font-size: 0.85rem; color: #1e293b; margin: 0; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .glossary-term { flex-direction: column; gap: 0.2rem; } .glossary-term dt { min-width: unset; } .graph-container { margin: 0.5rem 0; } .graph-container svg text { font-size: 10px !important; } .graph-title { font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Seminar 6: Externalities, Public Goods & Uncertainty</div>
+
+    <div class="page-header">
+        <h2>🧑‍🏫 Seminar 6: Externalities, Public Goods & Uncertainty</h2>
+        <div class="subtitle">Market failures, public goods, and decision-making under risk</div>
+    </div>
+
+    <!-- LEARNING OBJECTIVES -->
+    <div class="card">
+        <h3>📌 Learning Objectives</h3>
+        <ul>
+            <li>Define externalities and distinguish between positive and negative externalities</li>
+            <li>Calculate the socially optimal quantity and optimal Pigouvian tax/subsidy</li>
+            <li>Identify the four types of goods based on excludability and rivalry</li>
+            <li>Distinguish between risk-averse, risk-neutral, and risk-seeking behavior</li>
+            <li>Calculate expected value and understand risk premiums</li>
+            <li>Apply these concepts to multiple-choice exam questions</li>
+        </ul>
+    </div>
+
+    <!-- TOPIC INTRODUCTION -->
+    <div class="card">
+        <h3>🔹 Topic Introduction</h3>
+        <p>This lesson covers three interconnected topics that explain why markets sometimes fail to produce the "right" amount of goods, and how individuals make decisions under uncertainty. <strong>Externalities</strong> occur when someone's actions affect others without being reflected in market prices—like pollution from factories or the benefits of getting an education. <strong>Public goods</strong> are things like clean air or national defense that everyone can use, but no one has an incentive to pay for. <strong>Uncertainty</strong> explores how people make choices when they don't know exactly what will happen—like whether to buy insurance or invest in Bitcoin.</p>
+
+        <div class="highlight-box">
+            <strong>Why should you care?</strong> These concepts explain why governments impose taxes on cigarettes, subsidize solar panels, and why you might buy insurance even though you hope you never need it. They're essential for understanding real-world policy debates and your own daily decisions.
+        </div>
+    </div>
+
+    <!-- SECTION A: EXTERNALITIES -->
+    <div class="card">
+        <h3>🔹 Section A: Externalities</h3>
+
+        <h4>Concept 1: What is an Externality?</h4>
+        <p><strong>Definition:</strong> An externality is a <strong>cost or benefit</strong> from a transaction that affects a <strong>third party</strong> who didn't choose to be involved. The market price doesn't reflect this cost or benefit.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Examples:</strong>
+            <ul>
+                <li><strong>Negative externality:</strong> A factory pollutes the air. The factory owner pays for materials and labor, but doesn't pay for the health problems caused to neighbors. The price of the factory's products doesn't include this "hidden" cost.</li>
+                <li><strong>Positive externality:</strong> You get a flu vaccine. You benefit, but everyone around you also benefits because you're less likely to spread the flu. The price you pay doesn't reflect these extra benefits to others.</li>
+            </ul>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Type</th><th>Effect</th><th>Market Outcome</th><th>Example</th></tr>
+                <tr><td>Negative Externality</td><td>External cost</td><td>Overproduction</td><td>Pollution, smoking</td></tr>
+                <tr><td>Positive Externality</td><td>External benefit</td><td>Underproduction</td><td>Education, vaccines</td></tr>
+            </table>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> Externalities are a type of <strong>market failure</strong>—when the free market doesn't maximize social welfare. The government can "internalize" the externality with Pigouvian taxes (for negative externalities) or Pigouvian subsidies (for positive externalities).</div>
+    </div>
+
+    <!-- CONCEPT 2: SOCIALLY OPTIMAL QUANTITY -->
+    <div class="card">
+        <h3>🔹 Socially Optimal Quantity</h3>
+        <p><strong>Definition:</strong> The socially optimal quantity is the level of production that <strong>maximizes total social welfare</strong>—where <strong>marginal social benefit (MSB) equals marginal social cost (MSC)</strong>.</p>
+
+        <div class="formula-box">MSC = MPC + External Cost</div>
+        <div class="formula-box">MSB = MPB + External Benefit</div>
+
+        <div class="highlight-box">
+            <strong>For Negative Externalities:</strong>
+            <ul>
+                <li>Private market: Q where Demand = Supply (<strong>too high!</strong>)</li>
+                <li>Social optimum: Q where MSB = MSC (<strong>lower</strong> than private equilibrium)</li>
+            </ul>
+            <strong>For Positive Externalities:</strong>
+            <ul>
+                <li>Private market: Q where Demand = Supply (<strong>too low!</strong>)</li>
+                <li>Social optimum: Q where MSB = MSC (<strong>higher</strong> than private equilibrium)</li>
+            </ul>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Memory trick:</strong> "Socially Optimal = MSB = MSC" — Same letters as "SOM" (Socially Optimal is MSB = MSC).</div>
+    </div>
+
+    <!-- CONCEPT 3: PIGOUVIAN TAXES AND SUBSIDIES -->
+    <div class="card">
+        <h3>🔹 Pigouvian Taxes and Subsidies</h3>
+        <p><strong>Pigouvian Tax:</strong> A tax on goods with <strong>negative externalities</strong>, designed to make the producer pay for the external cost.</p>
+        <p><strong>Pigouvian Subsidy:</strong> A payment to encourage consumption/production of goods with <strong>positive externalities</strong>.</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Scenario</th><th>Tax/Subsidy Amount</th></tr>
+                <tr><td>Negative Externality</td><td>Tax = External Cost per unit (MSC - MPC)</td></tr>
+                <tr><td>Positive Externality</td><td>Subsidy = External Benefit per unit (MSB - MPB)</td></tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Real-World Examples:</strong>
+            <ul>
+                <li><strong>Pigouvian tax:</strong> A carbon tax on gasoline makes polluters pay for the environmental damage.</li>
+                <li><strong>Pigouvian subsidy:</strong> Government rebates on electric vehicles encourage cleaner transportation.</li>
+            </ul>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Memory trick:</strong> "Tax the Bad, Subsidize the Good" — Negative externalities get taxes; positive externalities get subsidies.</div>
+    </div>
+
+    <!-- GRAPH: NEGATIVE EXTERNALITY -->
+    <div class="card">
+        <h3>📈 Graph: Negative Externality</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 1: Negative Externality (Pollution)</div>
+            <div class="graph-subtitle">Market overproduces; tax shifts supply up</div>
+            <svg viewBox="0 0 750 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="750" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="700" y2="400"/>
+                    <line x1="80" y1="100" x2="700" y2="100"/>
+                    <line x1="80" y1="150" x2="700" y2="150"/>
+                    <line x1="80" y1="200" x2="700" y2="200"/>
+                    <line x1="80" y1="250" x2="700" y2="250"/>
+                    <line x1="80" y1="300" x2="700" y2="300"/>
+                    <line x1="80" y1="350" x2="700" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="390" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (Q)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Price / Cost ($)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="700,400 685,390 685,410" fill="#0b2b4a"/>
+                <line x1="80" y1="400" x2="680" y2="100" stroke="#2563eb" stroke-width="3"/>
+                <text x="660" y="105" font-size="16" font-weight="700" fill="#2563eb">D = MPB</text>
+                <line x1="150" y1="50" x2="680" y2="380" stroke="#16a34a" stroke-width="3"/>
+                <text x="670" y="390" font-size="16" font-weight="700" fill="#16a34a">S = MPC</text>
+                <line x1="150" y1="120" x2="680" y2="420" stroke="#dc2626" stroke-width="3" stroke-dasharray="8,4"/>
+                <text x="670" y="425" font-size="16" font-weight="700" fill="#dc2626">MSC</text>
+                <circle cx="360" cy="250" r="8" fill="#0b2b4a"/>
+                <text x="370" y="245" font-size="13" font-weight="600" fill="#0b2b4a">E<sub>Market</sub></text>
+                <circle cx="290" cy="200" r="8" fill="#dc2626"/>
+                <text x="300" y="195" font-size="13" font-weight="600" fill="#dc2626">E<sub>Optimal</sub></text>
+                <line x1="80" y1="250" x2="360" y2="250" stroke="#0b2b4a" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="60" y="255" font-size="12" fill="#0b2b4a">P<sub>M</sub></text>
+                <line x1="80" y1="200" x2="290" y2="200" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="55" y="205" font-size="12" fill="#dc2626">P<sub>Opt</sub></text>
+                <line x1="360" y1="250" x2="360" y2="400" stroke="#0b2b4a" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="350" y="420" font-size="12" fill="#0b2b4a">Q<sub>M</sub></text>
+                <line x1="290" y1="200" x2="290" y2="400" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="280" y="420" font-size="12" fill="#dc2626">Q<sub>Opt</sub></text>
+                <text x="300" y="155" font-size="12" fill="#dc2626">External Cost</text>
+                <rect x="470" y="60" width="200" height="100" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="80" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="95" x2="495" y2="95" stroke="#2563eb" stroke-width="2"/>
+                <text x="505" y="99" font-size="11" fill="#1e293b">Demand (MPB)</text>
+                <line x1="480" y1="110" x2="495" y2="110" stroke="#16a34a" stroke-width="2"/>
+                <text x="505" y="114" font-size="11" fill="#1e293b">Supply (MPC)</text>
+                <line x1="480" y1="125" x2="495" y2="125" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="505" y="129" font-size="11" fill="#1e293b">MSC</text>
+                <text x="480" y="145" font-size="11" fill="#dc2626">Overproduction</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> With a negative externality, the market produces too much (Q<sub>M</sub>). The social optimum (Q<sub>Opt</sub>) occurs where MSB = MSC. A Pigouvian tax shifts the supply curve up, reducing quantity to the optimal level.</p></div>
+        </div>
+    </div>
+
+    <!-- GRAPH: POSITIVE EXTERNALITY -->
+    <div class="card">
+        <h3>📈 Graph: Positive Externality</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 2: Positive Externality</div>
+            <div class="graph-subtitle">Market underproduces; subsidy shifts demand up</div>
+            <svg viewBox="0 0 750 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="750" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="700" y2="400"/>
+                    <line x1="80" y1="100" x2="700" y2="100"/>
+                    <line x1="80" y1="150" x2="700" y2="150"/>
+                    <line x1="80" y1="200" x2="700" y2="200"/>
+                    <line x1="80" y1="250" x2="700" y2="250"/>
+                    <line x1="80" y1="300" x2="700" y2="300"/>
+                    <line x1="80" y1="350" x2="700" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="390" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (Q)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Price / Cost ($)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="700,400 685,390 685,410" fill="#0b2b4a"/>
+                <line x1="80" y1="400" x2="680" y2="100" stroke="#2563eb" stroke-width="3"/>
+                <text x="660" y="105" font-size="16" font-weight="700" fill="#2563eb">MPB</text>
+                <line x1="80" y1="350" x2="680" y2="60" stroke="#93c5fd" stroke-width="3" stroke-dasharray="8,4"/>
+                <text x="660" y="65" font-size="16" font-weight="700" fill="#93c5fd">MSB</text>
+                <line x1="150" y1="50" x2="680" y2="380" stroke="#16a34a" stroke-width="3"/>
+                <text x="670" y="390" font-size="16" font-weight="700" fill="#16a34a">S = MC</text>
+                <circle cx="360" cy="250" r="8" fill="#0b2b4a"/>
+                <text x="370" y="245" font-size="13" font-weight="600" fill="#0b2b4a">E<sub>Market</sub></text>
+                <circle cx="430" cy="200" r="8" fill="#dc2626"/>
+                <text x="440" y="195" font-size="13" font-weight="600" fill="#dc2626">E<sub>Optimal</sub></text>
+                <line x1="80" y1="250" x2="360" y2="250" stroke="#0b2b4a" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="60" y="255" font-size="12" fill="#0b2b4a">P<sub>M</sub></text>
+                <line x1="80" y1="200" x2="430" y2="200" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="55" y="205" font-size="12" fill="#dc2626">P<sub>Opt</sub></text>
+                <line x1="360" y1="250" x2="360" y2="400" stroke="#0b2b4a" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="350" y="420" font-size="12" fill="#0b2b4a">Q<sub>M</sub></text>
+                <line x1="430" y1="200" x2="430" y2="400" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="420" y="420" font-size="12" fill="#dc2626">Q<sub>Opt</sub></text>
+                <text x="370" y="155" font-size="12" fill="#93c5fd">External Benefit</text>
+                <rect x="470" y="60" width="200" height="100" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="80" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="95" x2="495" y2="95" stroke="#2563eb" stroke-width="2"/>
+                <text x="505" y="99" font-size="11" fill="#1e293b">MPB</text>
+                <line x1="480" y1="110" x2="495" y2="110" stroke="#93c5fd" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="505" y="114" font-size="11" fill="#1e293b">MSB</text>
+                <line x1="480" y1="125" x2="495" y2="125" stroke="#16a34a" stroke-width="2"/>
+                <text x="505" y="129" font-size="11" fill="#1e293b">MC</text>
+                <text x="480" y="145" font-size="11" fill="#93c5fd">Underproduction</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> With a positive externality, the market produces too little (Q<sub>M</sub>). The social optimum (Q<sub>Opt</sub>) occurs where MSB = MC. A Pigouvian subsidy shifts the demand curve up, increasing quantity to the optimal level.</p></div>
+        </div>
+    </div>
+
+    <!-- SECTION B: PUBLIC GOODS -->
+    <div class="card">
+        <h3>🔹 Section B: Public Goods</h3>
+
+        <h4>Concept 4: The Four Types of Goods</h4>
+        <p>Goods can be classified based on two characteristics:</p>
+        <ul>
+            <li><strong>Excludability:</strong> Can people be prevented from using the good?</li>
+            <li><strong>Rivalry:</strong> Does one person's use reduce availability for others?</li>
+        </ul>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Type</th><th>Rival?</th><th>Excludable?</th><th>Example</th><th>Market Provides?</th></tr>
+                <tr><td><strong>Private Good</strong></td><td>Yes</td><td>Yes</td><td>Pizza, clothing</td><td>✓ Yes</td></tr>
+                <tr><td><strong>Club Good</strong></td><td>No</td><td>Yes</td><td>Netflix, cable TV</td><td>✓ Yes</td></tr>
+                <tr><td><strong>Common Pool</strong></td><td>Yes</td><td>No</td><td>Fish in ocean, clean air</td><td>✗ No (overused)</td></tr>
+                <tr><td><strong>Public Good</strong></td><td>No</td><td>No</td><td>National defense, street lights</td><td>✗ No (free-rider problem)</td></tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Key Insights:</strong>
+            <ul>
+                <li><strong>Private goods</strong> (rival AND excludable): The market works!</li>
+                <li><strong>Club goods</strong> (non-rival BUT excludable): The market can work, but these often have high fixed costs and low marginal costs.</li>
+                <li><strong>Common pool goods</strong> (rival BUT non-excludable): The market fails because of the "tragedy of the commons."</li>
+                <li><strong>Public goods</strong> (non-rival AND non-excludable): The market fails completely because of the "free-rider problem."</li>
+            </ul>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Memory trick:</strong> "PRivate goods are Rival" — and both "Public" and "Pool" are <strong>Poorly</strong> provided by markets.</div>
+    </div>
+
+    <!-- SECTION C: UNCERTAINTY -->
+    <div class="card">
+        <h3>🔹 Section C: Uncertainty</h3>
+
+        <h4>Concept 5: Expected Value</h4>
+        <p><strong>Definition:</strong> Expected value (EV) is the average outcome of a risky situation, calculated by multiplying each possible outcome by its probability and summing the results.</p>
+
+        <div class="formula-box">EV = Σ(p<sub>i</sub> × X<sub>i</sub>)</div>
+        <p>Where p₁ + p₂ + ... + pₙ = 1</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> A lottery ticket has:
+            <ul>
+                <li>90% chance of winning 0 CHF</li>
+                <li>10% chance of winning 100 CHF</li>
+                <li>EV = (0.9 × 0) + (0.1 × 100) = <strong>10 CHF</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CONCEPT 6: RISK ATTITUDES -->
+    <div class="card">
+        <h3>🔹 Risk Attitudes</h3>
+        <p>People respond differently to risk based on their preferences:</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Type</th><th>Definition</th><th>Fair Bet Behavior</th><th>Utility Function</th></tr>
+                <tr><td><strong>Risk Averse</strong></td><td>Prefers certainty; dislikes risk</td><td>Always refuses</td><td>Concave</td></tr>
+                <tr><td><strong>Risk Neutral</strong></td><td>Only cares about expected value</td><td>Indifferent</td><td>Linear</td></tr>
+                <tr><td><strong>Risk Seeking</strong></td><td>Enjoys risk; likes gambling</td><td>Always accepts</td><td>Convex</td></tr>
+            </table>
+        </div>
+
+        <h4>What is a "Fair Bet"?</h4>
+        <p>A fair lottery has an <strong>expected value of zero</strong>. You pay a price equal to the expected payout.</p>
+
+        <div class="highlight-box">
+            <strong>Example:</strong> A coin toss where you pay 10 CHF to play:
+            <ul>
+                <li>Win 20 CHF if heads (gain +10)</li>
+                <li>Win 0 CHF if tails (gain -10)</li>
+                <li>EV = (0.5 × 10) + (0.5 × -10) = <strong>0</strong> → This is a fair bet!</li>
+            </ul>
+            <ul>
+                <li><strong>Risk averse person:</strong> Refuses (prefers 10 CHF for sure)</li>
+                <li><strong>Risk neutral person:</strong> Indifferent (EV = 0, so no advantage)</li>
+                <li><strong>Risk seeking person:</strong> Accepts (enjoys the thrill)</li>
+            </ul>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Risk Premium:</strong> The amount a risk-averse person would pay to avoid risk. For a risk-averse person, the risk premium is <strong>positive</strong>. For risk-seeking people, it's <strong>negative</strong> (they'd pay to gamble).</div>
+    </div>
+
+    <!-- CONCEPT 7: PROSPECT THEORY -->
+    <div class="card">
+        <h3>🔹 Prospect Theory</h3>
+        <p><strong>Definition:</strong> Prospect Theory (developed by <strong>Kahneman and Tversky</strong>) describes how people <strong>actually</strong> make decisions under risk, which differs from what economic models predict.</p>
+
+        <h4>Key Findings</h4>
+        <ul>
+            <li><strong>Overestimate low probabilities</strong> (e.g., buying lottery tickets)</li>
+            <li><strong>Underestimate high probabilities</strong> (e.g., not wearing seatbelts)</li>
+            <li><strong>Loss aversion:</strong> Feel losses more strongly than equivalent gains</li>
+        </ul>
+
+        <div class="exam-trap">⚠️ <strong>Exam connection:</strong> According to Prospect Theory, people tend to <strong>underestimate high probabilities</strong>. This is correct!</div>
+    </div>
+
+    <!-- FORMULAS -->
+    <div class="card">
+        <h3>🧮 Key Formulas</h3>
+
+        <div class="formula-box">MSC = MPC + External Cost</div>
+        <div class="formula-box">MSB = MPB + External Benefit</div>
+        <div class="formula-box">Social Optimum: MSB = MSC</div>
+        <div class="formula-box">Pigouvian Tax = External Cost per unit</div>
+        <div class="formula-box">Pigouvian Subsidy = External Benefit per unit</div>
+        <div class="formula-box">Expected Value: EV = Σ(p<sub>i</sub> × X<sub>i</sub>)</div>
+        <div class="formula-box">Deadweight Loss = ½ × (Q<sub>Market</sub> − Q<sub>Optimal</sub>) × (External Cost)</div>
+    </div>
+
+    <!-- EXAM SCENARIOS -->
+    <div class="card">
+        <h3>📝 Exam Scenarios & Problem-Solving</h3>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 1: Exercise 1 - Negative Externality</h4>
+            <p><strong>Scenario:</strong> Demand: Q<sub>D</sub> = 7 − P, Supply: Q<sub>S</sub> = P − 1, External cost = 5 CHF per unit.</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Private market: 7 − P = P − 1 → P = 4, Q = 3</li>
+                <li>MSC = (Q + 1) + 5 = Q + 6</li>
+                <li>Set MSB = MSC: 7 − Q = Q + 6 → Q<sub>Opt</sub> = 0.5</li>
+                <li><strong>Tax = 5 CHF per unit</strong></li>
+            </ul>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 2: Exercise 2 - Positive Externality</h4>
+            <p><strong>Scenario:</strong> Demand: Q<sub>d</sub> = 48 − P, Supply: Q<sub>s</sub> = 16 + P, MSB = 56 − Q.</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Private market: 48 − P = 16 + P → P = 16, Q = 32</li>
+                <li>MSC = Q − 16 (from supply: Q = 16 + P → P = Q − 16)</li>
+                <li>Set MSB = MSC: 56 − Q = Q − 16 → Q<sub>Opt</sub> = 36</li>
+                <li><strong>Subsidy = MSB − MPB = 8 CHF per unit</strong></li>
+                <li>Quantity increases from 32 to 36 → <strong>Increase of 4 units</strong></li>
+            </ul>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 3: Exercise 3 - Alcohol Tax</h4>
+            <p><strong>Scenario:</strong> Demand: Q<sub>D</sub> = 36 − P, Supply: Q<sub>S</sub> = P, MSC = Q + 4.</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Private market: 36 − P = P → P = 18, Q = 18</li>
+                <li>MSC = Q + 4</li>
+                <li>Set MSB = MSC: 36 − Q = Q + 4 → Q<sub>Opt</sub> = 16</li>
+                <li>Tax reduces quantity from 18 to 16 → <strong>Reduction of 2 units</strong></li>
+                <li><strong>Answer: (a) is correct</strong></li>
+            </ul>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 4: Exercise 11 - Fertilizer</h4>
+            <p><strong>Scenario:</strong> Demand: P<sub>D</sub> = 84 − Q, Supply: P<sub>S</sub> = 0.2Q, Social supply: P<sub>Sr</sub> = 0.2Q + 6.</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Private market: 84 − Q = 0.2Q → Q<sub>Market</sub> = 70</li>
+                <li>Social optimum: 84 − Q = 0.2Q + 6 → Q<sub>Opt</sub> = 65</li>
+                <li>Difference = 5 tons</li>
+                <li>DWL = ½ × 5 × 6 = <strong>15,000 francs</strong></li>
+                <li><strong>Answer: (d) is correct</strong></li>
+            </ul>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0;">
+            <h4>Scenario 5: Exercise 10 - Bitcoin Decision</h4>
+            <p><strong>Scenario:</strong> Bitcoin currently 10,000 CHF. At 4 PM: 15,000 CHF (60%), 4,000 CHF (20%), 1,000 CHF (20%).</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>EV = (0.6 × 15,000) + (0.2 × 4,000) + (0.2 × 1,000) = 10,000 CHF</li>
+                <li>Current price = 10,000 CHF = EV</li>
+                <li><strong>Risk neutral person is indifferent</strong></li>
+                <li><strong>Answer: Only statement 3 is correct</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- HIGH-YIELD EXAM FOCUS -->
+    <div class="card">
+        <h3>⚡ High-Yield Exam Focus</h3>
+
+        <h4>Memorization Checklist</h4>
+        <div class="grid-2">
+            <ul>
+                <li>□ Externality</li>
+                <li>□ Negative / Positive Externality</li>
+                <li>□ Socially Optimal Quantity</li>
+                <li>□ Pigouvian Tax</li>
+                <li>□ Pigouvian Subsidy</li>
+                <li>□ MSC / MSB / MPC / MPB</li>
+                <li>□ Private Good</li>
+                <li>□ Public Good</li>
+            </ul>
+            <ul>
+                <li>□ Club Good</li>
+                <li>□ Common Pool</li>
+                <li>□ Excludability</li>
+                <li>□ Rivalry</li>
+                <li>□ Free-Rider Problem</li>
+                <li>□ Tragedy of the Commons</li>
+                <li>□ Expected Value</li>
+                <li>□ Risk Averse / Neutral / Seeking</li>
+            </ul>
+        </div>
+
+        <h4>Common Exam Traps</h4>
+        <ul>
+            <li><strong>Confusing Private and Social Equilibrium:</strong> Negative externalities = market overproduces; positive externalities = market underproduces.</li>
+            <li><strong>Tax vs. Subsidy Confusion:</strong> "Tax the Bad, Subsidize the Good."</li>
+            <li><strong>Excludability vs. Rivalry:</strong> Draw the 2×2 matrix every time!</li>
+            <li><strong>Risk Aversion and Fair Bets:</strong> Risk-averse individuals refuse FAIR bets (EV = 0). They might accept bets with positive expected value!</li>
+            <li><strong>Probability Trees:</strong> Remember to multiply probabilities for sequential events.</li>
+        </ul>
+
+        <h4>The "If This, Then That" Logic</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then...</th></tr>
+                <tr><td>Negative externality exists</td><td>Market overproduces → Tax needed</td></tr>
+                <tr><td>Positive externality exists</td><td>Market underproduces → Subsidy needed</td></tr>
+                <tr><td>Good is non-excludable AND non-rival</td><td>Public good → Market fails</td></tr>
+                <tr><td>Good is non-excludable AND rival</td><td>Common pool → Overused</td></tr>
+                <tr><td>Individual refuses fair bet</td><td>Risk averse</td></tr>
+                <tr><td>Individual is indifferent to fair bet</td><td>Risk neutral</td></tr>
+                <tr><td>Individual accepts fair bet</td><td>Risk seeking</td></tr>
+            </table>
+        </div>
+
+        <h4>Quick Reference: Four Types of Goods</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Type</th><th>Excludable?</th><th>Rivalrous?</th><th>Example</th></tr>
+                <tr><td><strong>Private Good</strong></td><td>Yes</td><td>Yes</td><td>Food, clothing, cars</td></tr>
+                <tr><td><strong>Club Good</strong></td><td>Yes</td><td>No</td><td>Netflix, cable TV</td></tr>
+                <tr><td><strong>Common Pool</strong></td><td>No</td><td>Yes</td><td>Fish in ocean, water</td></tr>
+                <tr><td><strong>Public Good</strong></td><td>No</td><td>No</td><td>National defense, clean air</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- PRACTICE QUESTIONS -->
+    <div class="card">
+        <h3>📝 Practice Questions</h3>
+
+        <div class="question-block" id="q1">
+            <div class="q-text">Q1: A negative externality leads to:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) Underproduction</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="B"><span>B) Overproduction</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="C"><span>C) Efficient production</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) No market failure</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>A negative externality leads to overproduction because the producer doesn't pay for the cost imposed on others.</div>
+        </div>
+
+        <div class="question-block" id="q2">
+            <div class="q-text">Q2: A Pigouvian tax is used to correct:</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="A"><span>A) Negative externalities</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="B"><span>B) Positive externalities</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) Public goods</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="D"><span>D) Club goods</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2', 'A')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: A</strong><br>A Pigouvian tax is used to correct negative externalities by making producers pay for the external cost.</div>
+        </div>
+
+        <div class="question-block" id="q3">
+            <div class="q-text">Q3: A public good is:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A"><span>A) Excludable and rivalrous</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="B"><span>B) Excludable and non-rivalrous</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="C"><span>C) Non-excludable and non-rivalrous</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="D"><span>D) Non-excludable and rivalrous</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3', 'C')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: C</strong><br>A public good is non-excludable and non-rivalrous (e.g., national defense, streetlights).</div>
+        </div>
+
+        <div class="question-block" id="q4">
+            <div class="q-text">Q4: The tragedy of the commons occurs with:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q4" value="A"><span>A) Private goods</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="B"><span>B) Club goods</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="C"><span>C) Common pool resources</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="D"><span>D) Public goods</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4', 'C')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: C</strong><br>The tragedy of the commons occurs with common pool resources (non-excludable but rivalrous).</div>
+        </div>
+
+        <div class="question-block" id="q5">
+            <div class="q-text">Q5: A risk-averse person would:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A"><span>A) Accept a fair bet</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="B"><span>B) Refuse a fair bet</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="C"><span>C) Be indifferent to a fair bet</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="D"><span>D) Pay to take a fair bet</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>A risk-averse person refuses a fair bet because they prefer certainty over an uncertain outcome with the same expected value.</div>
+        </div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="card">
+        <h3>📖 Glossary</h3>
+        <div class="glossary-term"><dt>Externality</dt><dd>A cost or benefit affecting someone not involved in the transaction.</dd></div>
+        <div class="glossary-term"><dt>Negative Externality</dt><dd>Harmful effect on third party (cost).</dd></div>
+        <div class="glossary-term"><dt>Positive Externality</dt><dd>Beneficial effect on third party (benefit).</dd></div>
+        <div class="glossary-term"><dt>Socially Optimal Quantity</dt><dd>Amount that maximizes total social welfare (MSB = MSC).</dd></div>
+        <div class="glossary-term"><dt>Pigouvian Tax</dt><dd>Tax on negative externality to internalize cost.</dd></div>
+        <div class="glossary-term"><dt>Pigouvian Subsidy</dt><dd>Payment to encourage positive externality.</dd></div>
+        <div class="glossary-term"><dt>Private Good</dt><dd>Rival and excludable (food, clothing).</dd></div>
+        <div class="glossary-term"><dt>Public Good</dt><dd>Non-rival and non-excludable (national defense).</dd></div>
+        <div class="glossary-term"><dt>Club Good</dt><dd>Non-rival but excludable (Netflix).</dd></div>
+        <div class="glossary-term"><dt>Common Pool</dt><dd>Rival but non-excludable (fish in ocean).</dd></div>
+        <div class="glossary-term"><dt>Free-Rider Problem</dt><dd>Enjoying public good without paying.</dd></div>
+        <div class="glossary-term"><dt>Tragedy of the Commons</dt><dd>Overuse of common pool resources.</dd></div>
+        <div class="glossary-term"><dt>Expected Value</dt><dd>Average outcome of a risky situation.</dd></div>
+        <div class="glossary-term"><dt>Fair Lottery</dt><dd>Expected value equals zero.</dd></div>
+        <div class="glossary-term"><dt>Risk Averse</dt><dd>Prefers certainty; refuses fair bets.</dd></div>
+        <div class="glossary-term"><dt>Risk Neutral</dt><dd>Only cares about expected value.</dd></div>
+        <div class="glossary-term"><dt>Risk Seeking</dt><dd>Enjoys risk; accepts fair bets.</dd></div>
+        <div class="glossary-term"><dt>Risk Premium</dt><dd>Amount paid to avoid risk.</dd></div>
+        <div class="glossary-term"><dt>Prospect Theory</dt><dd>Behavioral model of decision-making under risk.</dd></div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+        function toggleAnswer(qId, correct) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

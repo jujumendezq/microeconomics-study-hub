@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seminar 3: Market Equilibrium, Government Interventions & Cost Functions</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+        .card li { margin: 0.3rem 0; line-height: 1.6; }
+        .highlight-box { background: #eef4fa; padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #1f6e8c; margin: 1rem 0; }
+        .formula-box { background: #e7edf6; padding: 0.8rem 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 500; color: #003153; display: inline-block; margin: 0.4rem 0; border: 1px solid #bfd3e6; }
+        .exam-trap { background: #fef6ee; border-left: 4px solid #c77d4a; padding: 0.8rem 1.5rem; border-radius: 10px; margin: 0.6rem 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .glossary-term { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #e8edf3; }
+        .glossary-term dt { font-weight: 600; color: #0b2b4a; min-width: 160px; }
+        .glossary-term dd { color: #334155; }
+        .graph-container { width: 100%; max-width: 850px; margin: 1.5rem auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 0.5rem; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .graph-container svg { width: 100%; height: auto; display: block; }
+        .graph-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; text-align: center; padding: 0.8rem 0 0.3rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .graph-subtitle { font-size: 0.85rem; color: #64748b; text-align: center; padding-bottom: 0.5rem; }
+        .graph-insight { padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 6px; margin-top: 0.5rem; }
+        .graph-insight p { font-size: 0.85rem; color: #1e293b; margin: 0; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .glossary-term { flex-direction: column; gap: 0.2rem; } .glossary-term dt { min-width: unset; } .graph-container { margin: 0.5rem 0; } .graph-container svg text { font-size: 10px !important; } .graph-title { font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Seminar 3: Market Equilibrium, Government Interventions & Cost Functions</div>
+
+    <div class="page-header">
+        <h2>🧑‍🏫 Seminar 3: Market Equilibrium, Government Interventions & Cost Functions</h2>
+        <div class="subtitle">Taxes, subsidies, price controls, and production costs</div>
+    </div>
+
+    <!-- LEARNING OBJECTIVES -->
+    <div class="card">
+        <h3>📌 Learning Objectives</h3>
+        <ul>
+            <li>Calculate equilibrium price and quantity in a perfectly competitive market</li>
+            <li>Compute consumer surplus, producer surplus, and deadweight loss</li>
+            <li>Analyze the impact of a per-unit tax on market outcomes, including who bears the tax burden</li>
+            <li>Evaluate the effects of subsidies on consumer surplus, producer surplus, and government expenditure</li>
+            <li>Distinguish between price ceilings and price floors and identify their market consequences</li>
+            <li>Define and calculate fixed costs, variable costs, total costs, average costs, and marginal costs</li>
+            <li>Explain the relationship between marginal product and marginal cost</li>
+        </ul>
+    </div>
+
+    <!-- TOPIC INTRODUCTION -->
+    <div class="card">
+        <h3>🔹 Topic Introduction</h3>
+        <p>Welcome to Seminar 3! This session bridges two critical areas of microeconomics: how markets work with government intervention (taxes, subsidies, price controls) and how firms think about their production costs. Why should you care? Because governments constantly intervene in markets—from rent control in New York to minimum wage laws in Switzerland—and understanding who really bears the burden of these policies is essential for any economist or informed citizen. Additionally, understanding cost structures is the foundation for analyzing how firms make production decisions, which we'll build on throughout the course.</p>
+    </div>
+
+    <!-- CONCEPT 1: CONSUMER SURPLUS -->
+    <div class="card">
+        <h3>🔹 Consumer Surplus</h3>
+        <p><strong>Definition:</strong> Consumer surplus (CS) is the difference between what consumers are <strong>willing to pay</strong> for a good and what they <strong>actually pay</strong>. It measures the extra benefit consumers receive from buying at market price.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> You're willing to pay up to 50 CHF for a concert ticket, but you find one for 30 CHF. Your consumer surplus is <strong>20 CHF</strong>—the "savings" you enjoy from paying less than your maximum willingness to pay.
+        </div>
+
+        <div class="formula-box">CS = Willingness to Pay − Market Price</div>
+        <div class="formula-box">For linear demand: CS = ½ × (P<sub>max</sub> − P*) × Q*</div>
+    </div>
+
+    <!-- CONCEPT 2: PRODUCER SURPLUS -->
+    <div class="card">
+        <h3>🔹 Producer Surplus</h3>
+        <p><strong>Definition:</strong> Producer surplus (PS) is the difference between what producers <strong>receive</strong> for a good and the <strong>minimum price</strong> they would be willing to accept to produce it.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> A farmer is willing to sell grapes for at least 2.50 CHF per kg (her minimum acceptable price), but the market price is 6 CHF per kg. Her producer surplus is <strong>3.50 CHF</strong> per kg.
+        </div>
+
+        <div class="formula-box">PS = Market Price − Willingness to Sell</div>
+        <div class="formula-box">For linear supply: PS = ½ × (P* − P<sub>min</sub>) × Q*</div>
+    </div>
+
+    <!-- CONCEPT 3: TAX INCIDENCE -->
+    <div class="card">
+        <h3>🔹 Tax Incidence</h3>
+        <p><strong>Definition:</strong> Tax incidence refers to how the burden of a tax is distributed between consumers and producers. It does <strong>NOT</strong> depend on who legally pays the tax—it depends on the <strong>relative elasticities</strong> of supply and demand.</p>
+
+        <div class="exam-trap">⚠️ <strong>The Golden Rule:</strong> The more inelastic (steeper) a curve is, the more burden that side bears. If demand is inelastic, consumers can't easily reduce consumption and absorb more of the tax. If supply is inelastic, producers absorb more.</div>
+
+        <div class="formula-box">Tax = P<sub>D</sub> − P<sub>S</sub></div>
+        <div class="formula-box">Tax Revenue = Tax × Q<sub>t</sub></div>
+        <div class="formula-box">DWL = ½ × Tax × (Q* − Q<sub>t</sub>)</div>
+
+        <div class="highlight-box">
+            <strong>Example from Exercise 1:</strong>
+            <ul>
+                <li>Demand: Q<sub>D</sub> = 100 − 2P</li>
+                <li>Supply: Q<sub>S</sub> = −20 + 8P</li>
+                <li>Tax = 10</li>
+                <li>Initial: P* = 12, Q* = 76</li>
+                <li>After tax: Q<sub>t</sub> = 60, P<sub>D</sub> = 20, P<sub>S</sub> = 10</li>
+                <li>Consumers pay 8 more; producers receive 2 less</li>
+                <li>Tax Revenue = 10 × 60 = 600</li>
+                <li>DWL = ½ × 10 × (76 − 60) = 80</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- GRAPH: TAX -->
+    <div class="card">
+        <h3>📈 Graph: Impact of a Tax</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 1: Tax on Sellers</div>
+            <div class="graph-subtitle">Supply shifts up by the amount of the tax</div>
+            <svg viewBox="0 0 750 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="750" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="700" y2="400"/>
+                    <line x1="80" y1="100" x2="700" y2="100"/>
+                    <line x1="80" y1="150" x2="700" y2="150"/>
+                    <line x1="80" y1="200" x2="700" y2="200"/>
+                    <line x1="80" y1="250" x2="700" y2="250"/>
+                    <line x1="80" y1="300" x2="700" y2="300"/>
+                    <line x1="80" y1="350" x2="700" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="390" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (Q)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Price / Cost ($)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="700,400 685,390 685,410" fill="#0b2b4a"/>
+                <line x1="80" y1="400" x2="680" y2="100" stroke="#2563eb" stroke-width="3"/>
+                <text x="660" y="105" font-size="16" font-weight="700" fill="#2563eb">D</text>
+                <line x1="150" y1="50" x2="680" y2="350" stroke="#16a34a" stroke-width="3"/>
+                <text x="670" y="360" font-size="16" font-weight="700" fill="#16a34a">S<sub>0</sub></text>
+                <line x1="150" y1="120" x2="680" y2="420" stroke="#dc2626" stroke-width="3" stroke-dasharray="8,4"/>
+                <text x="670" y="425" font-size="16" font-weight="700" fill="#dc2626">S<sub>tax</sub></text>
+                <circle cx="360" cy="250" r="8" fill="#0b2b4a"/>
+                <text x="370" y="245" font-size="13" font-weight="600" fill="#0b2b4a">E<sub>0</sub></text>
+                <circle cx="290" cy="180" r="8" fill="#dc2626"/>
+                <text x="300" y="175" font-size="13" font-weight="600" fill="#dc2626">E<sub>1</sub></text>
+                <line x1="80" y1="250" x2="360" y2="250" stroke="#0b2b4a" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="60" y="255" font-size="12" fill="#0b2b4a">P<sub>0</sub></text>
+                <line x1="80" y1="180" x2="290" y2="180" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="55" y="185" font-size="12" fill="#dc2626">P<sub>D</sub></text>
+                <line x1="80" y1="300" x2="290" y2="300" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="55" y="305" font-size="12" fill="#dc2626">P<sub>S</sub></text>
+                <line x1="360" y1="250" x2="360" y2="400" stroke="#0b2b4a" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="350" y="420" font-size="12" fill="#0b2b4a">Q<sub>0</sub></text>
+                <line x1="290" y1="180" x2="290" y2="400" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="280" y="420" font-size="12" fill="#dc2626">Q<sub>1</sub></text>
+                <text x="295" y="240" font-size="12" fill="#dc2626">Tax Wedge</text>
+                <rect x="470" y="60" width="200" height="100" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="80" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="95" x2="495" y2="95" stroke="#2563eb" stroke-width="2"/>
+                <text x="505" y="99" font-size="11" fill="#1e293b">Demand (D)</text>
+                <line x1="480" y1="110" x2="495" y2="110" stroke="#16a34a" stroke-width="2"/>
+                <text x="505" y="114" font-size="11" fill="#1e293b">Supply (S<sub>0</sub>)</text>
+                <line x1="480" y1="125" x2="495" y2="125" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="505" y="129" font-size="11" fill="#1e293b">Supply (S<sub>tax</sub>)</text>
+                <text x="480" y="145" font-size="11" fill="#dc2626">Tax Wedge</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> A tax creates a wedge between what consumers pay (P<sub>D</sub>) and what producers receive (P<sub>S</sub>). The quantity falls from Q<sub>0</sub> to Q<sub>1</sub>, creating deadweight loss.</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 4: SUBSIDIES -->
+    <div class="card">
+        <h3>🔹 Subsidies</h3>
+        <p><strong>Definition:</strong> A subsidy is a government payment to producers (or consumers) that lowers production costs or purchase prices. It is the <strong>opposite</strong> of a tax.</p>
+
+        <div class="formula-box">Subsidy = P<sub>S</sub> − P<sub>D</sub></div>
+        <div class="formula-box">Government Expenditure = Subsidy × Q<sub>subsidy</sub></div>
+
+        <div class="highlight-box">
+            <strong>Example from Exercise 3:</strong>
+            <ul>
+                <li>Demand: Q<sub>D</sub> = 100 − 5P</li>
+                <li>Supply: Q<sub>S</sub> = −50 + 20P</li>
+                <li>Target consumer price: P<sub>D</sub> = 3</li>
+                <li>Q = 100 − 5(3) = 85</li>
+                <li>P<sub>S</sub> = (85 + 50)/20 = 6.75</li>
+                <li>Subsidy = 6.75 − 3 = <strong>3.75</strong></li>
+                <li>Government Expenditure = 3.75 × 85 = <strong>318.75</strong></li>
+            </ul>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Insight:</strong> Subsidies make both consumers and producers better off, but the government must pay for them. The deadweight loss is the "waste"—the amount the government spends that doesn't translate into benefits for either group.</div>
+    </div>
+
+    <!-- CONCEPT 5: PRICE CEILINGS -->
+    <div class="card">
+        <h3>🔹 Price Ceilings</h3>
+        <p><strong>Definition:</strong> A price ceiling is a government-imposed <strong>maximum price</strong> that sellers can charge for a good or service. It only has an effect if set <strong>below</strong> the equilibrium price.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> Rent control in New York City. The government sets a maximum rent of 1,000 USD when the equilibrium rent would be 1,600 USD.
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Effects:</strong>
+            <ul>
+                <li>Quantity demanded increases (more people want the cheap good)</li>
+                <li>Quantity supplied decreases (fewer sellers willing to supply at the low price)</li>
+                <li>The result is a <strong>shortage</strong> (excess demand)</li>
+                <li>Quantity exchanged = Q<sub>S</sub> (the smaller quantity)</li>
+            </ul>
+        </div>
+
+        <h4>Short-Run vs. Long-Run Effects</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Factor</th><th>Short Run</th><th>Long Run</th></tr>
+                <tr><td>Supply Elasticity</td><td>Inelastic (few new buildings)</td><td>Elastic (developers can build less)</td></tr>
+                <tr><td>Demand Elasticity</td><td>Inelastic (limited mobility)</td><td>Elastic (people can move)</td></tr>
+                <tr><td>Shortage</td><td>Smaller</td><td><strong>LARGER</strong></td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- GRAPH: PRICE CEILING -->
+    <div class="card">
+        <h3>📈 Graph: Price Ceiling</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 2: Price Ceiling (Rent Control)</div>
+            <div class="graph-subtitle">A binding price ceiling creates a shortage</div>
+            <svg viewBox="0 0 750 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="750" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="700" y2="400"/>
+                    <line x1="80" y1="100" x2="700" y2="100"/>
+                    <line x1="80" y1="150" x2="700" y2="150"/>
+                    <line x1="80" y1="200" x2="700" y2="200"/>
+                    <line x1="80" y1="250" x2="700" y2="250"/>
+                    <line x1="80" y1="300" x2="700" y2="300"/>
+                    <line x1="80" y1="350" x2="700" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="390" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (Q)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Price (P)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="700,400 685,390 685,410" fill="#0b2b4a"/>
+                <line x1="80" y1="400" x2="680" y2="80" stroke="#2563eb" stroke-width="3"/>
+                <text x="660" y="85" font-size="16" font-weight="700" fill="#2563eb">D</text>
+                <line x1="150" y1="50" x2="680" y2="380" stroke="#16a34a" stroke-width="3"/>
+                <text x="670" y="390" font-size="16" font-weight="700" fill="#16a34a">S</text>
+                <line x1="80" y1="220" x2="700" y2="220" stroke="#dc2626" stroke-width="3"/>
+                <text x="690" y="215" font-size="14" font-weight="700" fill="#dc2626">P<sub>c</sub></text>
+                <text x="60" y="225" font-size="13" font-weight="600" fill="#dc2626">P<sub>c</sub></text>
+                <circle cx="360" cy="280" r="7" fill="#0b2b4a"/>
+                <text x="370" y="275" font-size="12" font-weight="600" fill="#0b2b4a">E</text>
+                <line x1="290" y1="220" x2="290" y2="400" stroke="#16a34a" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="280" y="420" font-size="12" fill="#16a34a">Q<sub>S</sub></text>
+                <line x1="500" y1="220" x2="500" y2="400" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="490" y="420" font-size="12" fill="#2563eb">Q<sub>D</sub></text>
+                <rect x="290" y="220" width="210" height="180" fill="#ef4444" fill-opacity="0.15" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
+                <text x="350" y="380" font-size="18" font-weight="700" fill="#dc2626">SHORTAGE</text>
+                <rect x="470" y="60" width="200" height="85" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="80" font-size="12" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="95" x2="495" y2="95" stroke="#2563eb" stroke-width="2"/>
+                <text x="505" y="99" font-size="11" fill="#1e293b">Demand (D)</text>
+                <line x1="480" y1="110" x2="495" y2="110" stroke="#16a34a" stroke-width="2"/>
+                <text x="505" y="114" font-size="11" fill="#1e293b">Supply (S)</text>
+                <line x1="480" y1="125" x2="495" y2="125" stroke="#dc2626" stroke-width="2"/>
+                <text x="505" y="129" font-size="11" fill="#1e293b">Price Ceiling</text>
+                <rect x="480" y="135" width="15" height="10" fill="#ef4444" fill-opacity="0.3" stroke="#dc2626" stroke-width="1"/>
+                <text x="502" y="144" font-size="10" fill="#1e293b">Shortage</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> A price ceiling set below equilibrium creates a shortage (Q<sub>D</sub> > Q<sub>S</sub>). The quantity traded is Q<sub>S</sub> (the short side of the market).</p></div>
+        </div>
+    </div>
+
+    <!-- CONCEPT 6: PRICE FLOORS -->
+    <div class="card">
+        <h3>🔹 Price Floors (Minimum Wage)</h3>
+        <p><strong>Definition:</strong> A price floor is a government-imposed <strong>minimum price</strong> that sellers can charge. It only has an effect if set <strong>above</strong> the equilibrium price.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> The minimum wage is a price floor on labor—a government-mandated minimum price that employers must pay workers.
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Effects:</strong>
+            <ul>
+                <li>Quantity supplied increases (more workers want to work)</li>
+                <li>Quantity demanded decreases (fewer employers want to hire)</li>
+                <li>The result is a <strong>surplus</strong> (excess supply)—in labor markets, this is <strong>unemployment</strong></li>
+                <li>Quantity exchanged = Q<sub>D</sub> (the smaller quantity)</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <strong>The Monopsony Counter-Argument:</strong>
+            <ul>
+                <li>In perfectly competitive labor markets, minimum wages create unemployment</li>
+                <li>But in <strong>monopsony markets</strong> (employers have market power), minimum wages can actually <strong>increase employment</strong>!</li>
+                <li><strong>Card & Krueger (1994):</strong> Studied New Jersey's minimum wage increase → found <strong>no negative effect</strong> on employment</li>
+                <li><strong>Card won the 2021 Nobel Prize</strong> for this work</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CONCEPT 7: COST FUNCTIONS -->
+    <div class="card">
+        <h3>🔹 Cost Functions</h3>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Cost Type</th><th>Definition</th><th>Formula</th></tr>
+                <tr><td><strong>Fixed Cost (FC)</strong></td><td>Costs that don't vary with output</td><td>FC = TC when q=0</td></tr>
+                <tr><td><strong>Variable Cost (VC)</strong></td><td>Costs that vary with output</td><td>VC = VC(q)</td></tr>
+                <tr><td><strong>Total Cost (TC)</strong></td><td>Sum of fixed and variable costs</td><td>TC = FC + VC(q)</td></tr>
+                <tr><td><strong>Average Cost (AC)</strong></td><td>Cost per unit</td><td>AC = TC/q</td></tr>
+                <tr><td><strong>Average Variable Cost (AVC)</strong></td><td>Variable cost per unit</td><td>AVC = VC/q</td></tr>
+                <tr><td><strong>Marginal Cost (MC)</strong></td><td>Cost of one more unit</td><td>MC = ΔTC/Δq</td></tr>
+            </table>
+        </div>
+
+        <div class="exam-trap">⚠️ <strong>Key Relationship:</strong> MC is the <strong>inverse</strong> of marginal product (MP). When MP rises, MC falls. When MP falls, MC rises.</div>
+
+        <h4>Step-by-Step Example</h4>
+        <p>A company has FC = 200, labor costs = 100 per worker. Production table:</p>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Workers</th><th>Production</th><th>MP</th><th>TC</th><th>AC</th><th>MC</th></tr>
+                <tr><td>0</td><td>0</td><td>—</td><td>200</td><td>—</td><td>—</td></tr>
+                <tr><td>1</td><td>20</td><td>20</td><td>300</td><td>15.00</td><td>5.00</td></tr>
+                <tr><td>2</td><td>50</td><td>30</td><td>400</td><td>8.00</td><td>3.33</td></tr>
+                <tr><td>3</td><td>90</td><td>40</td><td>500</td><td>5.56</td><td>2.50</td></tr>
+                <tr><td>4</td><td>120</td><td>30</td><td>600</td><td>5.00</td><td>3.33</td></tr>
+                <tr><td>5</td><td>140</td><td>20</td><td>700</td><td>5.00</td><td>5.00</td></tr>
+                <tr><td>6</td><td>150</td><td>10</td><td>800</td><td>5.33</td><td>10.00</td></tr>
+                <tr><td>7</td><td>155</td><td>5</td><td>900</td><td>5.81</td><td>20.00</td></tr>
+            </table>
+        </div>
+        <p><strong>Observation:</strong> MP and MC move in opposite directions. When MP is at its maximum, MC is at its minimum.</p>
+    </div>
+
+    <!-- FORMULAS -->
+    <div class="card">
+        <h3>🧮 Key Formulas</h3>
+
+        <div class="formula-box">Equilibrium: Q<sub>D</sub> = Q<sub>S</sub></div>
+        <div class="formula-box">Consumer Surplus: CS = ½ × (P<sub>max</sub> − P*) × Q*</div>
+        <div class="formula-box">Producer Surplus: PS = ½ × (P* − P<sub>min</sub>) × Q*</div>
+        <div class="formula-box">Tax Wedge: Tax = P<sub>D</sub> − P<sub>S</sub></div>
+        <div class="formula-box">Tax Revenue: Tax × Q<sub>t</sub></div>
+        <div class="formula-box">Deadweight Loss: DWL = ½ × Tax × (Q* − Q<sub>t</sub>)</div>
+        <div class="formula-box">Subsidy Wedge: Subsidy = P<sub>S</sub> − P<sub>D</sub></div>
+        <div class="formula-box">Subsidy Cost: Subsidy × Q<sub>s</sub></div>
+        <div class="formula-box">Total Cost: TC = FC + VC</div>
+        <div class="formula-box">Average Cost: AC = TC/q</div>
+        <div class="formula-box">Average Variable Cost: AVC = VC/q</div>
+        <div class="formula-box">Marginal Cost: MC = ΔTC/Δq</div>
+    </div>
+
+    <!-- HIGH-YIELD EXAM FOCUS -->
+    <div class="card">
+        <h3>⚡ High-Yield Exam Focus</h3>
+
+        <h4>Memorization Checklist</h4>
+        <div class="grid-2">
+            <ul>
+                <li>□ Consumer Surplus (CS)</li>
+                <li>□ Producer Surplus (PS)</li>
+                <li>□ Deadweight Loss (DWL)</li>
+                <li>□ Tax Wedge</li>
+                <li>□ Tax Incidence</li>
+                <li>□ Price Ceiling</li>
+                <li>□ Price Floor</li>
+                <li>□ Shortage (Excess Demand)</li>
+            </ul>
+            <ul>
+                <li>□ Surplus (Excess Supply)</li>
+                <li>□ Fixed Cost (FC)</li>
+                <li>□ Variable Cost (VC)</li>
+                <li>□ Total Cost (TC)</li>
+                <li>□ Average Cost (AC)</li>
+                <li>□ Average Variable Cost (AVC)</li>
+                <li>□ Marginal Cost (MC)</li>
+                <li>□ Marginal Product (MP)</li>
+            </ul>
+        </div>
+
+        <h4>Common Exam Traps</h4>
+        <ul>
+            <li><strong>Confusing "change in demand" with "change in quantity demanded":</strong> Tax affects quantity (movement along the curve), not demand (shift).</li>
+            <li><strong>Thinking tax burden is always split 50/50:</strong> Burden depends on relative elasticities.</li>
+            <li><strong>Confusing price ceilings and price floors:</strong> Ceiling → SHORTAGE; Floor → SURPLUS.</li>
+            <li><strong>Thinking subsidies eliminate deadweight loss:</strong> Subsidies increase CS and PS, but still create DWL.</li>
+            <li><strong>Confusing average cost with marginal cost:</strong> AC is average cost per unit; MC is cost of the LAST unit.</li>
+            <li><strong>Forgetting to divide by the change in quantity:</strong> MC = ΔTC/Δq (if q changes by more than 1, divide).</li>
+        </ul>
+
+        <h4>The "If This, Then That" Logic</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then...</th></tr>
+                <tr><td>Tax is imposed</td><td>Supply shifts UP → Quantity falls → DWL</td></tr>
+                <tr><td>Subsidy is imposed</td><td>Supply shifts DOWN → Quantity rises → Government cost</td></tr>
+                <tr><td>Ceiling is BELOW equilibrium</td><td>SHORTAGE → Quantity = Q<sub>S</sub></td></tr>
+                <tr><td>Floor is ABOVE equilibrium</td><td>SURPLUS → Quantity = Q<sub>D</sub></td></tr>
+                <tr><td>MC < AC</td><td>AC is falling</td></tr>
+                <tr><td>MC > AC</td><td>AC is rising</td></tr>
+                <tr><td>MC = AC</td><td>AC is at minimum</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- PRACTICE QUESTIONS -->
+    <div class="card">
+        <h3>📝 Practice Questions</h3>
+
+        <div class="question-block" id="q1">
+            <div class="q-text">Q1: A price ceiling set below equilibrium creates:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) A surplus</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="B"><span>B) A shortage</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="C"><span>C) No effect</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) An increase in supply</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>A price ceiling set below equilibrium creates a shortage (excess demand) because quantity demanded exceeds quantity supplied.</div>
+        </div>
+
+        <div class="question-block" id="q2">
+            <div class="q-text">Q2: A price floor set above equilibrium creates:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q2" value="A"><span>A) A shortage</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="B"><span>B) A surplus</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) No effect</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="D"><span>D) A decrease in demand</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>A price floor set above equilibrium creates a surplus (excess supply) because quantity supplied exceeds quantity demanded.</div>
+        </div>
+
+        <div class="question-block" id="q3">
+            <div class="q-text">Q3: In a shortage, the quantity traded is determined by:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A"><span>A) Quantity demanded</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="B"><span>B) Quantity supplied</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="C"><span>C) The average of Q<sub>D</sub> and Q<sub>S</sub></span></label>
+                <label class="option-label"><input type="radio" name="q3" value="D"><span>D) The government</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>In a shortage, the short side of the market prevails. Since sellers control how much they supply, the quantity traded is Q<sub>S</sub>.</div>
+        </div>
+
+        <div class="question-block" id="q4">
+            <div class="q-text">Q4: A tax is imposed on a good. Buyers pay $12 and sellers receive $8. What is the tax per unit?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="A"><span>A) $4</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="B"><span>B) $8</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="C"><span>C) $12</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="D"><span>D) $20</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4', 'A')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: A</strong><br>Tax = P<sub>D</sub> − P<sub>S</sub> = $12 − $8 = <strong>$4</strong></div>
+        </div>
+
+        <div class="question-block" id="q5">
+            <div class="q-text">Q5: The more inelastic side of the market bears:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A"><span>A) Less of the tax burden</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="B"><span>B) More of the tax burden</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="C"><span>C) None of the tax burden</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="D"><span>D) All of the tax burden</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>The more inelastic side bears more of the tax burden because they can't easily adjust their behavior.</div>
+        </div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="card">
+        <h3>📖 Glossary</h3>
+        <div class="glossary-term"><dt>Consumer Surplus</dt><dd>Difference between willingness to pay and actual price paid.</dd></div>
+        <div class="glossary-term"><dt>Producer Surplus</dt><dd>Difference between price received and minimum willingness to sell.</dd></div>
+        <div class="glossary-term"><dt>Tax Incidence</dt><dd>How the burden of a tax is shared between buyers and sellers.</dd></div>
+        <div class="glossary-term"><dt>Deadweight Loss</dt><dd>The loss of economic efficiency from market interventions.</dd></div>
+        <div class="glossary-term"><dt>Price Ceiling</dt><dd>A legal maximum price (creates shortage if below equilibrium).</dd></div>
+        <div class="glossary-term"><dt>Price Floor</dt><dd>A legal minimum price (creates surplus if above equilibrium).</dd></div>
+        <div class="glossary-term"><dt>Shortage</dt><dd>Excess demand (Q<sub>D</sub> > Q<sub>S</sub>).</dd></div>
+        <div class="glossary-term"><dt>Surplus</dt><dd>Excess supply (Q<sub>S</sub> > Q<sub>D</sub>).</dd></div>
+        <div class="glossary-term"><dt>Fixed Cost</dt><dd>A cost that does not vary with output.</dd></div>
+        <div class="glossary-term"><dt>Variable Cost</dt><dd>A cost that varies with output.</dd></div>
+        <div class="glossary-term"><dt>Total Cost</dt><dd>Sum of fixed and variable costs.</dd></div>
+        <div class="glossary-term"><dt>Average Cost</dt><dd>Total cost divided by quantity.</dd></div>
+        <div class="glossary-term"><dt>Average Variable Cost</dt><dd>Variable cost divided by quantity.</dd></div>
+        <div class="glossary-term"><dt>Marginal Cost</dt><dd>The cost of producing one additional unit.</dd></div>
+        <div class="glossary-term"><dt>Marginal Product</dt><dd>The additional output from hiring one more worker.</dd></div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+        function toggleAnswer(qId, correct) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seminar 1: Foundations</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .card h4 { font-size: 1rem; font-weight: 600; color: #1e4b6e; margin: 1rem 0 0.5rem 0; }
+        .card ul, .card ol { padding-left: 1.5rem; margin: 0.5rem 0; }
+        .card li { margin: 0.3rem 0; line-height: 1.6; }
+        .highlight-box { background: #eef4fa; padding: 1rem 1.5rem; border-radius: 12px; border-left: 4px solid #1f6e8c; margin: 1rem 0; }
+        .formula-box { background: #e7edf6; padding: 0.8rem 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 1.1rem; font-weight: 500; color: #003153; display: inline-block; margin: 0.4rem 0; border: 1px solid #bfd3e6; }
+        .exam-trap { background: #fef6ee; border-left: 4px solid #c77d4a; padding: 0.8rem 1.5rem; border-radius: 10px; margin: 0.6rem 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .glossary-term { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px solid #e8edf3; }
+        .glossary-term dt { font-weight: 600; color: #0b2b4a; min-width: 160px; }
+        .glossary-term dd { color: #334155; }
+        .graph-container { width: 100%; max-width: 850px; margin: 1.5rem auto; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 0.5rem; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .graph-container svg { width: 100%; height: auto; display: block; }
+        .graph-title { font-size: 1.1rem; font-weight: 700; color: #0b2b4a; text-align: center; padding: 0.8rem 0 0.3rem 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 0.5rem; }
+        .graph-subtitle { font-size: 0.85rem; color: #64748b; text-align: center; padding-bottom: 0.5rem; }
+        .graph-insight { padding: 0.5rem 1rem; background: #f1f5f9; border-radius: 6px; margin-top: 0.5rem; }
+        .graph-insight p { font-size: 0.85rem; color: #1e293b; margin: 0; }
+        @media (max-width: 768px) { body { padding: 1rem; } .grid-2 { grid-template-columns: 1fr; } .glossary-term { flex-direction: column; gap: 0.2rem; } .glossary-term dt { min-width: unset; } .graph-container { margin: 0.5rem 0; } .graph-container svg text { font-size: 10px !important; } .graph-title { font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Seminar 1: Foundations</div>
+
+    <div class="page-header">
+        <h2>🧑‍🏫 Seminar 1: Opportunity Costs, Market Equilibrium, and Methodology</h2>
+        <div class="subtitle">Fundamental building blocks of microeconomics</div>
+    </div>
+
+    <!-- LEARNING OBJECTIVES -->
+    <div class="card">
+        <h3>📌 Learning Objectives</h3>
+        <ul>
+            <li>Define and calculate opportunity costs in real-world scenarios</li>
+            <li>Distinguish between microeconomics and macroeconomics and classify economic topics correctly</li>
+            <li>Explain the difference between correlation and causation, and identify examples of reverse causality and spurious correlation</li>
+            <li>Analyze supply and demand diagrams and determine how shifts affect equilibrium price and quantity</li>
+            <li>Solve for equilibrium price and quantity using supply and demand equations</li>
+            <li>Distinguish between substitutes and complements and analyze market spillovers</li>
+            <li>Calculate economic costs and economic rent for decision-making scenarios</li>
+            <li>Identify cases of excess demand and excess supply in real-world markets</li>
+        </ul>
+    </div>
+
+    <!-- TOPIC INTRODUCTION -->
+    <div class="card">
+        <h3>🔹 Topic Introduction</h3>
+        <p>Welcome to Microeconomics! This first seminar introduces you to the fundamental building blocks of all economic thinking. Think of microeconomics as the study of how individuals and firms make decisions when faced with scarce resources. Every choice you make—whether to study or go out with friends, whether to buy coffee or tea, whether to work or pursue a degree—involves <strong>trade-offs</strong>. This seminar teaches you how to think like an economist by understanding opportunity costs, analyzing markets, and distinguishing between correlation and causation.</p>
+
+        <div class="highlight-box">
+            <strong>Why should you care?</strong> Because these concepts aren't just academic—they explain everything from why roses are expensive on Valentine's Day to why traffic jams happen. By the end of this seminar, you'll be able to analyze real-world decisions and market outcomes with an economist's toolkit.
+        </div>
+    </div>
+
+    <!-- CONCEPT 1: OPPORTUNITY COST -->
+    <div class="card">
+        <h3>🔹 Concept 1: Opportunity Cost</h3>
+        <p><strong>Definition:</strong> Opportunity Cost is the <strong>value of the best alternative</strong> you give up when making a choice between two or more options.</p>
+
+        <p>Think of it as the "road not taken"—whenever you choose one thing, you're saying "no" to everything else you could have done with that time, money, or resource. The opportunity cost is the value of the best of those alternatives you gave up.</p>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong>
+            <p>You have $20 and one hour. You can either:</p>
+            <ul>
+                <li><strong>Option A:</strong> Go to the movies ($15 ticket + 2 hours of your time)</li>
+                <li><strong>Option B:</strong> Work a part-time job ($20/hour for 2 hours = $40)</li>
+            </ul>
+            <p>The opportunity cost of going to the movies <strong>isn't just the $15 ticket</strong>—it's the $40 you could have earned working PLUS the $15 you spent. The full cost of the movie is <strong>$55</strong>!</p>
+        </div>
+
+        <p><strong>Why do we care about opportunity cost?</strong> Because money isn't the only cost. Every decision uses scarce resources:</p>
+        <ul>
+            <li><strong>Time is scarce</strong> (24 hours a day)</li>
+            <li><strong>Money is scarce</strong> (limited budget)</li>
+            <li><strong>Energy is scarce</strong> (can't do everything)</li>
+        </ul>
+        <p>If you only consider money, you miss the bigger picture. The true cost of any decision includes what you sacrifice to make that choice.</p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Element</th><th>Explanation</th></tr>
+                <tr><td>Not Just Monetary</td><td>Opportunity cost includes non-money costs like time, enjoyment, and convenience</td></tr>
+                <tr><td>Always Relative</td><td>It's always computed relative to a specific alternative</td></tr>
+                <tr><td>"Best" Alternative</td><td>Only the best foregone alternative counts, not all alternatives</td></tr>
+                <tr><td>Subjective</td><td>Opportunity cost depends on the individual's personal valuation</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- CONCEPT 2: MICRO VS MACRO -->
+    <div class="card">
+        <h3>🔹 Concept 2: Microeconomics vs. Macroeconomics</h3>
+        <p><strong>Microeconomics</strong> studies the choices of individual economic agents—households, firms, and individual markets.</p>
+        <p><strong>Macroeconomics</strong> studies the behavior of the entire economy as a whole—national income, inflation, unemployment, and economic growth.</p>
+
+        <div class="highlight-box">
+            <strong>Think of the economy like a forest:</strong>
+            <ul>
+                <li><strong>Microeconomics</strong> = studying individual trees (how one tree grows, how much sunlight it needs, how it competes with nearby trees)</li>
+                <li><strong>Macroeconomics</strong> = studying the whole forest (how many trees total, the overall health of the forest, the climate affecting all trees)</li>
+            </ul>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Microeconomics Focus</th><th>Macroeconomics Focus</th></tr>
+                <tr><td>Individual household consumption/saving</td><td>National consumption and total investment</td></tr>
+                <tr><td>Firm pricing and staffing decisions</td><td>Banking system and government taxation</td></tr>
+                <tr><td>Single market for specific goods</td><td>National savings and economic growth</td></tr>
+                <tr><td>Individual optimization</td><td>Inflation and money supply</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- CONCEPT 3: CORRELATION VS CAUSALITY -->
+    <div class="card">
+        <h3>🔹 Concept 3: Correlation vs. Causality</h3>
+        <p><strong>Correlation:</strong> Two variables move together (when X goes up, Y goes up or down).</p>
+        <p><strong>Causality:</strong> A change in X <strong>directly causes</strong> a change in Y (X → Y).</p>
+
+        <div class="exam-trap">⚠️ <strong>The Key Insight:</strong> Correlation does <strong>NOT</strong> imply causation! Just because two things happen together doesn't mean one causes the other.</div>
+
+        <h4>Three Types of Correlation/Causality Problems:</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>Type</th><th>Definition</th><th>Example</th></tr>
+                <tr><td><strong>Reverse Causality</strong></td><td>Y causes X, not X causes Y</td><td>Hospital beds don't kill you; being sick (Y) puts you in a hospital bed (X)</td></tr>
+                <tr><td><strong>Spurious Correlation</strong></td><td>Z causes both X and Y</td><td>Ice cream sales and violent crime both increase in warm weather (Z)</td></tr>
+                <tr><td><strong>Omitted Variable Bias</strong></td><td>An unobserved variable affects both X and Y</td><td>Healthier people (Z) are more likely to marry AND live longer</td></tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Real-World Example:</strong> Teacher Salaries and Test Results
+            <ul>
+                <li><strong>Observation:</strong> Pupils do better in smaller classes with teachers paid more.</li>
+                <li><strong>Correct conclusion:</strong> There exists a <strong>correlation</strong> between teacher salaries and test results.</li>
+                <li><strong>Wrong conclusion:</strong> This <strong>proves</strong> that teacher salaries influence student performance.</li>
+                <li><strong>Why?</strong> There might be omitted variables (wealthier schools have both smaller classes AND better test results).</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CONCEPT 4: MARKET EQUILIBRIUM -->
+    <div class="card">
+        <h3>🔹 Concept 4: Market Equilibrium</h3>
+        <p><strong>Definition:</strong> Market Equilibrium is the point where the <strong>quantity supplied equals the quantity demanded</strong>. At this point, the market "clears"—everyone who wants to buy at the equilibrium price can, and everyone who wants to sell at that price can.</p>
+
+        <div class="formula-box">At equilibrium: Q<sub>D</sub> = Q<sub>S</sub></div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Concept</th><th>Definition</th></tr>
+                <tr><td>Demand</td><td>Quantity buyers want to purchase at each price (downward sloping)</td></tr>
+                <tr><td>Supply</td><td>Quantity sellers want to sell at each price (upward sloping)</td></tr>
+                <tr><td>Equilibrium Price (P*)</td><td>Price where Q<sub>D</sub> = Q<sub>S</sub></td></tr>
+                <tr><td>Equilibrium Quantity (Q*)</td><td>Quantity where Q<sub>D</sub> = Q<sub>S</sub></td></tr>
+                <tr><td>Excess Demand (Shortage)</td><td>Q<sub>D</sub> > Q<sub>S</sub> (price is below equilibrium)</td></tr>
+                <tr><td>Excess Supply (Surplus)</td><td>Q<sub>S</sub> > Q<sub>D</sub> (price is above equilibrium)</td></tr>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Real-World Examples of Excess Demand:</strong>
+            <ul>
+                <li><strong>Traffic jams:</strong> The "good" is road space. Supply is fixed, but demand exceeds supply during peak times.</li>
+                <li><strong>Waiting lists for rental apartments:</strong> More people want apartments than are available at the current price.</li>
+                <li><strong>Black market for concert tickets:</strong> Tickets sell at prices above face value, indicating excess demand at the official price.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- GRAPH: DEMAND AND SUPPLY -->
+    <div class="card">
+        <h3>📈 Graph: Market Equilibrium</h3>
+        <div class="graph-container">
+            <div class="graph-title">Figure 1: Supply and Demand Equilibrium</div>
+            <div class="graph-subtitle">The intersection of supply and demand determines equilibrium price and quantity</div>
+            <svg viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="700" height="450" fill="#f8fafc" rx="8"/>
+                <g stroke="#e2e8f0" stroke-width="0.5">
+                    <line x1="80" y1="50" x2="80" y2="400"/>
+                    <line x1="80" y1="400" x2="680" y2="400"/>
+                    <line x1="80" y1="100" x2="680" y2="100"/>
+                    <line x1="80" y1="150" x2="680" y2="150"/>
+                    <line x1="80" y1="200" x2="680" y2="200"/>
+                    <line x1="80" y1="250" x2="680" y2="250"/>
+                    <line x1="80" y1="300" x2="680" y2="300"/>
+                    <line x1="80" y1="350" x2="680" y2="350"/>
+                    <line x1="150" y1="400" x2="150" y2="50"/>
+                    <line x1="220" y1="400" x2="220" y2="50"/>
+                    <line x1="290" y1="400" x2="290" y2="50"/>
+                    <line x1="360" y1="400" x2="360" y2="50"/>
+                    <line x1="430" y1="400" x2="430" y2="50"/>
+                    <line x1="500" y1="400" x2="500" y2="50"/>
+                    <line x1="570" y1="400" x2="570" y2="50"/>
+                    <line x1="640" y1="400" x2="640" y2="50"/>
+                </g>
+                <text x="380" y="430" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Quantity (Q)</text>
+                <text x="30" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b" transform="rotate(-90, 30, 225)">Price (P)</text>
+                <polygon points="80,50 70,65 90,65" fill="#0b2b4a"/>
+                <polygon points="680,400 665,390 665,410" fill="#0b2b4a"/>
+                <line x1="80" y1="400" x2="680" y2="100" stroke="#2563eb" stroke-width="3"/>
+                <text x="660" y="105" font-size="16" font-weight="700" fill="#2563eb">D</text>
+                <line x1="150" y1="50" x2="680" y2="350" stroke="#16a34a" stroke-width="3"/>
+                <text x="670" y="360" font-size="16" font-weight="700" fill="#16a34a">S</text>
+                <circle cx="380" cy="230" r="8" fill="#0b2b4a"/>
+                <text x="390" y="225" font-size="14" font-weight="600" fill="#0b2b4a">E</text>
+                <text x="390" y="240" font-size="11" fill="#0b2b4a">(P*, Q*)</text>
+                <line x1="80" y1="230" x2="380" y2="230" stroke="#0b2b4a" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="60" y="235" font-size="13" font-weight="600" fill="#0b2b4a">P*</text>
+                <line x1="380" y1="230" x2="380" y2="400" stroke="#0b2b4a" stroke-width="2" stroke-dasharray="4,4"/>
+                <text x="370" y="420" font-size="13" font-weight="600" fill="#0b2b4a">Q*</text>
+                <rect x="470" y="280" width="190" height="85" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+                <text x="480" y="300" font-size="13" font-weight="700" fill="#0b2b4a">Legend</text>
+                <line x1="480" y1="315" x2="500" y2="315" stroke="#2563eb" stroke-width="2"/>
+                <text x="510" y="319" font-size="11" fill="#1e293b">Demand (D)</text>
+                <line x1="480" y1="330" x2="500" y2="330" stroke="#16a34a" stroke-width="2"/>
+                <text x="510" y="334" font-size="11" fill="#1e293b">Supply (S)</text>
+                <circle cx="488" cy="348" r="4" fill="#0b2b4a"/>
+                <text x="510" y="352" font-size="11" fill="#1e293b">Equilibrium</text>
+            </svg>
+            <div class="graph-insight"><p><strong>Key Insight:</strong> At equilibrium, quantity demanded equals quantity supplied. The market "clears"—no shortage and no surplus.</p></div>
+        </div>
+    </div>
+
+    <!-- FORMULAS -->
+    <div class="card">
+        <h3>🧮 Key Formulas</h3>
+
+        <div class="formula-box">Equilibrium: Q<sub>S</sub> = Q<sub>D</sub></div>
+        <div class="formula-box">Economic Cost = Explicit Costs + Implicit Costs</div>
+        <div class="formula-box">Economic Rent = Benefit − Economic Cost</div>
+        <div class="formula-box">Decision Rule: If Benefit > Economic Cost → Take the action</div>
+    </div>
+
+    <!-- EXAM SCENARIOS -->
+    <div class="card">
+        <h3>📝 Exam Scenarios & Problem-Solving</h3>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 1: Opportunity Cost – Concert Choice</h4>
+            <p><strong>Scenario:</strong> Concert A in a theater: $25 admission. Concert B in a park: FREE (but happens at the same time). You would have been willing to pay $15 to attend Concert B if it was NOT free.</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li><strong>Benefit of next best alternative to Concert A:</strong> $15 (opportunity cost)</li>
+                <li><strong>Total economic cost of Concert A:</strong> $25 + $15 = <strong>$40</strong></li>
+                <li>If you anticipate $35 worth of pleasure from Concert A → <strong>Don't go</strong> ($35 < $40)</li>
+                <li>If you anticipate $50 worth of pleasure from Concert A → <strong>Go</strong> ($50 > $40)</li>
+            </ul>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 2: Correlation vs. Causation – Teacher Salaries</h4>
+            <p><strong>Scenario:</strong> On average, pupils do better at school if they study in smaller classes and are taught by teachers that are paid more.</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li><strong>Correct:</strong> There exists a <strong>positive correlation</strong> between teacher salaries and test results, and a <strong>negative correlation</strong> between class size and test results.</li>
+                <li><strong>Incorrect:</strong> The observation <strong>proves</strong> that teacher salaries and class size influence student performance.</li>
+                <li><strong>Why?</strong> We can't prove causality—there might be omitted variables (wealthier schools have both).</li>
+            </ul>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+            <h4>Scenario 3: Excess Demand</h4>
+            <p><strong>Scenario:</strong> Which of the following are cases of excess demand?</p>
+            <p><strong>Solution:</strong> Traffic jams, waiting lists for rental apartments, black market for concert tickets are cases of <strong>excess demand</strong>. Minimum wage unemployment is <strong>excess supply</strong> of labor.</p>
+        </div>
+
+        <div class="card" style="border: 1px solid #e2e8f0;">
+            <h4>Scenario 4: Demand and Supply Shifts – Wheat and Corn</h4>
+            <p><strong>Scenario:</strong> Heavy rains cause a negative supply shock to wheat, and the price of corn (a substitute for wheat) increases. What happens to the wheat market?</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li><strong>Supply shock:</strong> Wheat supply shifts LEFT → Price ↑, Quantity ↓</li>
+                <li><strong>Substitute effect:</strong> Corn price ↑ → Demand for wheat shifts RIGHT → Price ↑, Quantity ↑</li>
+                <li><strong>Net effect:</strong> Price <strong>increases</strong> (certain); Quantity is <strong>undetermined</strong> (depends on which effect is larger)</li>
+            </ul>
+            <div class="highlight-box"><strong>Answer:</strong> The price of wheat increases but the effect on the quantity exchanged is undetermined.</div>
+        </div>
+    </div>
+
+    <!-- HIGH-YIELD EXAM FOCUS -->
+    <div class="card">
+        <h3>⚡ High-Yield Exam Focus</h3>
+
+        <h4>Memorization Checklist</h4>
+        <div class="grid-2">
+            <ul>
+                <li>□ Opportunity Cost</li>
+                <li>□ Microeconomics</li>
+                <li>□ Macroeconomics</li>
+                <li>□ Correlation</li>
+                <li>□ Causality</li>
+                <li>□ Reverse Causality</li>
+                <li>□ Spurious Correlation</li>
+            </ul>
+            <ul>
+                <li>□ Market Equilibrium</li>
+                <li>□ Excess Demand (Shortage)</li>
+                <li>□ Excess Supply (Surplus)</li>
+                <li>□ Substitutes</li>
+                <li>□ Complements</li>
+                <li>□ Economic Cost</li>
+                <li>□ Economic Rent</li>
+            </ul>
+        </div>
+
+        <h4>Common Exam Traps</h4>
+        <ul>
+            <li><strong>Confusing "Demand" with "Quantity Demanded":</strong> Price changes cause movements along the curve; other factors cause shifts.</li>
+            <li><strong>Assuming Correlation = Causation:</strong> Always look for third factors or reverse causality.</li>
+            <li><strong>Forgetting Opportunity Cost:</strong> The true cost includes what you gave up.</li>
+            <li><strong>Confusing Substitutes and Complements:</strong> If coffee price increases → demand for tea (substitute) INCREASES.</li>
+        </ul>
+
+        <h4>The "If This, Then That" Logic</h4>
+        <div class="table-wrap">
+            <table>
+                <tr><th>If...</th><th>Then...</th></tr>
+                <tr><td>Change in the good's OWN price</td><td>Movement ALONG the curve</td></tr>
+                <tr><td>Change in ANYTHING ELSE</td><td>Shift of the ENTIRE curve</td></tr>
+                <tr><td>Price is below equilibrium</td><td>Excess demand (shortage)</td></tr>
+                <tr><td>Price is above equilibrium</td><td>Excess supply (surplus)</td></tr>
+                <tr><td>Two variables move together</td><td>Correlation (NOT causation)</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- PRACTICE QUESTIONS -->
+    <div class="card">
+        <h3>📝 Practice Questions</h3>
+
+        <div class="question-block" id="q1">
+            <div class="q-text">Q1: The opportunity cost of going to college includes:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) Tuition and fees only</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="B"><span>B) Books and supplies only</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="C"><span>C) Tuition, books, AND the income you could have earned working</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) The income you could have earned working only</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1', 'C')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: C</strong><br>Opportunity cost includes BOTH explicit costs (tuition, books) AND implicit costs (the income you could have earned working).</div>
+        </div>
+
+        <div class="question-block" id="q2">
+            <div class="q-text">Q2: Which of the following is a microeconomics question?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="A"><span>A) Why does the price of avocados rise in winter?</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="B"><span>B) Why is inflation rising?</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) What is the national unemployment rate?</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="D"><span>D) How fast is the economy growing?</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2', 'A')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: A</strong><br>Microeconomics focuses on individual agents and specific markets. Avocado prices are a specific market question. B, C, and D are macroeconomics questions.</div>
+        </div>
+
+        <div class="question-block" id="q3">
+            <div class="q-text">Q3: A study finds that people who own pets live longer. A journalist concludes: "Owning a pet extends your lifespan." This is an example of:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A"><span>A) Reverse causality</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="B"><span>B) Confusing correlation with causation</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="C"><span>C) A valid causal conclusion</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="D"><span>D) A normative statement</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>The journalist is confusing correlation with causation. Healthier people may be more able to care for pets (reverse causality), or wealthier people may afford both pets and healthcare (third variable).</div>
+        </div>
+
+        <div class="question-block" id="q4">
+            <div class="q-text">Q4: Given Q<sub>D</sub> = 5 − P and Q<sub>S</sub> = P − 1, what is the equilibrium price and quantity?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q4" value="A"><span>A) P = 2, Q = 3</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="B"><span>B) P = 3, Q = 2</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="C"><span>C) P = 4, Q = 1</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="D"><span>D) P = 1, Q = 4</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>Set Q<sub>D</sub> = Q<sub>S</sub>: 5 − P = P − 1 → 6 = 2P → P* = 3 → Q* = 5 − 3 = 2</div>
+        </div>
+
+        <div class="question-block" id="q5">
+            <div class="q-text">Q5: Coffee and tea are substitutes. If the price of coffee increases, what happens to the demand for tea?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A"><span>A) Demand for tea decreases (shifts LEFT)</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="B"><span>B) Demand for tea increases (shifts RIGHT)</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="C"><span>C) Quantity demanded of tea decreases</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="D"><span>D) Quantity demanded of tea increases</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5', 'B')">Show Answer</button>
+            <div class="answer-area"><strong>✅ Correct Answer: B</strong><br>When the price of a substitute increases, consumers switch to the alternative, causing demand for the other good to increase (shift RIGHT).</div>
+        </div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="card">
+        <h3>📖 Glossary</h3>
+        <div class="glossary-term"><dt>Opportunity Cost</dt><dd>The value of the best alternative given up when making a choice.</dd></div>
+        <div class="glossary-term"><dt>Microeconomics</dt><dd>The study of individual economic agents and their choices.</dd></div>
+        <div class="glossary-term"><dt>Macroeconomics</dt><dd>The study of the economy as a whole.</dd></div>
+        <div class="glossary-term"><dt>Correlation</dt><dd>A statistical relationship where two variables move together.</dd></div>
+        <div class="glossary-term"><dt>Causality</dt><dd>A relationship where one variable directly causes a change in another.</dd></div>
+        <div class="glossary-term"><dt>Reverse Causality</dt><dd>When Y causes X, rather than X causing Y.</dd></div>
+        <div class="glossary-term"><dt>Spurious Correlation</dt><dd>When a third variable (Z) causes both X and Y.</dd></div>
+        <div class="glossary-term"><dt>Market Equilibrium</dt><dd>The point where quantity supplied equals quantity demanded.</dd></div>
+        <div class="glossary-term"><dt>Excess Demand (Shortage)</dt><dd>When quantity demanded exceeds quantity supplied.</dd></div>
+        <div class="glossary-term"><dt>Excess Supply (Surplus)</dt><dd>When quantity supplied exceeds quantity demanded.</dd></div>
+        <div class="glossary-term"><dt>Substitutes</dt><dd>Goods used in place of each other.</dd></div>
+        <div class="glossary-term"><dt>Complements</dt><dd>Goods used together.</dd></div>
+        <div class="glossary-term"><dt>Economic Cost</dt><dd>The sum of explicit and implicit costs.</dd></div>
+        <div class="glossary-term"><dt>Economic Rent</dt><dd>The difference between benefit and economic cost.</dd></div>
+        <div class="glossary-term"><dt>Explicit Cost</dt><dd>A direct monetary cost.</dd></div>
+        <div class="glossary-term"><dt>Implicit Cost</dt><dd>An opportunity cost (value of foregone alternative).</dd></div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+        function toggleAnswer(qId, correct) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
