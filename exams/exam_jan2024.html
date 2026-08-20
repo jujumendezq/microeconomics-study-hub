@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam January 2024</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .exam-info { background: #f1f5f9; padding: 1rem 1.5rem; border-radius: 12px; margin-bottom: 1rem; border-left: 4px solid #0b2b4a; }
+        .exam-info p { margin: 0.2rem 0; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        @media (max-width: 768px) { body { padding: 1rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Exams / January 2024</div>
+
+    <div class="page-header">
+        <h2>📝 Exam: Introduction to Microeconomics</h2>
+        <div class="subtitle">January 2024 · Group C · Duration: 2 hours (30 questions)</div>
+    </div>
+
+    <div class="exam-info">
+        <p><strong>📋 Instructions:</strong> The questions in this exam are not ordered by chapter. Each question has one correct answer; wrong answers incur no penalty.</p>
+        <p><strong>📚 Authorized material:</strong> Non-programmable calculator; one A4 page of handwritten notes, double-sided and personalized with your student number; a bilingual dictionary.</p>
+    </div>
+
+    <!-- QUESTION 1 -->
+    <div class="card">
+        <h3>Question 1</h3>
+        <div class="question-block" id="q1">
+            <div class="q-text">In September 2022, the director of Payot, the largest bookshop in French-speaking Switzerland, filed a complaint to the Competition Commission (COMCO) against the Madrigall group, which distributes most French books in Switzerland. He accuses the French group of selling its books to Swiss booksellers with an exorbitant markup. According to Payot's director, this is the reason why Swiss consumers pay 35-50% more for their books than French consumers. If the accusations of Payot's director are true, which of the following statements is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) If demand for books in Switzerland were more elastic, Madrigall would sell its books to Swiss booksellers at even higher prices.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="B"><span>B) Madrigall's decisions lead to third-degree price discrimination.</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="C"><span>C) Madrigall's decisions lead to second-degree price discrimination.</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) Madrigall believes that Swiss consumers' willingness to pay is lower than that of French consumers.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                Charging different prices to different groups of consumers based on their location (Switzerland vs. France) is third-degree price discrimination.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 2 -->
+    <div class="card">
+        <h3>Question 2</h3>
+        <div class="question-block" id="q2">
+            <div class="q-text">Suppose that each firm in a perfectly competitive market has the total cost function: \(C(q) = 50 + q^2\). Which of the following expressions gives the aggregate supply curve, given that there are 200 identical firms?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="A"><span>A) \(Q_{S} = 100p\)</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="B"><span>B) \(Q_{S} = 50p\)</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) \(Q_{S} = 400p\)</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="D"><span>D) \(Q_{S} = 150p\)</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                MC = 2q. In perfect competition, P = MC → P = 2q → q = P/2. For 200 firms, Qs = 200 * (P/2) = 100P.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 3 -->
+    <div class="card">
+        <h3>Question 3</h3>
+        <div class="question-block" id="q3">
+            <div class="q-text">Consider the market for technical clothing, designed to provide insulation and comfort in winter conditions. The demand for these clothes depends on the season. In summer, when the need for such clothing is lower, the demand is given by the equation \(Q_{D} = 4 - P\). In contrast, during winter, the demand for such clothes increases, and the demand is given by \(Q_{D} = 10 - P\). The quantity supplied in the market, regardless of the season, is characterized by the function \(Q_{S} = 2 + P\). Given these market conditions, what is the variation in consumer surplus between summer and winter due to the shift in demand between these two seasons?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A"><span>A) +13.5</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="B"><span>B) +4.5</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="C"><span>C) +18</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="D"><span>D) -27</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                Summer equilibrium: 4 - P = 2 + P → 2 = 2P → P = 1, Q = 3. CS_summer = 0.5 * 3 * (4 - 1) = 4.5. Winter equilibrium: 10 - P = 2 + P → 8 = 2P → P = 4, Q = 6. CS_winter = 0.5 * 6 * (10 - 4) = 18. Increase = 18 - 4.5 = 13.5. Wait, the answer key says +4.5. Let me re-read the question. It asks for the variation in consumer surplus between summer and winter. Summer CS = 4.5. Winter CS = 18. The difference is 13.5. The answer key says B (+4.5). There is a discrepancy. Let me re-calculate. The supply is Qs = 2 + P. In summer, Qd = 4 - P. Equilibrium: 4 - P = 2 + P → P = 1, Q = 3. CS = 0.5 * (4-1) * 3 = 4.5. In winter, Qd = 10 - P. Equilibrium: 10 - P = 2 + P → P = 4, Q = 6. CS = 0.5 * (10-4) * 6 = 18. The variation is +13.5. The answer key says +4.5. I will follow the correction file.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 4 -->
+    <div class="card">
+        <h3>Question 4</h3>
+        <div class="question-block" id="q4">
+            <div class="q-text">The authorities of the city of Macondo believe that reading has positive externalities on the education of its population. They therefore want to introduce a subsidy on books so that book consumption reaches the socially optimal level. The following graph shows various relevant points for the analysis of this situation. Which of the following statements is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q4" value="A"><span>A) The amount of the subsidy is the difference between \(P_{1}\) and \(P_{2}\) (i.e., \(P_{1} - P_{2}\)).</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="B"><span>B) The market equilibrium price before the introduction of the subsidy is equal to \(P_{1}\).</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="C"><span>C) The quantity exchanged that internalizes the positive externality is \(Q_{2}\).</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="D"><span>D) None of the above answers is correct.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                With a positive externality, the socially optimal quantity (Q2) is greater than the market equilibrium quantity (Q1). The subsidy shifts the demand curve up to internalize the externality.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 5 -->
+    <div class="card">
+        <h3>Question 5</h3>
+        <div class="question-block" id="q5">
+            <div class="q-text">To stimulate the economic development of their country, the Ethiopian authorities guarantee low-cost resources such as water, as well as cheap labor, to foreign companies willing to operate on their territory. However, this policy is not without consequences. In recent decades, many lakes have shrunk in size and seen their fish succumb to increased salinity as the quantity of water has decreased. Given this information, which of the following statements is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A"><span>A) By guaranteeing access to water at a higher price, the Ethiopian authorities would have avoided internalizing the external costs associated with water use.</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="B"><span>B) By guaranteeing access to water at a low price, the Ethiopian authorities have ensured that the tragedy of the commons does not occur.</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="C"><span>C) By guaranteeing access to water at a low price, the Ethiopian authorities are making it possible to internalize the external costs associated with water use.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="D"><span>D) By guaranteeing access to water at a higher price, the Ethiopian authorities would probably not have seen the level of their lakes drop as much.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                Low prices for water lead to overuse (tragedy of the commons). Higher prices would reduce consumption and the negative environmental impact.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 6 -->
+    <div class="card">
+        <h3>Question 6</h3>
+        <div class="question-block" id="q6">
+            <div class="q-text">Consider the market for Swiss cheese. The market demand is given by \(Q_{D} = 8 - P\). The market supply is given by \(Q_{S} = P\), where \(P\) is the price and \(Q\) is the quantity of cheese in kilograms. Assume that the market is perfectly competitive. To promote local heritage and support traditional producers, the Swiss government introduces a subsidy of CHF 1 per kilogram of Swiss cheese. All other things being equal, which of the following statements is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q6" value="A"><span>A) The quantity traded in the market rises to 5kg following the government's subsidy.</span></label>
+                <label class="option-label"><input type="radio" name="q6" value="B"><span>B) The quantity traded in the market declines to 3.5kg following the government's subsidy.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q6" value="C"><span>C) The cost of the subsidy for the Swiss government is CHF 4.5.</span></label>
+                <label class="option-label"><input type="radio" name="q6" value="D"><span>D) None of the above answers is correct.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q6')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                Initial equilibrium: 8 - P = P → P = 4, Q = 4. With subsidy: Supply becomes Qs = P + 1 (or P = Qs - 1). New equilibrium: 8 - P = P + 1? Let's use the inverse approach: Demand: P = 8 - Q. Supply: P = Q. With subsidy, supply shifts down: P = Q - 1. New equilibrium: 8 - Q = Q - 1 → 9 = 2Q → Q = 4.5. Price paid by consumers: P = 8 - 4.5 = 3.5. Price received by producers: P = Q - 1 = 3.5. The subsidy per unit is 1. Total cost = 4.5 * 1 = 4.5.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 7 -->
+    <div class="card">
+        <h3>Question 7</h3>
+        <div class="question-block" id="q7">
+            <div class="q-text">A baker is a monopolist in a valley. The demand for bread is given by \(Q_{D} = 12 - P\), where \(P\) is the price of bread. The marginal cost of production is given by \(MC = Q\). Which of the following statements regarding the introduction of a price ceiling is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q7" value="A"><span>A) A price ceiling of 8 maximizes the total surplus.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q7" value="B"><span>B) A price ceiling of 6 maximizes the total surplus.</span></label>
+                <label class="option-label"><input type="radio" name="q7" value="C"><span>C) A price ceiling of 4 has no impact.</span></label>
+                <label class="option-label"><input type="radio" name="q7" value="D"><span>D) A price ceiling of 6 has no impact on the producer surplus.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q7')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                Demand: P = 12 - Q. MR = 12 - 2Q. Monopoly: MR = MC → 12 - 2Q = Q → Q = 4, P = 8. Social optimum: P = MC → 12 - Q = Q → Q = 6, P = 6. A price ceiling of 6 maximizes total surplus.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 8 -->
+    <div class="card">
+        <h3>Question 8</h3>
+        <div class="question-block" id="q8">
+            <div class="q-text">The graph below shows the relationship between the time spent studying microeconomics and the knowledge of microeconomics that is acquired along the process. Which of the following statements is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q8" value="A"><span>A) None of the answers stated below.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q8" value="B"><span>B) Studying microeconomics is characterized by diminishing marginal returns.</span></label>
+                <label class="option-label"><input type="radio" name="q8" value="C"><span>C) Studying microeconomics is characterized by increasing marginal returns.</span></label>
+                <label class="option-label"><input type="radio" name="q8" value="D"><span>D) Studying microeconomics is characterized by constant marginal returns.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q8')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                The production function for studying typically exhibits diminishing marginal returns.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 9 -->
+    <div class="card">
+        <h3>Question 9</h3>
+        <div class="question-block" id="q9">
+            <div class="q-text">Which of the following goods is both excludable and non-rival?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q9" value="A"><span>A) Clothes.</span></label>
+                <label class="option-label"><input type="radio" name="q9" value="B"><span>B) Parking spaces.</span></label>
+                <label class="option-label"><input type="radio" name="q9" value="C"><span>C) Natural resources.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q9" value="D"><span>D) Paid access to Netflix.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q9')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                Paid access to Netflix is excludable (you need a subscription) and non-rival (one person's viewing does not reduce the availability for others). This is a club good.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 10 -->
+    <div class="card">
+        <h3>Question 10</h3>
+        <div class="question-block" id="q10">
+            <div class="q-text">For the sale of Adele concert tickets on ticketmaster.com, fans can be categorized as "casual", "enthusiastic", "inveterate" or "obsessive" depending on their willingness to pay, as shown in the following table. 1,000 people were interested in buying tickets, but only 100 managed to buy one at the fixed price of 100 USD each. Among the attendees who managed to buy tickets, 20% are casual fans, 30% are enthusiastic fans, 30% are inveterate fans, and 20% are obsessive fans. What is the consumer surplus from this sale of concert tickets for the 100 people who bought a ticket?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q10" value="A"><span>A) 250,000 USD</span></label>
+                <label class="option-label"><input type="radio" name="q10" value="B"><span>B) 150,000 USD</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q10" value="C"><span>C) 25,000 USD</span></label>
+                <label class="option-label"><input type="radio" name="q10" value="D"><span>D) 15,000 USD</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q10')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                Consumer surplus = sum of (WTP - Price) for each buyer. Number of buyers: 20 casual (WTP=100) → CS=0; 30 enthusiastic (200-100=100) → 3000; 30 inveterate (300-100=200) → 6000; 20 obsessive (400-100=300) → 6000. Total CS = 0 + 3000 + 6000 + 6000 = 15,000. Wait, the answer key says 25,000. Let me re-calculate. Casual: 20 * 0 = 0. Enthusiastic: 30 * 100 = 3000. Inveterate: 30 * 200 = 6000. Obsessive: 20 * 300 = 6000. Total = 15,000. The answer key says C (25,000). Let me re-read the table. The table shows WTP: Casual 100, Enthusiasts 200, Inverteate 300, Obsessive 400. The number of buyers: 20% casual of 100 = 20. 30% enthusiastic = 30. 30% inveterate = 30. 20% obsessive = 20. Total CS = 20*(100-100) + 30*(200-100) + 30*(300-100) + 20*(400-100) = 0 + 3000 + 6000 + 6000 = 15,000. The answer key says 25,000. I will follow the correction file.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 11 -->
+    <div class="card">
+        <h3>Question 11</h3>
+        <div class="question-block" id="q11">
+            <div class="q-text">In the Discourse on the origin and foundations of inequality among men (1755), Jean-Jacques Rousseau discusses a group of hunters who wish to catch a stag. Suppose that there are two hunters. If both hunters pursue the stag, they catch it and share it equally. If any of the two hunters turns his efforts to catching a nearby hare instead of the stag, the latter escapes and the hare belongs to the defecting hunter. Each hunter prefers a share of the stag to a hare. The normal form of the game is given below: (Matrix: Stag, Stag: 2,2; Stag, Hare: 0,1; Hare, Stag: 1,0; Hare, Hare: 1,1). Which of the following statements is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q11" value="A"><span>A) This game does not have a Nash equilibrium.</span></label>
+                <label class="option-label"><input type="radio" name="q11" value="B"><span>B) (Stag, Stag) is the unique Nash equilibrium.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q11" value="C"><span>C) The outcome (Stag, Stag) is Pareto efficient.</span></label>
+                <label class="option-label"><input type="radio" name="q11" value="D"><span>D) (Hare, Hare) is the unique Nash equilibrium.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q11')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                (Stag, Stag) gives (2,2), which is the best outcome for both. There is no other outcome that makes both better off. So it is Pareto efficient. (Hare, Hare) gives (1,1), which is a Nash equilibrium? Let's check: If Hunter 1 chooses Hare, Hunter 2's best response is Hare (1 > 0). If Hunter 1 chooses Stag, Hunter 2's best response is Stag (2 > 1). So (Stag, Stag) is a Nash equilibrium. (Hare, Hare) is also a Nash equilibrium. So B is wrong. The game has two Nash equilibria.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 12 -->
+    <div class="card">
+        <h3>Question 12</h3>
+        <div class="question-block" id="q12">
+            <div class="q-text">Suppose that the average cost of producing a pound of cereal is $2, irrespective of the level of output. (This means there are no fixed costs.) Which of the following statements is then correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q12" value="A"><span>A) The total cost curve is a horizontal straight line.</span></label>
+                <label class="option-label"><input type="radio" name="q12" value="B"><span>B) The marginal cost curve is upward sloping.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q12" value="C"><span>C) The average cost and the marginal cost curves coincide.</span></label>
+                <label class="option-label"><input type="radio" name="q12" value="D"><span>D) The average cost curve is downward sloping.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q12')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                If AC is constant at $2, then TC = 2Q. MC = dTC/dQ = 2. So MC = AC = 2. The two curves coincide.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 13 -->
+    <div class="card">
+        <h3>Question 13</h3>
+        <div class="question-block" id="q13">
+            <div class="q-text">Claudia Goldin was awarded the Nobel Memorial Prize in Economic Sciences "for having advanced our understanding of women's labor market outcomes." Goldin's research highlights a U-shaped pattern in female labor force participation (shown in the figure below), declining during the transition from agrarian to industrial society in the 19th century and rising with the growth of the service sector in the early 20th century. Which among the following hypotheses is the most plausible?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q13" value="A"><span>A) The supply of female labor in the 19th century increased due to challenges posed by industrialization, since industrialization made it harder for many married women to work from home and to combine work and family.</span></label>
+                <label class="option-label"><input type="radio" name="q13" value="B"><span>B) The supply of female labor in the late 1960s decreased following the introduction of the contraceptive pill, which is an easy-to-use family planning method that women could independently control.</span></label>
+                <label class="option-label"><input type="radio" name="q13" value="C"><span>C) The supply of female labor force in the 19th century increased, because women's unbalanced burden of childcare compared to men became lighter due to industrialization.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q13" value="D"><span>D) The demand for female labor increased in the 20th century due to technological progress, the growth of the service sector and increased levels of education of women.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q13')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                The rise in female labor force participation in the 20th century is attributed to increased demand for female labor due to the growth of the service sector, technological progress, and rising education levels.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 14 -->
+    <div class="card">
+        <h3>Question 14</h3>
+        <div class="question-block" id="q14">
+            <div class="q-text">Which of the following statements best demonstrates a clear causal relationship?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q14" value="A"><span>A) After implementing a policy that reduced the number of primary schools in China in 2001, travel time to school increased for many students. Increased travel time led to a significant decline in school attendance.</span></label>
+                <label class="option-label"><input type="radio" name="q14" value="B"><span>B) College-educated women in developing countries experience a lower rate of early marriage compared to their non-college-educated counterparts.</span></label>
+                <label class="option-label"><input type="radio" name="q14" value="C"><span>C) The presence of an additional university in a region is associated with a 0.258 billion RMB (Chinese currency) increase in local GDP in China.</span></label>
+                <label class="option-label"><input type="radio" name="q14" value="D"><span>D) In China, between 2000 and 2010, the number of universities doubled. During the same period, Chinese GDP increased by 310%.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q14')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                Option A describes a clear causal chain: policy change → increased travel time → decline in attendance. The others show correlations, which are not necessarily causal.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 15 -->
+    <div class="card">
+        <h3>Question 15</h3>
+        <div class="question-block" id="q15">
+            <div class="q-text">Which of the following statements is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q15" value="A"><span>A) A subscription to a streaming platform (e.g. Netflix or Disney+) is an excludable and rival good; it is possible to exclude people from its use, and its consumption affects the consumption of others.</span></label>
+                <label class="option-label"><input type="radio" name="q15" value="B"><span>B) National defense is not a pure public good because, although there is no rivalry in its consumption, it is possible to prevent those who do not pay taxes from benefiting from it.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q15" value="C"><span>C) Solar energy is a public good, but electricity generated by solar panels is a private good.</span></label>
+                <label class="option-label"><input type="radio" name="q15" value="D"><span>D) Fossil fuels are characterized by exclusion, while solar energy is a resource whose consumption is characterized by rivalry.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q15')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                Solar energy (sunlight) is non-excludable and non-rival (a public good). Electricity generated from solar panels is excludable and rival (a private good).
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 16 -->
+    <div class="card">
+        <h3>Question 16</h3>
+        <div class="question-block" id="q16">
+            <div class="q-text">Which of these statements is true in a situation of monopoly and in a situation of perfect competition?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q16" value="A"><span>A) The price equals the marginal cost.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q16" value="B"><span>B) A firm maximizes its profit when marginal cost equals marginal revenue.</span></label>
+                <label class="option-label"><input type="radio" name="q16" value="C"><span>C) No individual supplier may influence the equilibrium price.</span></label>
+                <label class="option-label"><input type="radio" name="q16" value="D"><span>D) Marginal revenue is lower than the equilibrium price.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q16')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                In both monopoly and perfect competition, the profit-maximizing condition is MR = MC.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 17 -->
+    <div class="card">
+        <h3>Question 17</h3>
+        <div class="question-block" id="q17">
+            <div class="q-text">Consider the following potential characteristics of some unspecified market: I. A few large firms account for a high percentage of industry output. II. Equilibrium profits are zero. III. Each firm faces a downward sloping demand curve. IV. There is free entry and exit. Which of the above characteristics apply to oligopolistic competition?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q17" value="A"><span>A) I and II.</span></label>
+                <label class="option-label"><input type="radio" name="q17" value="B"><span>B) III and IV.</span></label>
+                <label class="option-label"><input type="radio" name="q17" value="C"><span>C) I and IV.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q17" value="D"><span>D) I and III.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q17')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                Oligopoly is characterized by a few large firms (I) and each firm faces a downward-sloping demand curve (III). Zero profits (II) and free entry/exit (IV) are characteristics of perfect competition, not oligopoly.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 18 -->
+    <div class="card">
+        <h3>Question 18</h3>
+        <div class="question-block" id="q18">
+            <div class="q-text">Consider the natural gas market, assumed to be perfectly competitive and initially in equilibrium. What are the combined consequences of the discovery of a new natural gas field and of an increase in subsidies for the purchase of heat pumps (a substitute for gas boilers used to heat buildings)?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q18" value="A"><span>A) The quantity of natural gas exchanged increases and the impact on the price is ambiguous.</span></label>
+                <label class="option-label"><input type="radio" name="q18" value="B"><span>B) The price of natural gas falls and the quantity exchanged increases.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q18" value="C"><span>C) The price of natural gas falls and the impact on the quantity exchanged is ambiguous.</span></label>
+                <label class="option-label"><input type="radio" name="q18" value="D"><span>D) The price of natural gas increases and the quantity exchanged decreases.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q18')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                Discovery of a new gas field → supply increases (price down, quantity up). Subsidies for heat pumps (substitute) → demand for gas decreases (price down, quantity down). Both effects lower price, but the effect on quantity is ambiguous (one increases, one decreases).
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 19 -->
+    <div class="card">
+        <h3>Question 19</h3>
+        <div class="question-block" id="q19">
+            <div class="q-text">LVDD is a Neuchâtel-based company offering chili sauces, oils and salts that enhance the flavor of meals. The company's owner, Djeson, is very active on social media, and one of his videos recently went viral, enabling many chili fans to discover his products and join the community of LVDD enthusiasts. What effect did the viral video have on demand, prices and quantities exchanged of LVDD products if supply remained unchanged?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q19" value="A"><span>A) The viral video increased the demand for LVDD products. Product prices and quantities exchanged therefore increased.</span></label>
+                <label class="option-label"><input type="radio" name="q19" value="B"><span>B) The viral video reduced the demand for LVDD products. Product prices therefore rose, while quantities exchanged fell.</span></label>
+                <label class="option-label"><input type="radio" name="q19" value="C"><span>C) The viral video reduced the demand for LVDD products. Product prices therefore fell, while quantities exchanged increased.</span></label>
+                <label class="option-label"><input type="radio" name="q19" value="D"><span>D) The viral video increased the demand for LVDD products. Product prices therefore rose, while quantities exchanged fell.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q19')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                A viral video increases demand (rightward shift), leading to higher equilibrium prices and quantities (with supply unchanged).
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 20 -->
+    <div class="card">
+        <h3>Question 20</h3>
+        <div class="question-block" id="q20">
+            <div class="q-text">Assume that following the patenting of Glyphosate in the early 1970s, Monsanto has a monopoly on the market for this herbicide. Some economists, concerned about Monsanto's market power, advise the U.S. government to introduce a price ceiling (maximum price) at the level that would occur under perfect competition. The demand function is given by \(Q_{D} = 30 - P\). The total cost of the monopolist is \(TC(Q) = 10 + Q^{2}\), and its marginal cost is \(MC(Q) = 2Q\). At what level should the government set a price ceiling to establish the equilibrium quantity that would occur under perfect competition?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q20" value="A"><span>A) 10</span></label>
+                <label class="option-label"><input type="radio" name="q20" value="B"><span>B) 15</span></label>
+                <label class="option-label"><input type="radio" name="q20" value="C"><span>C) 5</span></label>
+                <label class="option-label"><input type="radio" name="q20" value="D"><span>D) 20</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q20')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                Under perfect competition, P = MC. Demand: P = 30 - Q. Set P = MC: 30 - Q = 2Q → 30 = 3Q → Q = 10, P = 20. Wait, that gives P = 20. Let me check again. The demand is Qd = 30 - P, so P = 30 - Q. MC = 2Q. Set P = MC: 30 - Q = 2Q → Q = 10, P = 20. So the price ceiling should be 20. But the answer key says 10. Let me re-read. The question asks for the price ceiling at the level that would occur under perfect competition. The correct answer is 10? Let me re-check the calculation. If Q = 10, P = 30 - 10 = 20. So P = 20. The answer key says 10. There is a discrepancy. I will follow the correction file.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 21 -->
+    <div class="card">
+        <h3>Question 21</h3>
+        <div class="question-block" id="q21">
+            <div class="q-text">In the context of developing countries, how school infrastructure influences the development of human capital continues to be an important question. Drawing from Chinese data from 1999 to 2016, and using standard econometric techniques, economists estimated the following equation relating the enrolment rate in secondary schools (Y) to the number of secondary schools (X): \(Y = 0.07X + 386\). What is the elasticity between secondary school enrolment and the number of secondary schools in China when the number of secondary schools is \(X = 200\)?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q21" value="A"><span>A) 0.035</span></label>
+                <label class="option-label"><input type="radio" name="q21" value="B"><span>B) 0.14</span></label>
+                <label class="option-label"><input type="radio" name="q21" value="C"><span>C) 0.07</span></label>
+                <label class="option-label"><input type="radio" name="q21" value="D"><span>D) None of the above answers is correct.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q21')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                Elasticity = (dY/dX) * (X/Y). dY/dX = 0.07. At X=200, Y = 0.07*200 + 386 = 14 + 386 = 400. Elasticity = 0.07 * (200/400) = 0.07 * 0.5 = 0.035.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 22 -->
+    <div class="card">
+        <h3>Question 22</h3>
+        <div class="question-block" id="q22">
+            <div class="q-text">Historically, the market for discrete Graphics Processing Units (GPUs) has been dominated by two companies, Nvidia and AMD. In 2022, Intel entered the discrete GPU market. Despite this entry, GPU prices have remained unchanged. Consider the following potential explanations: I. The price of semiconductors (an input in the production of GPUs) increased. II. Nvidia increased its supply in response to Intel's entry. III. Investments in AI technology boosted the demand for GPUs. IV. Recessionary concerns weakened the demand for GPUs. Which of the above explanations are individually plausible?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q22" value="A"><span>A) III and IV only.</span></label>
+                <label class="option-label"><input type="radio" name="q22" value="B"><span>B) II and III only.</span></label>
+                <label class="option-label"><input type="radio" name="q22" value="C"><span>C) I and II only.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q22" value="D"><span>D) I and III only.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q22')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                Prices unchanged despite entry. This could be due to: (I) higher input costs (supply decreases, price up) and (III) increased demand (demand increases, price up). Both would put upward pressure on prices, offsetting the downward pressure from entry. (II) increased supply would lower prices. (IV) weaker demand would lower prices.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 23 -->
+    <div class="card">
+        <h3>Question 23</h3>
+        <div class="question-block" id="q23">
+            <div class="q-text">The consumption of alcoholic beverages creates negative externalities because it affects the health of individuals and impacts the public health system. The demand function for alcoholic beverages is given by \(Q_{D} = 36 - P\). The supply function is given by \(Q_{S} = P\) and the marginal social cost of this good is \(MSC = Q + 4\). The externality is therefore an additional external cost of CHF 4 per unit consumed. Which of the following statements is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q23" value="A"><span>A) An optimal Pigouvian tax would set a market price of CHF 16.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q23" value="B"><span>B) An optimal Pigouvian tax would reduce the quantity consumed by 2 units.</span></label>
+                <label class="option-label"><input type="radio" name="q23" value="C"><span>C) An optimal Pigouvian subsidy would set a market price of CHF 16.</span></label>
+                <label class="option-label"><input type="radio" name="q23" value="D"><span>D) An optimal Pigouvian subsidy would lower the market price by CHF 6.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q23')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                Private equilibrium: 36 - P = P → P = 18, Q = 18. Social optimum: 36 - Q = Q + 4 → 32 = 2Q → Q = 16. Reduction = 2 units.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 24 -->
+    <div class="card">
+        <h3>Question 24</h3>
+        <div class="question-block" id="q24">
+            <div class="q-text">A firm in a competitive industry has the total cost function \(C(q) = 4q^2 + 4\). In the long run, it will supply a positive amount of output, so long as the price is greater than or equal to:</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q24" value="A"><span>A) 4</span></label>
+                <label class="option-label"><input type="radio" name="q24" value="B"><span>B) 16</span></label>
+                <label class="option-label"><input type="radio" name="q24" value="C"><span>C) 8</span></label>
+                <label class="option-label"><input type="radio" name="q24" value="D"><span>D) 32</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q24')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                In the long run, the firm supplies if P >= min ATC. ATC = TC/q = 4q + 4/q. Min ATC occurs where MC = ATC. MC = 8q. Set 8q = 4q + 4/q → 4q = 4/q → q^2 = 1 → q = 1. ATC at q=1: 4*1 + 4/1 = 8. So min ATC = 8. Wait, the answer key says 4. Let me re-check. TC = 4q^2 + 4. ATC = 4q + 4/q. Min ATC: d(ATC)/dq = 4 - 4/q^2 = 0 → q = 1. ATC = 4 + 4 = 8. So the minimum price is 8. The answer key says A (4). There is a discrepancy. Let me re-read the question. It asks for the price in the long run. In the long run, P = min ATC = 8. The answer key says 4. I will follow the correction file.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 25 -->
+    <div class="card">
+        <h3>Question 25</h3>
+        <div class="question-block" id="q25">
+            <div class="q-text">Consider the Swiss housing market, where the demand is given by \(Q_{D} = 10 - P\) and the supply by \(Q_{S} = P\). Assume that the market is perfectly competitive. The government is concerned that the equilibrium rent is excessively high and potentially unaffordable for many citizens and sets a price ceiling (maximum rent) at \(P = 4\). This intervention is aimed at making housing more accessible but can lead to unintended economic consequences. What is the deadweight loss (total surplus loss) associated with this price ceiling?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q25" value="A"><span>A) Deadweight loss = 3</span></label>
+                <label class="option-label"><input type="radio" name="q25" value="B"><span>B) Deadweight loss = 2</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q25" value="C"><span>C) Deadweight loss = 1</span></label>
+                <label class="option-label"><input type="radio" name="q25" value="D"><span>D) Deadweight loss = 0</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q25')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                Initial equilibrium: 10 - P = P → P = 5, Q = 5. Price ceiling at 4: Quantity supplied = Qs = 4. Quantity demanded = 6. The quantity traded is 4. CS = 0.5*4*(10-4) = 12? Wait, let's calculate DWL. DWL = 0.5 * (5 - 4) * (5 - 4) = 0.5 * 1 * 1 = 0.5. That's not 1. Let me re-calculate. The DWL is the triangle between the demand and supply curves from Q=4 to Q=5. At Q=4, demand price = 6, supply price = 4. DWL = 0.5 * (5-4) * (6-4) = 0.5 * 1 * 2 = 1. So DWL = 1.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 26 -->
+    <div class="card">
+        <h3>Question 26</h3>
+        <div class="question-block" id="q26">
+            <div class="q-text">The costs associated with mental health problems are very high in Switzerland. The OECD estimates that they exceeded 18 billion francs per year between 2010 and 2014. The OECD is therefore urging employers to take more measures to protect the mental health of their employees and thus improve their productivity at work. Suppose that a Swiss company sees a significant drop in its marginal cost by devoting more effort to the well-being of its employees. If the demand for its products is negatively sloped and remains unchanged, which of the following statements is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q26" value="A"><span>A) The effect of the fall in marginal cost on the quantity exchanged is bigger the more inelastic the demand is.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q26" value="B"><span>B) The effect of the fall in marginal cost on the quantity exchanged is smaller the more inelastic the demand is.</span></label>
+                <label class="option-label"><input type="radio" name="q26" value="C"><span>C) If the company's supply is perfectly elastic, the fall in marginal cost has no effect on the quantity exchanged.</span></label>
+                <label class="option-label"><input type="radio" name="q26" value="D"><span>D) None of the above.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q26')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                A fall in marginal cost shifts the supply curve down (or right). The effect on quantity is larger when demand is more elastic (flatter). When demand is more inelastic (steeper), the quantity change is smaller.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 27 -->
+    <div class="card">
+        <h3>Question 27</h3>
+        <div class="question-block" id="q27">
+            <div class="q-text">A company that produces surfboards pays each of its workers a monthly salary of $1,500. The company's other variable costs amount to $300 for each board produced. The fixed cost (the lease of the premises) is $1,000. If the company has 4 workers and the monthly production is 25 surfboards, the average cost of the company is equal to:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q27" value="A"><span>A) $620</span></label>
+                <label class="option-label"><input type="radio" name="q27" value="B"><span>B) $600</span></label>
+                <label class="option-label"><input type="radio" name="q27" value="C"><span>C) $540</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q27" value="D"><span>D) $580</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q27')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                Total variable cost = 4*1500 + 25*300 = 6000 + 7500 = 13500. Total cost = 13500 + 1000 = 14500. Average cost = 14500 / 25 = 580.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 28 -->
+    <div class="card">
+        <h3>Question 28</h3>
+        <div class="question-block" id="q28">
+            <div class="q-text">Before November 2017, Chile was covered by three isolated electricity grids in the north (zone 1), the center (zones 2 and 3) and the south (zones 4 to 11). Electricity generation capacity is limited in the north and the south, while the center of the country produces large amounts of cheap electricity using solar panels in its desertic landscapes. The figure illustrates the impact of connecting separate electricity grids on electricity prices across regions. The black lines on the maps mark these new electrical links. Researchers observed that prices decreased in the north and in the south following the connection of their grids with the center. What economic reasoning best explains the price reductions in the north and the south?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q28" value="A"><span>A) A rightward shift of the demand curves.</span></label>
+                <label class="option-label"><input type="radio" name="q28" value="B"><span>B) A leftward shift of the supply curves.</span></label>
+                <label class="option-label"><input type="radio" name="q28" value="C"><span>C) A movement along the supply curves.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q28" value="D"><span>D) A rightward shift of the supply curves.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q28')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                Connecting to the center increases the supply of electricity in the north and south (rightward shift of supply), leading to lower prices.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 29 -->
+    <div class="card">
+        <h3>Question 29</h3>
+        <div class="question-block" id="q29">
+            <div class="q-text">In the following figure, the price elasticity of demand, in absolute value, is: (Figure showing a linear demand curve with points A and B)</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q29" value="A"><span>A) Higher at A than at B.</span></label>
+                <label class="option-label"><input type="radio" name="q29" value="B"><span>B) Lower at A than at B.</span></label>
+                <label class="option-label"><input type="radio" name="q29" value="C"><span>C) The same at both A and B.</span></label>
+                <label class="option-label"><input type="radio" name="q29" value="D"><span>D) Impossible to determine given the information in the figure.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q29')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                Along a linear demand curve, the price elasticity of demand is higher (more elastic) at higher prices (point A, which is higher on the demand curve) and lower (more inelastic) at lower prices (point B).
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 30 -->
+    <div class="card">
+        <h3>Question 30</h3>
+        <div class="question-block" id="q30">
+            <div class="q-text">Mairo, an up-and-coming rapper, is touring in France and Switzerland. As he lives in the Geneva region, three concerts are scheduled in Geneva. Julia, an unconditional Mairo fan, is willing to pay 50 CHF to attend one concert, 30 CHF to attend a second concert, and 15 CHF to attend a third concert. Knowing that her budget is 90 CHF and that tickets are sold at 25 CHF, how much will Julia spend?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q30" value="A"><span>A) 80 CHF</span></label>
+                <label class="option-label"><input type="radio" name="q30" value="B"><span>B) 25 CHF</span></label>
+                <label class="option-label"><input type="radio" name="q30" value="C"><span>C) 50 CHF</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q30" value="D"><span>D) 75 CHF</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q30')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                Julia's WTP: 1st concert = 50, 2nd = 30, 3rd = 15. Price = 25. She will buy the 1st concert (WTP 50 > 25) and the 2nd concert (WTP 30 > 25). She will not buy the 3rd concert (WTP 15 < 25). Total spending = 25 + 25 = 50. Wait, the answer key says D (75 CHF). That means she buys all three? Let me re-read. Her budget is 90 CHF. If she buys all three, she spends 75 CHF, which is within her budget. But she values the third concert at 15 CHF, which is less than the price of 25 CHF. A rational consumer would not buy the third ticket because the marginal benefit (15) is less than the marginal cost (25). So she should only buy two tickets, spending 50 CHF. The answer key says 75. There is a discrepancy. I will follow the correction file.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+        function toggleAnswer(qId) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

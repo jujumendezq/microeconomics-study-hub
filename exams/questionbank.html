@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Bank 2019-2025</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem 2.5rem; line-height: 1.6; max-width: 1100px; margin: 0 auto; }
+        .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .page-header h2 { font-size: 2rem; font-weight: 700; color: #0b2b4a; }
+        .page-header .subtitle { color: #64748b; font-size: 1rem; margin-top: 0.2rem; }
+        .card { background: white; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e8edf3; }
+        .card h3 { font-size: 1.2rem; font-weight: 600; color: #0b2b4a; margin-bottom: 0.8rem; }
+        .exam-info { background: #f1f5f9; padding: 1rem 1.5rem; border-radius: 12px; margin-bottom: 1rem; border-left: 4px solid #0b2b4a; }
+        .exam-info p { margin: 0.2rem 0; }
+        .breadcrumb { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .breadcrumb a { color: #0b2b4a; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .question-block { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+        .question-block .q-text { font-weight: 600; font-size: 1rem; margin-bottom: 0.8rem; color: #0b2b4a; }
+        .question-block .options { list-style: none; padding: 0; margin: 0.4rem 0 0.8rem 0; }
+        .question-block .option-label { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.8rem; margin: 0.2rem 0; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; user-select: none; }
+        .question-block .option-label:hover { background: #eef2f6; }
+        .question-block .option-label input[type="radio"] { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; accent-color: #0b2b4a; }
+        .question-block .option-label span { font-size: 0.95rem; color: #1e293b; cursor: pointer; }
+        .question-block .option-label.selected { background: #dbeafe; border-color: #3b82f6; }
+        .question-block .option-label.correct-answer { background: #dcfce7; border-color: #22c55e; }
+        .question-block .option-label.correct-answer span::after { content: " ✓"; color: #22c55e; font-weight: 700; }
+        .question-block .option-label.wrong-answer { background: #fee2e2; border-color: #ef4444; }
+        .question-block .option-label.wrong-answer span::after { content: " ✗"; color: #ef4444; font-weight: 700; }
+        .question-block .option-label.disabled { cursor: default; opacity: 0.7; }
+        .question-block .option-label.disabled:hover { background: transparent; }
+        .question-block .option-label.disabled input[type="radio"] { cursor: default; }
+        .question-block .answer-area { margin-top: 0.8rem; padding: 0.8rem 1rem; background: #f1f5f9; border-radius: 8px; display: none; border-left: 3px solid #22c55e; }
+        .question-block .answer-area.show { display: block; }
+        .question-block .answer-area strong { color: #15803d; }
+        .btn-show-answer { background: #0b2b4a; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-show-answer:hover { background: #1a4a6a; }
+        .btn-show-answer.active { background: #15803d; }
+        .btn-show-answer.active:hover { background: #166534; }
+        .table-wrap { overflow-x: auto; margin: 1rem 0; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .table-wrap th, .table-wrap td { border: 1px solid #dce2ec; padding: 0.6rem 0.8rem; text-align: left; }
+        .table-wrap th { background: #eef4fa; font-weight: 600; }
+        @media (max-width: 768px) { body { padding: 1rem; } }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb"><a href="../index.html">📘 Home</a> / Question Bank</div>
+
+    <div class="page-header">
+        <h2>📚 Question Bank</h2>
+        <div class="subtitle">Compilation of questions from exams 2019-2025</div>
+    </div>
+
+    <div class="exam-info">
+        <p><strong>📋 Instructions:</strong> This is a compilation of questions from various exams. Each question has one correct answer.</p>
+        <p><strong>📚 Note:</strong> Some questions may cover topics not included in the current year's scope (e.g., uncertainty, asymmetric information).</p>
+    </div>
+
+    <!-- QUESTION 1 -->
+    <div class="card">
+        <h3>Question 1</h3>
+        <div class="question-block" id="q1">
+            <div class="q-text">Among the following statements, which one is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A"><span>A) The producer surplus is equal to price times quantity.</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="B"><span>B) Consumer surplus is area below demand and above supply.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q1" value="C"><span>C) Producer surplus is area above supply and below price.</span></label>
+                <label class="option-label"><input type="radio" name="q1" value="D"><span>D) Firms in competition maximize consumer surplus.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q1')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                Producer surplus is the area above the supply curve and below the market price.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 2 -->
+    <div class="card">
+        <h3>Question 2</h3>
+        <div class="question-block" id="q2">
+            <div class="q-text">As part of a randomized experiment, Jessica Cohen and Pascaline Dupas created an NGO to distribute mosquito nets in prenatal care centers in Kenya. They distributed these mosquito nets at different prices, randomly assigned to different centers. They found that the purchase of a mosquito net was heavily dependent on price. When mosquito nets were offered for a price close to zero, almost all households in a village (400 out of 500) took them home. However, with a marginal increase in price, demand dropped drastically, with only 20 households out of 500 purchasing the nets in another village. What can be said about the price elasticity of demand \(\epsilon_{P}\) of mosquito nets in Kenya?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q2" value="A"><span>A) \(0< |\epsilon_{P}|< 1\)</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="B"><span>B) \(|\epsilon_{P}| = 1\)</span></label>
+                <label class="option-label"><input type="radio" name="q2" value="C"><span>C) \(|\epsilon_{P}| = 0\)</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q2" value="D"><span>D) \(1< |\epsilon_{P}|\)</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q2')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                A small price increase caused a large drop in quantity demanded, indicating elastic demand.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 3 -->
+    <div class="card">
+        <h3>Question 3</h3>
+        <div class="question-block" id="q3">
+            <div class="q-text">In The Evolution of Cooperation (1984), Robert Axelrod explores how countries often face a "prisoner's dilemma" during an arms race. In this scenario, two nations (players) must choose whether to arm themselves (defect) or disarm (cooperate). If both countries disarm (cooperate), both avoid the high costs of maintaining large arsenals, leading to a peaceful and mutually beneficial outcome. If one country arms while the other disarms, the arming country gains a strategic military advantage, leaving the disarming country vulnerable. If both countries arm (defect), they incur massive costs maintaining weapons, creating a situation where both lose resources despite no actual conflict occurring. The normal form of the game is given below: (Matrix: Arm, Arm: 2,2; Arm, Disarm: 4,1; Disarm, Arm: 1,4; Disarm, Disarm: 3,3). Note that payoffs are the net benefit for the country. Based on the above matrix, what can you conclude?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q3" value="A"><span>A) In the arms race game, the Nash equilibrium occurs when both countries choose to arm, even though this outcome is not Pareto efficient.</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="B"><span>B) If both countries arm in the arms race game, the outcome is Pareto efficient because both players achieve their maximum possible payoffs.</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="C"><span>C) In the arms race game, both countries disarming is a Nash equilibrium because neither country would want to change its strategy if the other disarms.</span></label>
+                <label class="option-label"><input type="radio" name="q3" value="D"><span>D) The Nash equilibrium of the arms race game is always Pareto efficient because no player can improve their outcome without harming the other.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q3')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                The dominant strategy is to arm. (Arm, Arm) is a Nash equilibrium but not Pareto efficient because (Disarm, Disarm) is better for both.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 4 -->
+    <div class="card">
+        <h3>Question 4</h3>
+        <div class="question-block" id="q4">
+            <div class="q-text">While infrastructure development is important for economic progress, it can lead to negative effects like environmental damage and deforestation. The figure below shows how deforestation has increased near main roads in the Brazilian Amazon between 1990 and 2020. Deforestation is hence a negative externality of infrastructure development in this case. Which of the following propositions is correct regarding government policy to internalize potential externality in the Amazon?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q4" value="A"><span>A) At the market equilibrium, the marginal social cost is lower than the marginal private cost.</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="B"><span>B) The equilibrium is characterized by under-production compared to the social optimum.</span></label>
+                <label class="option-label"><input type="radio" name="q4" value="C"><span>C) The market is perfectly efficient and requires no intervention.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q4" value="D"><span>D) If government intervention internalizes the externality, the equilibrium quantity exchanged will be lower.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q4')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                A negative externality leads to over-production. Internalizing it (e.g., with a tax) reduces the quantity to the socially optimal level.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 5 -->
+    <div class="card">
+        <h3>Question 5</h3>
+        <div class="question-block" id="q5">
+            <div class="q-text">Consider the market for handcrafted ceramic mugs. In a competitive market, each identical artisan studio faces the following total cost structure: \(TC(q) = 49 + q^2\). The market demand for handcrafted ceramic mugs is given by: \(Q_D(P) = 84 - P\). How many studios operate in the market if the industry reaches long-run equilibrium?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A"><span>A) 7</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="B"><span>B) 70</span></label>
+                <label class="option-label"><input type="radio" name="q5" value="C"><span>C) 14</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q5" value="D"><span>D) 10</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q5')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                In long-run equilibrium, P = min ATC. ATC = 49/q + q → min at q=7, ATC=14. Market demand at P=14: Q=70. Number of firms = 70/7 = 10.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 6 -->
+    <div class="card">
+        <h3>Question 6</h3>
+        <div class="question-block" id="q6">
+            <div class="q-text">A company that manufactures surfboards pays each of its employees a salary of $1,500. The company's other variable costs amount to $300 per surfboard produced. The fixed cost is $1,000. If the company employs 4 workers and produces 25 surfboards, the average cost of the company is:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q6" value="A"><span>A) $600</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q6" value="B"><span>B) $580</span></label>
+                <label class="option-label"><input type="radio" name="q6" value="C"><span>C) $620</span></label>
+                <label class="option-label"><input type="radio" name="q6" value="D"><span>D) $540</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q6')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                Total variable cost = 4*1500 + 25*300 = 6000 + 7500 = 13500. Total cost = 13500 + 1000 = 14500. Average cost = 14500 / 25 = 580.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 7 -->
+    <div class="card">
+        <h3>Question 7</h3>
+        <div class="question-block" id="q7">
+            <div class="q-text">Cigarette consumption leads to increased healthcare costs due to hospitalization from smoking-related diseases. The government has decided to impose a production tax on cigarette manufacturers to account for the externality and reach an economically efficient outcome. The optimal production tax is equal to:</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q7" value="A"><span>A) The difference between the social marginal cost and the private marginal cost.</span></label>
+                <label class="option-label"><input type="radio" name="q7" value="B"><span>B) The private marginal cost.</span></label>
+                <label class="option-label"><input type="radio" name="q7" value="C"><span>C) The social marginal cost.</span></label>
+                <label class="option-label"><input type="radio" name="q7" value="D"><span>D) The sum of the social marginal cost and the private marginal cost.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q7')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                The optimal Pigouvian tax equals the external cost, which is the difference between SMC and PMC.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 8 -->
+    <div class="card">
+        <h3>Question 8</h3>
+        <div class="question-block" id="q8">
+            <div class="q-text">On 26 September 2022, a series of underwater explosions caused severe damage to Nord Stream 1 and Nord Stream 2 natural gas pipelines, which were key infrastructures for transporting gas from Russia to Europe. Assume that the global oil and gas market has a relatively inelastic demand in the short run. If this disruption leads to reduced natural gas exports from Russia, what is the most likely outcome in the global oil and gas market?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q8" value="A"><span>A) Prices will increase slightly, but the quantity demanded will decrease substantially.</span></label>
+                <label class="option-label"><input type="radio" name="q8" value="B"><span>B) Both prices and quantity demanded will decrease significantly due to the reduced supply.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q8" value="C"><span>C) Prices will increase substantially, but the quantity demanded will decrease only slightly.</span></label>
+                <label class="option-label"><input type="radio" name="q8" value="D"><span>D) Prices will remain stable, as consumers will easily substitute other energy sources.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q8')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                With inelastic demand, a supply reduction leads to a large price increase and a small quantity decrease.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 9 -->
+    <div class="card">
+        <h3>Question 9</h3>
+        <div class="question-block" id="q9">
+            <div class="q-text">Assume that a single caterer manages all cafeterias of a Swiss university, granting it a monopoly status within all its buildings. The demand function for cafeteria meals is given by: \(Q_{D} = 20 - P\) and the marginal cost of the caterer is given by \(MC = 2Q\). Which of the following propositions regarding the introduction of a price ceiling is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q9" value="A"><span>A) A price ceiling of 15 CHF maximizes total surplus.</span></label>
+                <label class="option-label"><input type="radio" name="q9" value="B"><span>B) A price ceiling of 7 CHF has no impact on producer surplus.</span></label>
+                <label class="option-label"><input type="radio" name="q9" value="C"><span>C) A price ceiling of 12 CHF has no impact on consumer surplus.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q9" value="D"><span>D) A price ceiling of 15 CHF has no impact on producer surplus.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q9')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                Monopoly equilibrium: MR = MC → Q=5, P=15. A price ceiling of 15 is non-binding.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 10 -->
+    <div class="card">
+        <h3>Question 10</h3>
+        <div class="question-block" id="q10">
+            <div class="q-text">The demand function for tennis rackets is as follows: \(Q_{D} = 300 - 4P + 10P_{P}\) where \(P\) is the price of a tennis racket, and \(P_{P}\) is the price of a padel racket. The current price of a tennis racket is 50 CHF, and the price of a padel racket is 10 CHF. At these price levels, what is the cross-price elasticity of demand for tennis rackets with respect to the price of padel rackets?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q10" value="A"><span>A) 0.5</span></label>
+                <label class="option-label"><input type="radio" name="q10" value="B"><span>B) 0.25</span></label>
+                <label class="option-label"><input type="radio" name="q10" value="C"><span>C) 0.4</span></label>
+                <label class="option-label"><input type="radio" name="q10" value="D"><span>D) 0.33</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q10')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                Cross-price elasticity = (dQ/dPp) * (Pp/Q) = 10 * (10/200) = 0.5.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 11 -->
+    <div class="card">
+        <h3>Question 11</h3>
+        <div class="question-block" id="q11">
+            <div class="q-text">Let a firm have marginal cost (MC), average cost (AC), and average variable cost (AVC) functions represented in the following graph. Which of the following propositions is correct?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q11" value="A"><span>A) The production level at point B is the one that a firm would operate in the long-term equilibrium in a context of perfect competition.</span></label>
+                <label class="option-label"><input type="radio" name="q11" value="B"><span>B) At the production level corresponding to point D, the cost of producing the last unit is higher than the average cost of the units produced so far.</span></label>
+                <label class="option-label"><input type="radio" name="q11" value="C"><span>C) In the short run, for production levels below point B, the firm's profits are negative, and it should therefore shut down.</span></label>
+                <label class="option-label"><input type="radio" name="q11" value="D"><span>D) The variable cost of production is constant for each unit produced.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q11')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                In long-run equilibrium, P = min AC, which occurs at point B.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 12 -->
+    <div class="card">
+        <h3>Question 12</h3>
+        <div class="question-block" id="q12">
+            <div class="q-text">Which of the following statements is correct regarding the factors that affect elasticity of supply?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q12" value="A"><span>A) The elasticity of supply will be smaller (inelastic supply curve) for a normal good than that of an inferior good.</span></label>
+                <label class="option-label"><input type="radio" name="q12" value="B"><span>B) The elasticity of supply will be smaller (inelastic supply curve), the easier the firm can hire workers.</span></label>
+                <label class="option-label"><input type="radio" name="q12" value="C"><span>C) The elasticity of supply will be larger (elastic supply curve) for a complementary good than that of a substitute good.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q12" value="D"><span>D) The elasticity of supply will be larger (elastic supply curve), the longer the time horizon.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q12')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                Supply is more elastic in the long run because firms have more flexibility to adjust.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 13 -->
+    <div class="card">
+        <h3>Question 13</h3>
+        <div class="question-block" id="q13">
+            <div class="q-text">Consider the market for photo editing, operating under conditions of perfect competition. The market is characterized by the following supply and demand functions: \(Q_{S}(P) = 2P - 6\) and \(Q_{D}(P) = 10 - 2P\). Recently, new AI-enhanced photo editing softwares led to a significant reduction in editing costs. This modified the supply function, which is now: \(Q_{S}(P) = 2P - 2\). What is the effect on market equilibrium?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q13" value="A"><span>A) The quantity exchanged increases from 2 to 4 million, and revenues increase from 8 to 16 million.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q13" value="B"><span>B) The quantity exchanged increases from 2 to 4 million, and revenues increase from 8 to 12 million.</span></label>
+                <label class="option-label"><input type="radio" name="q13" value="C"><span>C) The quantity exchanged decreases from 4 to 2 million, and revenues increase from 8 to 16 million.</span></label>
+                <label class="option-label"><input type="radio" name="q13" value="D"><span>D) The quantity exchanged decreases from 4 to 2 million, and revenues increase from 8 to 12 million.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q13')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                Initial: P=4, Q=2, Rev=8. New: P=3, Q=4, Rev=12.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 14 -->
+    <div class="card">
+        <h3>Question 14</h3>
+        <div class="question-block" id="q14">
+            <div class="q-text">The platform economy, driven by digitalisation, includes digital labour platforms that connect workers to jobs. Location-based platforms, like Uber, offer flexible schedules for workers, while online platforms, like Upwork, enable tasks such as graphic design to be completed remotely, allowing workers to work from anywhere. The number of platform workers has surged, especially post-COVID, when more people started looking for flexible work. The International Labour Office (ILO) estimates that digital platform workers make up 9.7% of Europe's workforce (ILO 2021). However, despite this growth, many platform workers have seen their wages decline, and their jobs have become less secure. In a market for labor where price is the wage paid to workers (supply) by employers (demand), what can explain the situation?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q14" value="A"><span>A) A movement along the supply curve led to a decrease in wages.</span></label>
+                <label class="option-label"><input type="radio" name="q14" value="B"><span>B) Both the demand and supply curve shifted rightward, hence decreasing wage and reducing the number of platform services.</span></label>
+                <label class="option-label"><input type="radio" name="q14" value="C"><span>C) An increase in the demand for platform services, with an unchanged supply, led to a decrease in wages.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q14" value="D"><span>D) The supply curve shifted rightward while the demand curve remained unchanged, leading to lower wages and an oversupply of workers at the initial equilibrium wage.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q14')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                An increase in the number of workers (rightward shift of supply) with unchanged demand lowers wages and creates an oversupply.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 15 -->
+    <div class="card">
+        <h3>Question 15</h3>
+        <div class="question-block" id="q15">
+            <div class="q-text">Consider a market for strawberries, operating under conditions of perfect competition. Demand is given by \(Q_{D} = 19 - 2P\) and supply by \(Q_{S} = -5 + P\). The market is initially in equilibrium. The government decides to introduce a production subsidy that reduces marginal cost by 3 CHF per unit. Which of the following propositions is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q15" value="A"><span>A) Both the exchanged quantity and the price paid by consumers decline.</span></label>
+                <label class="option-label"><input type="radio" name="q15" value="B"><span>B) Producer surplus decreases, consumer surplus increases.</span></label>
+                <label class="option-label"><input type="radio" name="q15" value="C"><span>C) Producer surplus increases, consumer surplus decreases.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q15" value="D"><span>D) The exchanged quantity increases and the price paid by consumers declines.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q15')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                A subsidy shifts supply down, increasing quantity and decreasing the consumer price.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 16 -->
+    <div class="card">
+        <h3>Question 16</h3>
+        <div class="question-block" id="q16">
+            <div class="q-text">In a 2019 lecture, Nathan Nunn said "One example is my coauthor Leonard Wantchekon, who left Benin—or, more accurately, escaped from jail where he was imprisoned for prodemocracy activism—and fled to Canada as a political refugee. In Canada, he obtained his M.A. in 1992, and then went to the United States, where he obtained his Ph.D. in 1995. He has since gone on to be an extremely successful scholar, working in the fields of political economy and development economics. As is common amongst successful diaspora from developing countries, he wanted to give back to his country. In 2014, he founded the African School of Economics, which is a Ph.D.-granting University located in Cotonou, Benin. The University has already been extremely successful at educating and training many talented African-born students who have gone on to have fruitful careers in government or academia. Not only has the country of Benin benefitted from Leonard's migration, but actually much of Africa." What economic concept does Leonard Wantchekon exemplify?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q16" value="A"><span>A) The opportunity cost of migration.</span></label>
+                <label class="option-label"><input type="radio" name="q16" value="B"><span>B) The marginal cost of education.</span></label>
+                <label class="option-label"><input type="radio" name="q16" value="C"><span>C) The diminishing returns of skilled labor.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q16" value="D"><span>D) The positive externalities of migration.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q16')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                The story illustrates the positive spillover effects (externalities) of migration on the home country.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 17 -->
+    <div class="card">
+        <h3>Question 17</h3>
+        <div class="question-block" id="q17">
+            <div class="q-text">In an article published in 2019 in the Journal Nature, authors warn that the capacity of groundwater to replenish itself has been completely exceeded by the rate of water abstraction, 70% of which goes to agriculture. They recommend that each country determine "as a matter of urgency" the thresholds at which groundwater pumping begins to affect the surface environment, in order to prevent the drought from worsening. What economic concept is this recommendation aimed to prevent?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q17" value="A"><span>A) Positive externalities of agriculture.</span></label>
+                <label class="option-label"><input type="radio" name="q17" value="B"><span>B) Monopolistic behavior in agriculture.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q17" value="C"><span>C) The tragedy of the Commons resulting from unregulated agriculture.</span></label>
+                <label class="option-label"><input type="radio" name="q17" value="D"><span>D) Free rider behavior in agriculture.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q17')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                Over-extraction of groundwater is a classic tragedy of the commons problem.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 18 -->
+    <div class="card">
+        <h3>Question 18</h3>
+        <div class="question-block" id="q18">
+            <div class="q-text">In 2017, a new AI-based price-setting software was introduced in the gasoline market in Germany. Unlike older systems, it learns from its past experiences and allows for quick price adjustments, taking into account the prices set by other stations to maximize profits. A recent study showed that, in oligopolistic situations, this software increases profits when all stations use it. What is the main economic effect observed by the researchers?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q18" value="A"><span>A) The software realizes that it sets prices for all gas stations and that a general price increase would lead to higher profits for all stations. An informal cartel, behind algorithms, is created by the software, and the market shifts from oligopoly pricing to monopoly pricing.</span></label>
+                <label class="option-label"><input type="radio" name="q18" value="B"><span>B) The software realizes that it sets prices for all gas stations and that a general price increase would lead to higher profits for all stations. An informal cartel, behind algorithms, is created by the software, and the market shifts from perfect competition pricing to oligopoly pricing.</span></label>
+                <label class="option-label"><input type="radio" name="q18" value="C"><span>C) The adoption of this software triggers a price war that forces all stations to significantly reduce their margins. The market shifts from oligopoly pricing to perfect competition pricing.</span></label>
+                <label class="option-label"><input type="radio" name="q18" value="D"><span>D) The adoption of this software triggers a price war that forces all stations to significantly reduce their margins. The market thus shifts from monopoly pricing to oligopoly pricing.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q18')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                The software enables tacit collusion, moving the market closer to monopoly.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 19 -->
+    <div class="card">
+        <h3>Question 19</h3>
+        <div class="question-block" id="q19">
+            <div class="q-text">A firm operates in a perfectly competitive market. In the short run, the profit maximizing firm decides to shut down its business. Which of the following propositions is correct:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q19" value="A"><span>A) The selling price is less than the marginal revenue.</span></label>
+                <label class="option-label"><input type="radio" name="q19" value="B"><span>B) The selling price is less than the marginal cost.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q19" value="C"><span>C) The selling price is less than the average variable cost for any level of output.</span></label>
+                <label class="option-label"><input type="radio" name="q19" value="D"><span>D) The selling price is less than the average cost for any level of output.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q19')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                A firm shuts down if P < AVC at all levels of output.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 20 -->
+    <div class="card">
+        <h3>Question 20</h3>
+        <div class="question-block" id="q20">
+            <div class="q-text">Ocevne, a singer from Geneva, wants to release her new album on Spotify. She has two options: I. Sign a contract with a label that takes a commission of one-third of the revenue generated by streams on Spotify. In return, the label will use its network to add some of her songs to playlists to boost the album's visibility. II. Use Distrokid, an online service that allows her to release the album without taking any commission on the revenue generated by streams on Spotify but will not do any promotion. The table below presents the probabilities associated with different volumes of streams for each option: (Label: 10k-0.3, 50k-0.3, 1M-0.3, 50M-0.1; Distrokid: 10k-0.5, 50k-0.35, 1M-0.1, 50M-0.05). Knowing that Ocevne is risk-neutral and that 1,000 Spotify streams generate 3 CHF in revenue, which option will Ocevne choose and why?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q20" value="A"><span>A) The label, because the expected value of this option is higher than that of the Distrokid option.</span></label>
+                <label class="option-label"><input type="radio" name="q20" value="B"><span>B) Distrokid, because the expected value of this option is lower than that of the label option.</span></label>
+                <label class="option-label"><input type="radio" name="q20" value="C"><span>C) Distrokid, because the expected value of this option is higher than that of the label option.</span></label>
+                <label class="option-label"><input type="radio" name="q20" value="D"><span>D) The label, because the expected value of this option is lower than that of the Distrokid option.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q20')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                Expected revenue (label) = 10636 after commission. Expected revenue (Distrokid) = 7867.5. The label has a higher expected value.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 21 -->
+    <div class="card">
+        <h3>Question 21</h3>
+        <div class="question-block" id="q21">
+            <div class="q-text">After the merger of WarnerMedia and Discovery in April 2022, the combined company has access to a vast library of content, including streaming platforms like HBO Max and Discovery+. Suppose the merged company implements a pricing strategy where it charges different prices for streaming subscriptions based on the geographical location of users. What type of price discrimination is the company engaging in, and what is the expected impact on consumer welfare?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q21" value="A"><span>A) Second-degree price discrimination, reducing consumer surplus but increasing market efficiency.</span></label>
+                <label class="option-label"><input type="radio" name="q21" value="B"><span>B) First-degree price discrimination, maximizing consumer surplus.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q21" value="C"><span>C) Third-degree price discrimination, potentially leading to higher profits but also increasing market segmentation.</span></label>
+                <label class="option-label"><input type="radio" name="q21" value="D"><span>D) First-degree price discrimination, reducing consumer surplus to 0.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q21')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                Charging different prices based on location is third-degree price discrimination.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 22 -->
+    <div class="card">
+        <h3>Question 22</h3>
+        <div class="question-block" id="q22">
+            <div class="q-text">In the town of Greentown, a paper mill produces high-quality paper but discharges wastewater into a river, causing environmental damage with an associated marginal social cost given by \(MSC = Q + 4\). The demand function for the high-quality paper is given by \(Q_D = 50 - P\), while the supply function is \(Q_S = P\). Which of the following propositions is correct?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q22" value="A"><span>A) An optimal Pigouvian tax would reduce the quantity consumed by 2.</span></label>
+                <label class="option-label"><input type="radio" name="q22" value="B"><span>B) The optimal Pigouvian tax is 2 CHF per unit.</span></label>
+                <label class="option-label"><input type="radio" name="q22" value="C"><span>C) The socially optimal quantity is 24 units.</span></label>
+                <label class="option-label"><input type="radio" name="q22" value="D"><span>D) The unregulated market equilibrium price is 20.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q22')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                Private equilibrium: Q=25. Social optimum: Q=23. Reduction = 2.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 23 -->
+    <div class="card">
+        <h3>Question 23</h3>
+        <div class="question-block" id="q23">
+            <div class="q-text">A pharmaceutical company holds a monopoly over the production of a life-saving drug due to patent protection. The company must decide on the optimal pricing and production strategy to maximize its profits while considering market demand and production costs. Which of the following propositions is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q23" value="A"><span>A) At equilibrium, total revenue equals total cost.</span></label>
+                <label class="option-label"><input type="radio" name="q23" value="B"><span>B) The company will always position itself on the inelastic part of the demand function.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q23" value="C"><span>C) The company maximizes profit by producing a quantity where marginal revenue equals marginal cost.</span></label>
+                <label class="option-label"><input type="radio" name="q23" value="D"><span>D) The equilibrium price is equal to marginal cost.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q23')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                Profit maximization for a monopolist occurs at MR = MC.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 24 -->
+    <div class="card">
+        <h3>Question 24</h3>
+        <div class="question-block" id="q24">
+            <div class="q-text">Consider a perfectly competitive market characterized by the following demand and supply functions: \(Q_{D} = 100 - 2P\) and \(Q_{S} = 5P - 50\). The government introduces a per-unit tax of 5. Calculate the total surplus after the tax is imposed. Which of the following answers is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q24" value="A"><span>A) 2500</span></label>
+                <label class="option-label"><input type="radio" name="q24" value="B"><span>B) 2125</span></label>
+                <label class="option-label"><input type="radio" name="q24" value="C"><span>C) 1875</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q24" value="D"><span>D) 1125</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q24')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                After tax: Q=50, CS=625, PS=250, Tax Rev=250, Total Surplus=1125.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 25 -->
+    <div class="card">
+        <h3>Question 25</h3>
+        <div class="question-block" id="q25">
+            <div class="q-text">Which of the following examples illustrates a "free-rider" behavior?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q25" value="A"><span>A) An individual who attends courses at a public university without paying the semester registration fees.</span></label>
+                <label class="option-label"><input type="radio" name="q25" value="B"><span>B) An individual who chooses a public university instead of a private school to reduce the cost of their studies.</span></label>
+                <label class="option-label"><input type="radio" name="q25" value="C"><span>C) An individual who attends courses at a public university, pays the registration fees, but drops out of the program mid-year.</span></label>
+                <label class="option-label"><input type="radio" name="q25" value="D"><span>D) An individual who pays their university fees using a scholarship.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q25')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                Free-riding means benefiting from a good without paying for it.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 26 -->
+    <div class="card">
+        <h3>Question 26</h3>
+        <div class="question-block" id="q26">
+            <div class="q-text">In the mid-20th century, the government of Egyptland decided to ensure basic food needs by implementing a price ceiling on the bread market, which operates under perfect competition, for low-income households. Assuming that this price ceiling was set at 3 Egyptian-idian pounds (EGP), that the supply of bread, in millions of loafs per day, was given by \(Q_{S} = 50P\) and the demand for bread from low-income households was \(Q_{D} = 360 - 40P\), how did the policy affect consumer surplus for low-income households?</div>
+            <div class="options">
+                <label class="option-label" data-correct="true"><input type="radio" name="q26" value="A"><span>A) The consumer surplus increased by 118.75.</span></label>
+                <label class="option-label"><input type="radio" name="q26" value="B"><span>B) The consumer surplus decreased by 175.</span></label>
+                <label class="option-label"><input type="radio" name="q26" value="C"><span>C) The consumer surplus increased by 175.</span></label>
+                <label class="option-label"><input type="radio" name="q26" value="D"><span>D) The consumer surplus decreased by 118.75.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q26')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: A</strong><br>
+                Initial equilibrium: P=4, Q=200, CS=500. With price ceiling: Q=150, CS=618.75. Increase = 118.75.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 27 -->
+    <div class="card">
+        <h3>Question 27</h3>
+        <div class="question-block" id="q27">
+            <div class="q-text">Alpine-electricity is the sole provider of electricity to a remote village in the Alps, where the demand for electricity in kilowatts per hour (kWh) is the following: \(Q_{D} = 1000 - P\). The marginal cost of Alpine-electricity is constant and equal to 100 CHF/kWh. What can be inferred from this?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q27" value="A"><span>A) The optimal quantity is 550 kWh and the fixed price is 450 CHF/kWh.</span></label>
+                <label class="option-label"><input type="radio" name="q27" value="B"><span>B) The optimal quantity is 700 kWh and the fixed price is 200 CHF/kWh.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q27" value="C"><span>C) The optimal quantity is 450 kWh and the fixed price is 550 CHF/kWh.</span></label>
+                <label class="option-label"><input type="radio" name="q27" value="D"><span>D) The optimal quantity is 600 kWh and the fixed price is 350 CHF/kWh.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q27')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                Monopoly: MR = MC → 1000 - 2Q = 100 → Q = 450, P = 550.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 28 -->
+    <div class="card">
+        <h3>Question 28</h3>
+        <div class="question-block" id="q28">
+            <div class="q-text">To try to limit over-tourism without putting a limit on the number of tourists allowed to enter the city, Venice has begun charging for access to its city center on high-traffic tourist days. This measure is aimed at countering the damage caused by tourists, who are partly responsible for the city's deterioration and the pollution of its waters. In particular, tourists will have to download a QR code for 5 euros from a dedicated website to be able to enter the center. The purpose of the measure taken by the Venice municipality is:</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q28" value="A"><span>A) To implement a visitor quota to limit the damage caused by over-tourism.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q28" value="B"><span>B) To make the tourist internalize the negative externality cost of their visit so as to decrease the number of times they enter the city.</span></label>
+                <label class="option-label"><input type="radio" name="q28" value="C"><span>C) To decrease the opportunity cost of visiting the city.</span></label>
+                <label class="option-label"><input type="radio" name="q28" value="D"><span>D) To promote tourism and increase the overall number of visitors to the city.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q28')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: B</strong><br>
+                The access fee is a Pigouvian tax to internalize the negative externality.
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 29 -->
+    <div class="card">
+        <h3>Question 29</h3>
+        <div class="question-block" id="q29">
+            <div class="q-text">Sami owns a café that operates daily from 8 a.m. to 8 p.m. Realizing that some bins of hours are far more profitable than others, he creates a chart showing the café's revenue per hour and category of day. Knowing that his (only) employee's wage is 30 CHF/hour (other variable costs have already been deducted in the chart), what should Sami's café opening hours be in the short term in order to maximize profits? (Figure with revenue per hour for different days)</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q29" value="A"><span>A) Saturday and Sunday from 8 a.m. to 5 p.m.; Monday to Wednesday from 11 a.m. to 5 p.m.; Thursday and Friday from 8 a.m. to 11 a.m., then from 2 p.m. to 5 p.m..</span></label>
+                <label class="option-label"><input type="radio" name="q29" value="B"><span>B) Saturday and Sunday from 8 a.m. to 5 p.m.; Monday to Wednesday from 11 a.m. to 8 p.m.; Thursday and Friday from 8 a.m. to 5 p.m..</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q29" value="C"><span>C) Saturday and Sunday from 8 a.m. to 5 p.m.; Monday to Wednesday from 11 a.m. to 8 p.m.; Thursday and Friday from 8 a.m. to 11 a.m., then from 2 p.m. to 5 p.m..</span></label>
+                <label class="option-label"><input type="radio" name="q29" value="D"><span>D) Saturday and Sunday from 11 a.m. to 5 p.m.; Monday to Wednesday from 11 a.m. to 8 p.m.; Thursday and Friday from 8 a.m. to 11 a.m., then from 2 p.m. to 5 p.m..</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q29')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: C</strong><br>
+                The firm should operate when revenue per hour exceeds the wage cost (30 CHF).
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTION 30 -->
+    <div class="card">
+        <h3>Question 30</h3>
+        <div class="question-block" id="q30">
+            <div class="q-text">Consider a monopolist that is the only provider of high-speed internet in a small town, with the following demand function for subscriptions: \(Q^D = 20 - P\). The marginal cost of providing an additional subscription is given by \(MC = 2q\). Concerned about high prices and access, the local government considers introducing a price ceiling on subscriptions to increase consumer surplus. Which of the following statements is correct?</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q30" value="A"><span>A) A price ceiling of 7 CHF has no impact on producer surplus.</span></label>
+                <label class="option-label"><input type="radio" name="q30" value="B"><span>B) A price ceiling of 12 CHF has no impact on consumer surplus.</span></label>
+                <label class="option-label"><input type="radio" name="q30" value="C"><span>C) A price ceiling of 15 CHF maximizes total surplus.</span></label>
+                <label class="option-label" data-correct="true"><input type="radio" name="q30" value="D"><span>D) A price ceiling of 15 CHF has no impact on producer surplus.</span></label>
+            </div>
+            <button class="btn-show-answer" onclick="toggleAnswer('q30')">Show Answer</button>
+            <div class="answer-area">
+                <strong>✅ Correct Answer: D</strong><br>
+                Monopoly equilibrium: Q=5, P=15. A price ceiling of 15 is non-binding.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    block.querySelectorAll('.option-label').forEach(l => l.classList.remove('selected'));
+                    if (this.checked) this.closest('.option-label').classList.add('selected');
+                });
+            });
+        });
+        function toggleAnswer(qId) {
+            const block = document.getElementById(qId);
+            if (!block) return;
+            const area = block.querySelector('.answer-area');
+            const btn = block.querySelector('.btn-show-answer');
+            const labels = block.querySelectorAll('.option-label');
+            const radios = block.querySelectorAll('input[type="radio"]');
+            if (area.classList.contains('show')) {
+                area.classList.remove('show');
+                btn.textContent = 'Show Answer';
+                btn.classList.remove('active');
+                labels.forEach(l => l.classList.remove('correct-answer', 'wrong-answer', 'disabled'));
+                radios.forEach(r => r.disabled = false);
+            } else {
+                area.classList.add('show');
+                btn.textContent = 'Hide Answer';
+                btn.classList.add('active');
+                radios.forEach(r => r.disabled = true);
+                labels.forEach(l => {
+                    const isCorrect = l.dataset.correct === 'true';
+                    if (isCorrect) l.classList.add('correct-answer');
+                    const radio = l.querySelector('input[type="radio"]');
+                    if (radio && radio.checked && !isCorrect) l.classList.add('wrong-answer');
+                    l.classList.add('disabled');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
