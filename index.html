@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microeconomics Study Hub</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f4f8; color: #1e293b; height: 100vh; overflow: hidden; }
+        .app-container { display: flex; height: 100vh; width: 100%; }
+        .sidebar { width: 280px; min-width: 280px; background: #0b2b4a; color: #e2e8f0; padding: 1.5rem 0; overflow-y: auto; display: flex; flex-direction: column; border-right: 1px solid #1a3a5a; z-index: 10; }
+        .sidebar-title { padding: 0 1.5rem 1.5rem 1.5rem; border-bottom: 1px solid #1a3a5a; margin-bottom: 1rem; }
+        .sidebar-title h1 { font-size: 1.4rem; font-weight: 700; color: #ffffff; }
+        .sidebar-title p { font-size: 0.8rem; color: #94a3b8; margin-top: 0.2rem; }
+        .directory-section { padding: 0.5rem 0; }
+        .directory-section .section-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; padding: 0.5rem 1.5rem; font-weight: 600; }
+        .directory-item { padding: 0.4rem 1.5rem; cursor: pointer; display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem; color: #cbd5e1; transition: all 0.15s ease; border-left: 3px solid transparent; text-decoration: none; }
+        .directory-item:hover { background: #1a3a5a; color: #ffffff; }
+        .directory-item.active { background: #1a3a5a; color: #ffffff; border-left-color: #60a5fa; }
+        .directory-item .icon { font-size: 1rem; width: 1.5rem; flex-shrink: 0; }
+        .directory-item .badge { margin-left: auto; background: #1a3a5a; padding: 0.05rem 0.5rem; border-radius: 10px; font-size: 0.6rem; color: #94a3b8; white-space: nowrap; }
+        .directory-item.active .badge { background: #2a4a6a; color: #cbd5e1; }
+        .main-content { flex: 1; overflow-y: auto; background: #f8fafc; padding: 0; }
+        .iframe-container { width: 100%; height: 100%; }
+        .iframe-container iframe { width: 100%; height: 100vh; border: none; background: #f8fafc; display: block; }
+        .welcome { text-align: center; padding: 4rem 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+        .welcome h2 { font-size: 2.5rem; color: #0b2b4a; margin-bottom: 1rem; }
+        .welcome p { color: #64748b; max-width: 500px; margin: 0 auto; line-height: 1.8; font-size: 1.1rem; }
+        .welcome .icon-large { font-size: 4rem; margin-bottom: 1.5rem; }
+        @media (max-width: 768px) {
+            .app-container { flex-direction: column; height: 100vh; }
+            .sidebar { width: 100%; min-width: unset; max-height: 200px; border-right: none; border-bottom: 1px solid #1a3a5a; }
+            .main-content { height: calc(100vh - 200px); }
+            .iframe-container iframe { height: calc(100vh - 200px); }
+            .welcome { height: calc(100vh - 200px); padding: 2rem 1rem; }
+            .welcome h2 { font-size: 1.8rem; }
+        }
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-track { background: #0b2b4a; }
+        .sidebar::-webkit-scrollbar-thumb { background: #2a4a6a; border-radius: 4px; }
+        .main-content::-webkit-scrollbar { width: 8px; }
+        .main-content::-webkit-scrollbar-track { background: #f1f5f9; }
+        .main-content::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .main-content::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-title">
+                <h1>📘 Microeconomics</h1>
+                <p>Study Hub · Complete Guide</p>
+            </div>
+
+            <!-- LESSONS -->
+            <div class="directory-section">
+                <div class="section-label">📚 Lessons</div>
+                <a href="lessons/lesson1.html" class="directory-item" data-page="L1">
+                    <span class="icon">🧠</span> 1. Methodology
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="lessons/lesson2.html" class="directory-item" data-page="L2">
+                    <span class="icon">📊</span> 2. The Market
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="lessons/lesson3.html" class="directory-item" data-page="L3">
+                    <span class="icon">📈</span> 3. Elasticity
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="lessons/lesson4.html" class="directory-item" data-page="L4">
+                    <span class="icon">🏛️</span> 4. Welfare & Government
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="lessons/lesson5.html" class="directory-item" data-page="L5">
+                    <span class="icon">⚖️</span> 5. Gov't Interventions
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="lessons/lesson6.html" class="directory-item" data-page="L6">
+                    <span class="icon">⚙️</span> 6. Technology & Cost
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="lessons/lesson7.html" class="directory-item" data-page="L7">
+                    <span class="icon">🏪</span> 7. Competitive Markets
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="lessons/lesson8.html" class="directory-item" data-page="L8">
+                    <span class="icon">👑</span> 8. Monopoly
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="lessons/lesson9.html" class="directory-item" data-page="L9">
+                    <span class="icon">🎲</span> 9. Oligopoly
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="lessons/lesson10.html" class="directory-item" data-page="L10">
+                    <span class="icon">🌿</span> 10. Externalities
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="lessons/lesson11.html" class="directory-item" data-page="L11">
+                    <span class="icon">🏛️</span> 11. Public Goods
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="lessons/lesson12.html" class="directory-item" data-page="L12">
+                    <span class="icon">🎯</span> 12. Uncertainty
+                    <span class="badge">Complete</span>
+                </a>
+            </div>
+
+            <!-- SEMINARS -->
+            <div class="directory-section">
+                <div class="section-label">🧑‍🏫 Seminars</div>
+                <a href="seminars/seminar1.html" class="directory-item" data-page="S1">
+                    <span class="icon">🧑‍🏫</span> 1. Foundations
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="seminars/seminar2.html" class="directory-item" data-page="S2">
+                    <span class="icon">🧑‍🏫</span> 2. Elasticity
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="seminars/seminar3.html" class="directory-item" data-page="S3">
+                    <span class="icon">🧑‍🏫</span> 3. Equilibrium
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="seminars/seminar4.html" class="directory-item" data-page="S4">
+                    <span class="icon">🧑‍🏫</span> 4. Cost Curves
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="seminars/seminar5.html" class="directory-item" data-page="S5">
+                    <span class="icon">🧑‍🏫</span> 5. Monopoly
+                    <span class="badge">Complete</span>
+                </a>
+                <a href="seminars/seminar6.html" class="directory-item" data-page="S6">
+                    <span class="icon">🧑‍🏫</span> 6. Externalities
+                    <span class="badge">Complete</span>
+                </a>
+            </div>
+
+            <!-- PROBLEM SETS - DIRECT TO PDF -->
+            <div class="directory-section">
+                <div class="section-label">📝 Problem Sets</div>
+                <a href="pdf/ps1.pdf" class="directory-item" data-page="P1" target="_blank">
+                    <span class="icon">📝</span> Problem Set 1
+                    <span class="badge">PDF</span>
+                </a>
+                <a href="pdf/ps2.pdf" class="directory-item" data-page="P2" target="_blank">
+                    <span class="icon">📝</span> Problem Set 2
+                    <span class="badge">PDF</span>
+                </a>
+                <a href="pdf/ps3.pdf" class="directory-item" data-page="P3" target="_blank">
+                    <span class="icon">📝</span> Problem Set 3
+                    <span class="badge">PDF</span>
+                </a>
+                <a href="pdf/ps4.pdf" class="directory-item" data-page="P4" target="_blank">
+                    <span class="icon">📝</span> Problem Set 4
+                    <span class="badge">PDF</span>
+                </a>
+                <a href="pdf/ps5.pdf" class="directory-item" data-page="P5" target="_blank">
+                    <span class="icon">📝</span> Problem Set 5
+                    <span class="badge">PDF</span>
+                </a>
+                <a href="pdf/ps6.pdf" class="directory-item" data-page="P6" target="_blank">
+                    <span class="icon">📝</span> Problem Set 6
+                    <span class="badge">PDF</span>
+                </a>
+            </div>
+
+            <!-- PDF FILES -->
+            <div class="directory-section">
+                <div class="section-label">📄 Seminar PDFs</div>
+                <a href="pdf/s1.pdf" class="directory-item" data-page="PDF1" target="_blank">
+                    <span class="icon">📄</span> Seminar 1 PDF
+                    <span class="badge">PDF</span>
+                </a>
+                <a href="pdf/s2.pdf" class="directory-item" data-page="PDF2" target="_blank">
+                    <span class="icon">📄</span> Seminar 2 PDF
+                    <span class="badge">PDF</span>
+                </a>
+                <a href="pdf/s3.pdf" class="directory-item" data-page="PDF3" target="_blank">
+                    <span class="icon">📄</span> Seminar 3 PDF
+                    <span class="badge">PDF</span>
+                </a>
+                <a href="pdf/s4.pdf" class="directory-item" data-page="PDF4" target="_blank">
+                    <span class="icon">📄</span> Seminar 4 PDF
+                    <span class="badge">PDF</span>
+                </a>
+                <a href="pdf/s5.pdf" class="directory-item" data-page="PDF5" target="_blank">
+                    <span class="icon">📄</span> Seminar 5 PDF
+                    <span class="badge">PDF</span>
+                </a>
+                <a href="pdf/s6.pdf" class="directory-item" data-page="PDF6" target="_blank">
+                    <span class="icon">📄</span> Seminar 6 PDF
+                    <span class="badge">PDF</span>
+                </a>
+            </div>
+
+            <!-- EXAMS -->
+            <div class="directory-section">
+                <div class="section-label">📝 Past Exams</div>
+                <a href="exams/exam_aug2023.html" class="directory-item" data-page="E1">
+                    <span class="icon">📝</span> August 2023
+                    <span class="badge">Practice</span>
+                </a>
+                <a href="exams/exam_aug2024.html" class="directory-item" data-page="E2">
+                    <span class="icon">📝</span> August 2024
+                    <span class="badge">Practice</span>
+                </a>
+                <a href="exams/exam_aug2025.html" class="directory-item" data-page="E3">
+                    <span class="icon">📝</span> August 2025
+                    <span class="badge">Practice</span>
+                </a>
+                <a href="exams/exam_jan2023.html" class="directory-item" data-page="E4">
+                    <span class="icon">📝</span> January 2023
+                    <span class="badge">Practice</span>
+                </a>
+                <a href="exams/exam_jan2024.html" class="directory-item" data-page="E5">
+                    <span class="icon">📝</span> January 2024
+                    <span class="badge">Practice</span>
+                </a>
+                <a href="exams/exam_jan2025.html" class="directory-item" data-page="E6">
+                    <span class="icon">📝</span> January 2025
+                    <span class="badge">Practice</span>
+                </a>
+                <a href="exams/questionbank.html" class="directory-item" data-page="E7">
+                    <span class="icon">📚</span> Question Bank
+                    <span class="badge">All Years</span>
+                </a>
+            </div>
+
+            <!-- RESOURCES -->
+            <div class="directory-section">
+                <div class="section-label">📖 Resources</div>
+                <a href="resources/glossary.html" class="directory-item" data-page="R1">
+                    <span class="icon">📖</span> Glossary
+                    <span class="badge">All Terms</span>
+                </a>
+                <a href="resources/quizzes.html" class="directory-item" data-page="R2">
+                    <span class="icon">🧪</span> Quizzes
+                    <span class="badge">Self-Assessment</span>
+                </a>
+            </div>
+        </nav>
+
+        <main class="main-content" id="mainContent">
+            <div class="welcome" id="welcomeScreen">
+                <div class="icon-large">📘</div>
+                <h2>Welcome to Microeconomics Study Hub</h2>
+                <p>Select a lesson, seminar, problem set, past exam, or resource from the sidebar to begin studying.</p>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #94a3b8;">
+                    📚 12 Lessons · 6 Seminars · 6 Problem Sets · 📄 12 PDFs · 7 Past Exams · Complete glossary · Quizzes
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Navigation handler
+        document.querySelectorAll('.directory-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                const target = this.getAttribute('target');
+
+                // If it's a PDF or external link, let it open normally
+                if (target === '_blank' || (href && href.endsWith('.pdf'))) {
+                    return; // Let the browser handle it
+                }
+
+                e.preventDefault();
+
+                // Update active state
+                document.querySelectorAll('.directory-item').forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+
+                // Load content
+                const mainContent = document.getElementById('mainContent');
+
+                if (href && href.endsWith('.html')) {
+                    mainContent.innerHTML = `
+                        <div class="iframe-container">
+                            <iframe src="${href}" title="Content" id="contentFrame"></iframe>
+                        </div>
+                    `;
+                } else {
+                    mainContent.innerHTML = `
+                        <div class="welcome">
+                            <div class="icon-large">📘</div>
+                            <h2>${this.textContent.trim()}</h2>
+                            <p>Loading content...</p>
+                        </div>
+                    `;
+                }
+            });
+        });
+
+        // Set initial active state
+        document.addEventListener('DOMContentLoaded', function() {
+            const hash = window.location.hash;
+            let targetItem = null;
+
+            if (hash) {
+                const pageId = hash.replace('#', '');
+                targetItem = document.querySelector(`.directory-item[data-page="${pageId}"]`);
+            }
+
+            if (!targetItem) {
+                targetItem = document.querySelector('.directory-item');
+                if (targetItem) {
+                    const pageId = targetItem.dataset.page;
+                    window.history.replaceState(null, '', `#${pageId}`);
+                }
+            }
+
+            if (targetItem) {
+                targetItem.click();
+            }
+        });
+
+        // Update hash when clicking sidebar items
+        document.querySelectorAll('.directory-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const pageId = this.dataset.page;
+                if (pageId && !this.getAttribute('target')) {
+                    window.location.hash = pageId;
+                }
+            });
+        });
+
+        // Handle back/forward
+        window.addEventListener('hashchange', function() {
+            const hash = window.location.hash.replace('#', '');
+            if (hash) {
+                const target = document.querySelector(`.directory-item[data-page="${hash}"]`);
+                if (target) {
+                    target.click();
+                }
+            }
+        });
+
+        console.log('📘 Microeconomics Study Hub loaded!');
+        console.log(`📚 ${document.querySelectorAll('.directory-item').length} items available in sidebar.`);
+    </script>
+</body>
+</html>
