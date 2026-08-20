@@ -19,3 +19,6 @@ A comprehensive study resource for Introduction to Microeconomics.
 3. Navigate using the sidebar
 
 ## 📂 Project Structure
+## 📄 License
+
+For educational purposes only. Not for commercial use.
